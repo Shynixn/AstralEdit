@@ -49,7 +49,7 @@ dependencies {
 
 ## How to use the it
 
-#### Sample to render the worldEdit selection of the player and moving it to the player's location
+#### Sample: Rendering the WorldEdit selection of the player and moving it to the player's location
 
 ```java
 //Get a player and a plugin instance
@@ -65,7 +65,7 @@ Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
    }
 });
 ```
-#### Sample to render the blocks between two given corners, moving it to a targetLocation and placing the blocks. 
+#### Sample: Rendering the blocks between two given corners, moving it to a targetLocation and placing the blocks. 
 
 ```java
 //Select the locations
@@ -83,7 +83,7 @@ Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
             Selection selection = AstralEditApi.renderAndDestroy(player,corner1, corner2);
             selection.move(targetLocation);
             selection.placeBlocks();
-            AstralEditApi.clearRenderedObject(player); //Do not forget to clear up the selection
+            AstralEditApi.clearRenderedObject(player); //Do not forget to clean up the selection
         }
 });
 ```
