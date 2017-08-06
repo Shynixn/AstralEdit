@@ -56,6 +56,7 @@ public class AstralEditPlugin extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
         } else {
             try {
+                this.saveDefaultConfig();
                 ReflectionUtils.invokeMethodByClass(AstralEdit.class, "initialize", new Class[]{Plugin.class}, new Object[]{this});
             } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
                 Bukkit.getLogger().log(Level.WARNING, "Failed to initialize plugin.", e);
