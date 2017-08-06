@@ -16,7 +16,7 @@ public final class AstralEdit {
     private static SelectionManager manager;
 
     /**
-     * Init
+     * Initialize
      */
     private AstralEdit() {
         super();
