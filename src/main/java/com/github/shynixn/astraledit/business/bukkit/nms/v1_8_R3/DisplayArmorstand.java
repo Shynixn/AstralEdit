@@ -73,11 +73,10 @@ public class DisplayArmorstand implements PacketArmorstand {
         this.storedId = id;
         this.storedData = data;
 
-        final ItemStackBuilder stackBuilder = new ItemStackBuilder(Material.getMaterial(id), 1, data);
+       ItemStackBuilder stackBuilder = new ItemStackBuilder(Material.getMaterial(id), 1, data);
         ((ArmorStand) this.armorStand.getBukkitEntity()).setHelmet(stackBuilder.build());
         if (((ArmorStand) this.armorStand.getBukkitEntity()).getHelmet().getType() == Material.AIR) {
-            stackBuilder.setType(Material.SKULL_ITEM);
-            stackBuilder.getData().setData((byte) 3);
+            stackBuilder = new ItemStackBuilder(Material.SKULL_ITEM, 1, (short) 3);
             if (id == Material.WATER.getId() || id == Material.STATIONARY_WATER.getId()) {
                 stackBuilder.setSkin(NMSRegistry.WATER_HEAD);
             } else if (id == Material.LAVA.getId() || id == Material.STATIONARY_LAVA.getId()) {
