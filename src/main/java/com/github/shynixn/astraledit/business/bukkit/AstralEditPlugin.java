@@ -1,11 +1,14 @@
 package com.github.shynixn.astraledit.business.bukkit;
 
-import com.github.shynixn.astraledit.api.AstralEdit;
+import com.github.shynixn.astraledit.api.AstralEditApi;
+import com.github.shynixn.astraledit.api.entity.Selection;
 import com.github.shynixn.astraledit.business.bukkit.dependencies.DependencySupport;
 import com.github.shynixn.astraledit.business.bukkit.nms.VersionSupport;
 import com.github.shynixn.astraledit.lib.ReflectionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -59,7 +62,7 @@ public class AstralEditPlugin extends JavaPlugin {
             try {
                 Bukkit.getServer().getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Loading AstralEdit ...");
                 this.saveDefaultConfig();
-                ReflectionUtils.invokeMethodByClass(AstralEdit.class, "initialize", new Class[]{Plugin.class}, new Object[]{this});
+                ReflectionUtils.invokeMethodByClass(AstralEditApi.class, "initialize", new Class[]{Plugin.class}, new Object[]{this});
                 Bukkit.getServer().getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Enabled AstralEdit " + this.getDescription().getVersion() + " by Shynixn");
             } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
                 Bukkit.getLogger().log(Level.WARNING, "Failed to initialize plugin.", e);
@@ -73,7 +76,7 @@ public class AstralEditPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         try {
-            ReflectionUtils.invokeMethodByClass(AstralEdit.class, "shutdown", new Class[0], new Object[0]);
+            ReflectionUtils.invokeMethodByClass(AstralEditApi.class, "shutdown", new Class[0], new Object[0]);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             Bukkit.getLogger().log(Level.WARNING, "Failed to initialize plugin.", e);
         }

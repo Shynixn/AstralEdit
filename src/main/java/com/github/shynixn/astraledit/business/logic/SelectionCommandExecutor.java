@@ -1,6 +1,6 @@
 package com.github.shynixn.astraledit.business.logic;
 
-import com.github.shynixn.astraledit.api.AstralEdit;
+import com.github.shynixn.astraledit.api.AstralEditApi;
 import com.github.shynixn.astraledit.api.entity.Selection;
 import com.github.shynixn.astraledit.business.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.business.bukkit.Permission;
@@ -182,7 +182,7 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             try {
                 player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Removing blocks and rendering selection asynchronly...");
                 this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
-                    final Selection selection = AstralEdit.renderAndDestroy(player);
+                    final Selection selection = AstralEditApi.renderAndDestroy(player);
                     this.manager.addSelection(player, selection);
                     player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished converting selection.");
                 });
@@ -470,7 +470,7 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
     private void createRenderCommand(final Player player) {
         this.runAsyncTask(() -> {
             player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Rendering WorldEdit-Selection asynchronly...");
-            final Selection selection = AstralEdit.render(player);
+            final Selection selection = AstralEditApi.render(player);
             if (selection == null) {
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "Failed rendering WE selection!");
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "Check if you selected an area with Worldedit.");

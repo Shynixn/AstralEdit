@@ -10,7 +10,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.logging.Level;
 
-public final class AstralEdit {
+public final class AstralEditApi {
 
     private static int maxAmountOfBlocksPerPerson = 10000;
     private static SelectionManager manager;
@@ -18,7 +18,7 @@ public final class AstralEdit {
     /**
      * Initialize
      */
-    private AstralEdit() {
+    private AstralEditApi() {
         super();
     }
 
@@ -28,7 +28,7 @@ public final class AstralEdit {
      * @param plugin plugin
      */
     private static void initialize(Plugin plugin) {
-        AstralEdit.manager = new SelectionManager(plugin);
+        AstralEditApi.manager = new SelectionManager(plugin);
         maxAmountOfBlocksPerPerson = plugin.getConfig().getInt("general.max-selected-blocks-amount");
     }
 
