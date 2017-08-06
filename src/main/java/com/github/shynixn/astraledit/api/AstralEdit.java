@@ -72,6 +72,7 @@ public final class AstralEdit {
     /**
      * Generates a visualized object between the two corners
      *
+     * @param player  player
      * @param corner1 corner 1
      * @param corner2 corner 2
      * @return Rendered object
@@ -95,6 +96,7 @@ public final class AstralEdit {
     /**
      * Generates a visualized object between the two corners
      *
+     * @param player player
      * @return Rendered object
      */
     public static Selection render(Player player) {
