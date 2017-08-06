@@ -2,8 +2,8 @@
 
 | branch        | status        | download      |
 | ------------- | --------------| --------------| 
-| master        | [![Build Status](https://travis-ci.org/Shynixn/PetBlocks.svg?branch=master)](https://travis-ci.org/Shynixn/AstralEdit) |[Download latest release (recommend)](https://github.com/Shynixn/AstralEdit/releases)|
-| experimental      | [![Build Status](https://travis-ci.org/Shynixn/PetBlocks.svg?branch=workflow)](https://travis-ci.org/Shynixn/AstralEdit) | [Download snapshots](https://oss.sonatype.org/content/repositories/snapshots/com/github/shynixn/astraledit/) |
+| master        | [![Build Status](https://travis-ci.org/Shynixn/AstralEdit.svg?branch=master)](https://travis-ci.org/Shynixn/AstralEdit) |[Download latest release (recommend)](https://github.com/Shynixn/AstralEdit/releases)|
+| experimental      | [![Build Status](https://travis-ci.org/Shynixn/AstralEdit.svg?branch=workflow)](https://travis-ci.org/Shynixn/AstralEdit) | [Download snapshots](https://oss.sonatype.org/content/repositories/snapshots/com/github/shynixn/astraledit/) |
 
 JavaDocs: https://shynixn.github.io/AstralEdit/apidocs/
 
@@ -41,7 +41,7 @@ WorldEdit Extension to modify your world in a way you have not seen before.
 
 ### Gradle
 
-```json
+```xml
 dependencies {
     compile 'com.github.shynixn:astraledit:1.0.0'
 }
@@ -52,40 +52,40 @@ dependencies {
 #### Sample to render the worldEdit selection of the player and moving it to the player's location
 
 ```java
-     //Get a player and a plugin instance
-     Player player;
-     Plugin plugin;
-   
-     //It is highly recommend to work with selections asynchronly to increase server performance
-     Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-       @Override
-       public void run() {
-           Selection selection = AstralEditApi.render(player);
-           selection.move(player.getLocation());
-       }
-     });
+//Get a player and a plugin instance
+Player player;
+Plugin plugin;
+
+ //It is highly recommend to work with selections asynchronly to increase server performance
+Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+   @Override
+   public void run() {
+       Selection selection = AstralEditApi.render(player);
+       selection.move(player.getLocation());
+   }
+});
 ```
 #### Sample to render the blocks between two given corners, moving it to a targetLocation and placing the blocks. 
 
 ```java
-    //Select the locations
-    Location corner1 = new Location(Bukkit.getWorld("world"), 20, 5, 20);
-    Location corner2 = new Location(Bukkit.getWorld("world"), 40, 10, 40);
-    Location targetLocation  = new Location(Bukkit.getWorld("world"), 70, 8, 40);
+//Select the locations
+Location corner1 = new Location(Bukkit.getWorld("world"), 20, 5, 20);
+Location corner2 = new Location(Bukkit.getWorld("world"), 40, 10, 40);
+Location targetLocation  = new Location(Bukkit.getWorld("world"), 70, 8, 40);
 
-   //Get a player and a plugin instance
-    Player player;
-    Plugin plugin;
-   
-    Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-            @Override
-            public void run() {
-                Selection selection = AstralEditApi.renderAndDestroy(player,corner1, corner2);
-                selection.move(targetLocation);
-                selection.placeBlocks();
-                AstralEditApi.clearRenderedObject(player); //Do not forget to clear up the selection
-            }
-    });
+//Get a player and a plugin instance
+Player player;
+Plugin plugin;
+
+Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+        @Override
+        public void run() {
+            Selection selection = AstralEditApi.renderAndDestroy(player,corner1, corner2);
+            selection.move(targetLocation);
+            selection.placeBlocks();
+            AstralEditApi.clearRenderedObject(player); //Do not forget to clear up the selection
+        }
+});
 ```
 
 * Check out the [AstralEdit-Spigot-Page](COMING SOON) to get more information. 
