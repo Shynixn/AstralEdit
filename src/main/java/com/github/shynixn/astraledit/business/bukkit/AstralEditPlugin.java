@@ -1,6 +1,7 @@
 package com.github.shynixn.astraledit.business.bukkit;
 
 import com.github.shynixn.astraledit.api.AstralEdit;
+import com.github.shynixn.astraledit.business.bukkit.dependencies.DependencySupport;
 import com.github.shynixn.astraledit.business.bukkit.nms.VersionSupport;
 import com.github.shynixn.astraledit.lib.ReflectionUtils;
 import org.bukkit.Bukkit;
@@ -42,7 +43,7 @@ import java.util.logging.Level;
  */
 public class AstralEditPlugin extends JavaPlugin {
     public static final String PLUGIN_NAME = "AstralEdit";
-    public static final String PREFIX_CONSOLE = ChatColor.AQUA + "[AstralEdit] ";
+    public static final String PREFIX_CONSOLE = ChatColor.LIGHT_PURPLE + "[AstralEdit] ";
     public static final String PREFIX = ChatColor.DARK_RED + "" + ChatColor.BOLD + "[" + ChatColor.RED + "" + ChatColor.BOLD + ChatColor.ITALIC + "AE" + ChatColor.DARK_RED + "" + ChatColor.BOLD + "] " + ChatColor.RED;
     public static final String PREFIX_SUCCESS = PREFIX + ChatColor.GREEN;
     public static final String PREFIX_ERROR = PREFIX + ChatColor.RED;
@@ -52,12 +53,14 @@ public class AstralEditPlugin extends JavaPlugin {
      */
     @Override
     public void onEnable() {
-        if (!VersionSupport.isServerVersionSupported(PLUGIN_NAME, PREFIX_CONSOLE)) {
+        if (!VersionSupport.isServerVersionSupported(PLUGIN_NAME, PREFIX_CONSOLE) || !DependencySupport.areRequiredDependenciesInstalled(PLUGIN_NAME, PREFIX_CONSOLE)) {
             Bukkit.getPluginManager().disablePlugin(this);
         } else {
             try {
+                Bukkit.getServer().getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Loading AstralEdit ...");
                 this.saveDefaultConfig();
                 ReflectionUtils.invokeMethodByClass(AstralEdit.class, "initialize", new Class[]{Plugin.class}, new Object[]{this});
+                Bukkit.getServer().getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Enabled AstralEdit " + this.getDescription().getVersion() + " by Shynixn");
             } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
                 Bukkit.getLogger().log(Level.WARNING, "Failed to initialize plugin.", e);
             }

@@ -1,7 +1,7 @@
 package com.github.shynixn.astraledit.api;
 
 import com.github.shynixn.astraledit.api.entity.Selection;
-import com.github.shynixn.astraledit.business.bukkit.dependencies.WorldEditConnection;
+import com.github.shynixn.astraledit.business.bukkit.dependencies.worldedit.WorldEditConnection;
 import com.github.shynixn.astraledit.business.logic.SelectionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

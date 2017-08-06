@@ -1,4 +1,4 @@
-package com.github.shynixn.astraledit.business.bukkit.dependencies;
+package com.github.shynixn.astraledit.business.bukkit.dependencies.worldedit;
 
 import com.github.shynixn.astraledit.lib.ReflectionUtils;
 import org.bukkit.Bukkit;
