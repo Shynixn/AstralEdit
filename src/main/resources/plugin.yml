@@ -1,0 +1,12 @@
+name: AstralEdit
+version: 1.0.0-SNAPSHOT
+author: Shynixn
+website: https://www.spigotmc.org/members/shynixn.63455/
+main: com.github.shynixn.astraleditt.business.bukkit.AstralEditPlugin
+softdepend: [WorldEdit]
+commands:
+   awe:
+      description: Opens the arena menu.
+      usage: /<command>
+      permission: astraledit.allowCommands
+      permission-message: You don't have permission.

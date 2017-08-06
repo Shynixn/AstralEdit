@@ -1,0 +1,38 @@
+#######################################################################
+#            AstralEdit [Rendered WorldEdit Reforged] 2017 by Shynixn #
+#            RenderedWorldEdit 2015 by Shynixn		                  #
+#######################################################################
+
+# Permission:
+# LEVEL		 DESCRIPTION									PERMISSION
+# admin      Allows to use the /awe command             astraledit.allowCommands
+# admin      Allows to render a selection               astraledit.commands.render
+# admin      Allows to join a selection                 astraledit.commands.join
+# admin      Allows to tear a selection apart           astraledit.commands.tear
+# admin      Allows to place a selection                astraledit.commands.place
+# admin      Allows to clear a selection                astraledit.commands.clear
+# admin      Allows to move a selection to coordinates  astraledit.commands.movecoordinate
+# admin      Allows to move a selection to players      astraledit.commands.moveplayer
+# admin      Allows to mirror a selection               astraledit.commands.mirror
+# admin      Allows to flip a selection                 astraledit.commands.flip
+# admin      Allows to upsidedown a selection           astraledit.commands.upsidedown
+# admin      Allows to set a selection's angles         astraledit.commands.angles
+# admin      Allows to rotate a selection               astraledit.commands.rotate
+# admin      Allows to teleport player to selection     astraledit.commands.teleportplayer
+# admin      Allows to convert to blocks                astraledit.commands.converttoblocks
+# admin      Allows to convert to render                astraledit.commands.converttorender
+# admin      Allows to convert to auto-follow           astraledit.commands.autofollow
+# admin      Allows to convert to auto-rotate           astraledit.commands.autorotate
+# admin      Allows to undo operations                  astraledit.commands.undo
+# admin      Allows to hide your selection              astraledit.commands.hideother
+# admin      Allows to show your selection              astraledit.commands.showother
+
+# General settings
+
+# max-selected-blocks-amount: Amount of blocks which can be rendered at once.
+#                             As it's handled via packets the server won't lag at all but the client might crash if he selects too many blocks
+# max-undo-amount: Amount of operations per player which can be undone#
+
+general:
+  max-selected-blocks-amount: 10000
+  max-undo-amount: 10
