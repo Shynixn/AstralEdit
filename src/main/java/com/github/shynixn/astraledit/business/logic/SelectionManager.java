@@ -1,10 +1,13 @@
 package com.github.shynixn.astraledit.business.logic;
 
+import com.github.shynixn.astraledit.api.AstralEditApi;
 import com.github.shynixn.astraledit.api.entity.Selection;
+import com.github.shynixn.astraledit.business.bukkit.AstralEditPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.EulerAngle;
 
 import java.io.Closeable;
@@ -156,10 +159,7 @@ public final class SelectionManager implements Runnable, AutoCloseable {
                 this.getSelection(player).setBlockAngle((EulerAngle) operation.getOperationData());
             } else if (operation.getType() == OperationType.PLACE || operation.getType() == OperationType.CONVERTOBLOCKS) {
                 final List<Container> containers = (List<Container>) operation.getOperationData();
-                for (final Container dummy : containers) {
-                    dummy.location.toLocation().getBlock().setTypeId(dummy.id);
-                    dummy.location.toLocation().getBlock().setData(dummy.data);
-                }
+                Bukkit.getServer().getScheduler().runTask(JavaPlugin.getPlugin(AstralEditPlugin.class), () -> this.placeUndoCalc(0, containers.get(0), containers, 0));
             } else if (operation.getType() == OperationType.MOVE) {
                 this.selections.get(player).teleport((Location) operation.getOperationData());
             }
@@ -194,6 +194,35 @@ public final class SelectionManager implements Runnable, AutoCloseable {
     }
 
     /**
+     * Places an undos
+     * @param counter counter
+     * @param container container
+     * @param containers containers
+     * @param nextContainer nextContainer
+     */
+    private void placeUndo(final int counter, final Container container, final List<Container> containers, final int nextContainer) {
+        if (counter > 100) {
+            Bukkit.getServer().getScheduler().runTaskLater(JavaPlugin.getPlugin(AstralEditPlugin.class), () -> this.placeUndoCalc(0, container, containers, nextContainer), 1L);
+        } else {
+            this.placeUndoCalc(counter, container, containers, nextContainer);
+        }
+    }
+
+    /**
+     * Calc Undo
+     * @param counter counter
+     * @param dummy dummy
+     * @param containers containers
+     * @param nextContainer  nextContainer
+     */
+    private void placeUndoCalc(int counter, Container dummy, List<Container> containers, int nextContainer) {
+        dummy.location.toLocation().getBlock().setTypeId(dummy.id);
+        dummy.location.toLocation().getBlock().setData(dummy.data);
+        nextContainer += 1;
+        this.placeUndo(counter + 1, containers.get(nextContainer), containers, nextContainer);
+    }
+
+    /**
      * Removes an operation from the undo stack
      *
      * @param player player
@@ -209,6 +238,7 @@ public final class SelectionManager implements Runnable, AutoCloseable {
      * Closes this resource, relinquishing any underlying resources.
      * This method is invoked automatically on objects managed by the
      * {@code try}-with-resources statement.
+     *
      * @throws Exception if this resource cannot be closed
      */
     @Override

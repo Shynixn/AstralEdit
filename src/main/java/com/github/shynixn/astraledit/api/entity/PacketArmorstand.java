@@ -1,6 +1,7 @@
 package com.github.shynixn.astraledit.api.entity;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.util.EulerAngle;
 
 /**
@@ -37,7 +38,7 @@ public interface PacketArmorstand extends AutoCloseable {
     /**
      * Spawns the armorstand
      */
-    void spawn();
+    void spawn(Player... players);
 
     /**
      * Teleports the armorstand to the given location
@@ -49,7 +50,7 @@ public interface PacketArmorstand extends AutoCloseable {
     /**
      * Removes the armorstand
      */
-    void remove();
+    void remove(Player... players);
 
     /**
      * Returns the location of the armorstand

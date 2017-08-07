@@ -33,7 +33,7 @@ class SelectionHolder implements Selection {
     private boolean isMirrored;
     private boolean flipped;
     private boolean upSideDown;
-    private boolean hidden;
+    private boolean hidden = true;
     private Player player;
 
     /**
@@ -105,9 +105,15 @@ class SelectionHolder implements Selection {
      * Places the selection at the current location
      */
     @Override
-    public void placeBlocks() {
+    public void placeBlocks(Runnable callback) {
         this.tearApart();
-        getPlugin().getServer().getScheduler().runTask(getPlugin(), () -> this.changeSetter(0, 0, 0, 0));
+        getPlugin().getServer().getScheduler().runTask(getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                SelectionHolder.this.changeSetter(0, 0, 0, 0);
+                callback.run();
+            }
+        });
     }
 
     /**
@@ -178,12 +184,8 @@ class SelectionHolder implements Selection {
             for (int j = 0; j < this.getYWidth(); j++) {
                 for (int k = 0; k < this.getZWidth(); k++) {
                     if (this.stands[i][j][k] != null) {
-                        for (final Player player : players) {
-                            if (!player.equals(this.player)) {
-                                this.stands[i][j][k].remove();
-                                this.stands[i][j][k].spawn();
-                            }
-                        }
+                        this.stands[i][j][k].remove(players);
+                        this.stands[i][j][k].spawn(players);
                     }
                 }
             }
@@ -202,11 +204,7 @@ class SelectionHolder implements Selection {
             for (int j = 0; j < this.getYWidth(); j++) {
                 for (int k = 0; k < this.getZWidth(); k++) {
                     if (this.stands[i][j][k] != null) {
-                        for (final Player player : players) {
-                            if (!player.equals(this.player)) {
-                                this.stands[i][j][k].remove();
-                            }
-                        }
+                        this.stands[i][j][k].remove(players);
                     }
                 }
             }

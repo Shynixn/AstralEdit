@@ -182,8 +182,7 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             try {
                 player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Removing blocks and rendering selection asynchronly...");
                 this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
-                    final Selection selection = AstralEditApi.renderAndDestroy(player);
-                    this.manager.addSelection(player, selection);
+                    AstralEditApi.renderAndDestroy(player);
                     player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished converting selection.");
                 });
             } catch (final Exception e) {
@@ -206,10 +205,11 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
                 player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Converting render ...");
                 final Operation operation = new Operation(OperationType.PLACE);
                 operation.setOperationData(((SelectionHolder) this.manager.getSelection(player)).getTemporaryStorage());
-                this.manager.getSelection(player).placeBlocks();
-                this.manager.clearSelection(player);
-                this.manager.addOperation(player, operation);
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished converting render.");
+                this.manager.getSelection(player).placeBlocks(() -> {
+                    this.manager.clearSelection(player);
+                    this.manager.addOperation(player, operation);
+                    player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished converting render.");
+                });
             }
         });
     }
@@ -284,6 +284,7 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             } else {
                 if (!this.manager.getSelection(player).isHidden()) {
                     this.manager.getSelection(player).hide(getOnlinePlayers().toArray(new Player[getOnlinePlayers().size()]));
+                    this.manager.getSelection(player).show(this.manager.getSelection(player).getOwner());
                     player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Your render is now invisible to other players.");
                 }
             }
@@ -423,9 +424,10 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
                 player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Placing render ...");
                 final Operation operation = new Operation(OperationType.PLACE);
                 operation.setOperationData(((SelectionHolder) this.manager.getSelection(player)).getTemporaryStorage());
-                this.manager.getSelection(player).placeBlocks();
-                this.manager.addOperation(player, operation);
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished placing render.");
+                this.manager.getSelection(player).placeBlocks(() -> {
+                    this.manager.addOperation(player, operation);
+                    player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished placing render.");
+                });
             }
         });
     }

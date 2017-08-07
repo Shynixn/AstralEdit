@@ -92,11 +92,15 @@ public class DisplayArmorstand implements PacketArmorstand {
      * Spawns the armorstand
      */
     @Override
-    public void spawn() {
+    public void spawn(Player... players) {
         final PacketPlayOutSpawnEntityLiving packetSpawn = new PacketPlayOutSpawnEntityLiving(this.armorStand);
-        this.sendPacket(packetSpawn);
         final PacketPlayOutEntityEquipment packetHead =
-                new PacketPlayOutEntityEquipment(this.armorStand.getId(), 3, CraftItemStack.asNMSCopy(((ArmorStand) this.armorStand.getBukkitEntity()).getHelmet()));
+                new PacketPlayOutEntityEquipment(this.armorStand.getId(),3, CraftItemStack.asNMSCopy(((ArmorStand) this.armorStand.getBukkitEntity()).getHelmet()));
+        for (final Player player : players) {
+            this.sendPacket(packetSpawn, player);
+            this.sendPacket(packetHead, player);
+        }
+        this.sendPacket(packetSpawn);
         this.sendPacket(packetHead);
     }
 
@@ -116,8 +120,11 @@ public class DisplayArmorstand implements PacketArmorstand {
      * Removes the armorstand
      */
     @Override
-    public void remove() {
+    public void remove(Player... players) {
         final PacketPlayOutEntityDestroy destroyPacket = new PacketPlayOutEntityDestroy(this.armorStand.getId());
+        for (final Player player : players) {
+            this.sendPacket(destroyPacket, player);
+        }
         this.sendPacket(destroyPacket);
     }
 
@@ -138,7 +145,7 @@ public class DisplayArmorstand implements PacketArmorstand {
      */
     @Override
     public void setHeadPose(EulerAngle angle) {
-        ((ArmorStand) this.armorStand).setHeadPose(angle);
+        ((ArmorStand) this.armorStand.getBukkitEntity()).setHeadPose(angle);
     }
 
     /**
@@ -148,7 +155,7 @@ public class DisplayArmorstand implements PacketArmorstand {
      */
     @Override
     public EulerAngle getHeadPose() {
-        return ((ArmorStand) this.armorStand).getHeadPose();
+        return ((ArmorStand) this.armorStand.getBukkitEntity()).getHeadPose();
     }
 
     /**
@@ -197,7 +204,17 @@ public class DisplayArmorstand implements PacketArmorstand {
      * @param packet packet
      */
     private void sendPacket(Packet<?> packet) {
-        ((CraftPlayer) this.player).getHandle().playerConnection.sendPacket(packet);
+        this.sendPacket(packet, this.player);
+    }
+
+    /**
+     * Sends the packet
+     *
+     * @param player player
+     * @param packet packet
+     */
+    private void sendPacket(Packet<?> packet, Player player) {
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
     }
 
     /**

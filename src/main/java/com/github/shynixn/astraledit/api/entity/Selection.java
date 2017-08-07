@@ -71,7 +71,7 @@ public interface Selection extends AutoCloseable {
     /**
      * Places the selection at the current location
      */
-    void placeBlocks();
+    void placeBlocks(Runnable callBack);
 
     /**
      * Moves the object to the given location
