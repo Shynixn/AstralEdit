@@ -1,14 +1,11 @@
 package com.github.shynixn.astraledit.business.bukkit;
 
 import com.github.shynixn.astraledit.api.AstralEditApi;
-import com.github.shynixn.astraledit.api.entity.Selection;
 import com.github.shynixn.astraledit.business.bukkit.dependencies.DependencySupport;
 import com.github.shynixn.astraledit.business.bukkit.nms.VersionSupport;
 import com.github.shynixn.astraledit.lib.ReflectionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 

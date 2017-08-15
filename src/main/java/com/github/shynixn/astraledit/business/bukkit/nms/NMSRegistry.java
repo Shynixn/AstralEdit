@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Set;
 import java.util.logging.Level;
 
 /**
@@ -50,15 +51,16 @@ public class NMSRegistry {
      * @param location location
      * @param id       id
      * @param data     data
+     * @param watchers watchers
      * @return packetArmorstand
      */
-    public static PacketArmorstand createPacketArmorstand(Player player, Location location, int id, byte data) {
+    public static PacketArmorstand createPacketArmorstand(Player player, Location location, int id, byte data,Set<Player> watchers) {
         try {
             return (PacketArmorstand) ReflectionUtils
                     .invokeConstructor(ReflectionUtils.invokeClass("com.github.shynixn.astraledit.business.bukkit.nms.VERSION.DisplayArmorstand"
                                     .replace("VERSION", VersionSupport.getServerVersion().getVersionText()))
-                            , new Class[]{Player.class, Location.class, int.class, byte.class}
-                            , new Object[]{player, location, id, data});
+                            , new Class[]{Player.class, Location.class, int.class, byte.class, Set.class}
+                            , new Object[]{player, location, id, data, watchers});
         } catch (IllegalAccessException | InvocationTargetException | InstantiationException | NoSuchMethodException | ClassNotFoundException e) {
             Bukkit.getLogger().log(Level.WARNING, "Failed to create packetArmorstand.", e);
             throw new RuntimeException("Failed to create packetArmorstand.");

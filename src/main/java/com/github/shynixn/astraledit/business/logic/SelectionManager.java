@@ -1,6 +1,5 @@
 package com.github.shynixn.astraledit.business.logic;
 
-import com.github.shynixn.astraledit.api.AstralEditApi;
 import com.github.shynixn.astraledit.api.entity.Selection;
 import com.github.shynixn.astraledit.business.bukkit.AstralEditPlugin;
 import org.bukkit.Bukkit;
@@ -10,7 +9,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.EulerAngle;
 
-import java.io.Closeable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;

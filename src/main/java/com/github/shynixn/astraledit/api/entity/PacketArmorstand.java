@@ -38,7 +38,7 @@ public interface PacketArmorstand extends AutoCloseable {
     /**
      * Spawns the armorstand
      */
-    void spawn(Player... players);
+    void spawn();
 
     /**
      * Teleports the armorstand to the given location
@@ -50,7 +50,7 @@ public interface PacketArmorstand extends AutoCloseable {
     /**
      * Removes the armorstand
      */
-    void remove(Player... players);
+    void remove();
 
     /**
      * Returns the location of the armorstand

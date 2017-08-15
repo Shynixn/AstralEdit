@@ -284,7 +284,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             } else {
                 if (!this.manager.getSelection(player).isHidden()) {
                     this.manager.getSelection(player).hide(getOnlinePlayers().toArray(new Player[getOnlinePlayers().size()]));
-                    this.manager.getSelection(player).show(this.manager.getSelection(player).getOwner());
                     player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Your render is now invisible to other players.");
                 }
             }

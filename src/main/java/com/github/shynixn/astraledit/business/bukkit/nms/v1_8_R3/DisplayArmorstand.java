@@ -7,6 +7,7 @@ import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftArmorStand;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.ArmorStand;
@@ -14,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.EulerAngle;
 
 import java.io.Closeable;
+import java.util.Set;
 
 /**
  * Copyright 2017 Shynixn
@@ -50,6 +52,7 @@ public class DisplayArmorstand implements PacketArmorstand {
     private final EntityArmorStand armorStand;
     private int storedId;
     private byte storedData;
+    private Set<Player> watchers;
 
     /**
      * Initializes the armorstand
@@ -59,8 +62,9 @@ public class DisplayArmorstand implements PacketArmorstand {
      * @param id       id
      * @param data     data
      */
-    public DisplayArmorstand(Player player, Location location, int id, byte data) {
+    public DisplayArmorstand(Player player, Location location, int id, byte data, Set<Player> watchers) {
         super();
+        this.watchers = watchers;
         this.player = player;
         this.armorStand = new EntityArmorStand(((CraftWorld) player.getWorld()).getHandle());
         final NBTTagCompound compound = new NBTTagCompound();
@@ -73,8 +77,12 @@ public class DisplayArmorstand implements PacketArmorstand {
         this.storedId = id;
         this.storedData = data;
 
-       ItemStackBuilder stackBuilder = new ItemStackBuilder(Material.getMaterial(id), 1, data);
-        ((ArmorStand) this.armorStand.getBukkitEntity()).setHelmet(stackBuilder.build());
+        ItemStackBuilder stackBuilder = new ItemStackBuilder(Material.getMaterial(id), 1, data);
+        this.getCraftEntity().setHelmet(stackBuilder.build());
+        this.getCraftEntity().setBodyPose(new EulerAngle(3.15, 0, 0));
+        this.getCraftEntity().setLeftLegPose(new EulerAngle(3.15, 0, 0));
+        this.getCraftEntity().setRightLegPose(new EulerAngle(3.15, 0, 0));
+
         if (((ArmorStand) this.armorStand.getBukkitEntity()).getHelmet().getType() == Material.AIR) {
             stackBuilder = new ItemStackBuilder(Material.SKULL_ITEM, 1, (short) 3);
             if (id == Material.WATER.getId() || id == Material.STATIONARY_WATER.getId()) {
@@ -92,14 +100,10 @@ public class DisplayArmorstand implements PacketArmorstand {
      * Spawns the armorstand
      */
     @Override
-    public void spawn(Player... players) {
+    public void spawn() {
         final PacketPlayOutSpawnEntityLiving packetSpawn = new PacketPlayOutSpawnEntityLiving(this.armorStand);
         final PacketPlayOutEntityEquipment packetHead =
                 new PacketPlayOutEntityEquipment(this.armorStand.getId(), 3, CraftItemStack.asNMSCopy(((ArmorStand) this.armorStand.getBukkitEntity()).getHelmet()));
-        for (final Player player : players) {
-            this.sendPacket(packetSpawn, player);
-            this.sendPacket(packetHead, player);
-        }
         this.sendPacket(packetSpawn);
         this.sendPacket(packetHead);
     }
@@ -120,11 +124,8 @@ public class DisplayArmorstand implements PacketArmorstand {
      * Removes the armorstand
      */
     @Override
-    public void remove(Player... players) {
+    public void remove() {
         final PacketPlayOutEntityDestroy destroyPacket = new PacketPlayOutEntityDestroy(this.armorStand.getId());
-        for (final Player player : players) {
-            this.sendPacket(destroyPacket, player);
-        }
         this.sendPacket(destroyPacket);
     }
 
@@ -205,6 +206,9 @@ public class DisplayArmorstand implements PacketArmorstand {
      */
     private void sendPacket(Packet<?> packet) {
         this.sendPacket(packet, this.player);
+        for (final Player player : this.watchers) {
+            this.sendPacket(packet, player);
+        }
     }
 
     /**
@@ -215,6 +219,15 @@ public class DisplayArmorstand implements PacketArmorstand {
      */
     private void sendPacket(Packet<?> packet, Player player) {
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+    }
+
+    /**
+     * Returns the craftArmorstand
+     *
+     * @return stand
+     */
+    private CraftArmorStand getCraftEntity() {
+        return (CraftArmorStand) this.armorStand.getBukkitEntity();
     }
 
     /**
