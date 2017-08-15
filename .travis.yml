@@ -1,0 +1,25 @@
+language: java
+sudo: true
+install:
+    - cd /home/travis/build/Shynixn/AstralEdit/
+    - mkdir lib
+    - wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastStableBuild/artifact/target/BuildTools.jar -P /home/travis/build/Shynixn/AstralEdit/lib/
+before_script:
+  - sudo /etc/init.d/mysql stop
+script:
+    - cd /home/travis/build/Shynixn/AstralEdit/lib/
+    - java -jar BuildTools.jar --rev 1.8 > /dev/null
+    - java -jar BuildTools.jar --rev 1.8.3 > /dev/null
+    - java -jar BuildTools.jar --rev 1.8.8 > /dev/null
+    - java -jar BuildTools.jar --rev 1.9 > /dev/null
+    - java -jar BuildTools.jar --rev 1.9.4 > /dev/null
+    - java -jar BuildTools.jar --rev 1.10 > /dev/null
+    - java -jar BuildTools.jar --rev 1.11 > /dev/null
+    - java -jar BuildTools.jar --rev 1.12 > /dev/null
+    - cd -
+    - mvn compile test
+jdk:
+  - oraclejdk8
+#jdk
+
+

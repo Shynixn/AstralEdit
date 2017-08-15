@@ -60,6 +60,7 @@ public class DisplayArmorstand implements PacketArmorstand {
      * @param location location
      * @param id       id
      * @param data     data
+     * @param watchers watchers
      */
     public DisplayArmorstand(Player player, Location location, int id, byte data, Set<Player> watchers) {
         super();
@@ -233,6 +234,7 @@ public class DisplayArmorstand implements PacketArmorstand {
      * Closes this resource, relinquishing any underlying resources.
      * This method is invoked automatically on objects managed by the
      * {@code try}-with-resources statement.
+     *
      * @throws Exception if this resource cannot be closed
      */
     @Override
