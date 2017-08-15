@@ -43,7 +43,7 @@ WorldEdit Extension to modify your world in a way you have not seen before.
 
 ```xml
 dependencies {
-    compile 'com.github.shynixn:astraledit:1.0.0'
+    compileOnly 'com.github.shynixn:astraledit:1.0.0'
 }
 ```
 
@@ -92,7 +92,8 @@ Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
 ## Screenshots
 
-Coming soon
+![alt tag](http://www.mediafire.com/view/s37xusb1guym4fb/astralgif1.gif)
+![alt tag](http://www.mediafire.com/view/dj58a1naxtxqje7/astralgif2.gif)
 
 ## Licence
 
