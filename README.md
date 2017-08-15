@@ -92,6 +92,7 @@ Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
 ## Screenshots
 
+![test image size](http://www.mediafire.com/convkey/6605/czkr85tdoq751g7zg.jpg){:height="50%" width="50%"}
 ![alt tag](http://www.mediafire.com/convkey/6605/czkr85tdoq751g7zg.jpg)
 ![alt tag](http://www.mediafire.com/convkey/de9a/s37xusb1guym4fbzg.jpg)
 
