@@ -3,17 +3,21 @@ package com.github.shynixn.astraledit.business.bukkit.nms.v1_12_R1;
 import com.github.shynixn.astraledit.api.entity.PacketArmorstand;
 import com.github.shynixn.astraledit.business.bukkit.nms.NMSRegistry;
 import com.github.shynixn.astraledit.lib.ItemStackBuilder;
+import com.github.shynixn.astraledit.lib.ReflectionUtils;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftArmorStand;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.util.EulerAngle;
 
-import java.io.Closeable;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Copyright 2017 Shynixn
@@ -50,16 +54,20 @@ public class DisplayArmorstand implements PacketArmorstand {
     private final EntityArmorStand armorStand;
     private int storedId;
     private byte storedData;
+    private Set<Player> watchers;
 
     /**
      * Initializes the armorstand
      *
-     * @param player player
-     * @param id     id
-     * @param data   data
+     * @param player   player
+     * @param location location
+     * @param id       id
+     * @param data     data
+     * @param watchers watchers
      */
-    public DisplayArmorstand(Player player, Location location, int id, byte data) {
+    public DisplayArmorstand(Player player, Location location, int id, byte data, Set<Player> watchers) {
         super();
+        this.watchers = watchers;
         this.player = player;
         this.armorStand = new EntityArmorStand(((CraftWorld) player.getWorld()).getHandle());
         final NBTTagCompound compound = new NBTTagCompound();
@@ -72,11 +80,15 @@ public class DisplayArmorstand implements PacketArmorstand {
         this.storedId = id;
         this.storedData = data;
 
-        final ItemStackBuilder stackBuilder = new ItemStackBuilder(Material.getMaterial(id), 1, data);
-        ((ArmorStand) this.armorStand.getBukkitEntity()).setHelmet(stackBuilder.build());
+        ItemStackBuilder stackBuilder = new ItemStackBuilder(Material.getMaterial(id), 1, data);
+        this.getCraftEntity().setHelmet(stackBuilder.build());
+        this.getCraftEntity().setBodyPose(new EulerAngle(3.15, 0, 0));
+        this.getCraftEntity().setLeftLegPose(new EulerAngle(3.15, 0, 0));
+        this.getCraftEntity().setRightLegPose(new EulerAngle(3.15, 0, 0));
+        this.getCraftEntity().setGlowing(true);
+
         if (((ArmorStand) this.armorStand.getBukkitEntity()).getHelmet().getType() == Material.AIR) {
-            stackBuilder.setType(org.bukkit.Material.SKULL_ITEM);
-            stackBuilder.getData().setData((byte) 3);
+            stackBuilder = new ItemStackBuilder(Material.SKULL_ITEM, 1, (short) 3);
             if (id == Material.WATER.getId() || id == Material.STATIONARY_WATER.getId()) {
                 stackBuilder.setSkin(NMSRegistry.WATER_HEAD);
             } else if (id == Material.LAVA.getId() || id == Material.STATIONARY_LAVA.getId()) {
@@ -94,9 +106,9 @@ public class DisplayArmorstand implements PacketArmorstand {
     @Override
     public void spawn() {
         final PacketPlayOutSpawnEntityLiving packetSpawn = new PacketPlayOutSpawnEntityLiving(this.armorStand);
-        this.sendPacket(packetSpawn);
         final PacketPlayOutEntityEquipment packetHead =
                 new PacketPlayOutEntityEquipment(this.armorStand.getId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(((ArmorStand) this.armorStand.getBukkitEntity()).getHelmet()));
+        this.sendPacket(packetSpawn);
         this.sendPacket(packetHead);
     }
 
@@ -138,7 +150,9 @@ public class DisplayArmorstand implements PacketArmorstand {
      */
     @Override
     public void setHeadPose(EulerAngle angle) {
-        ((ArmorStand) this.armorStand).setHeadPose(angle);
+        ((ArmorStand) this.armorStand.getBukkitEntity()).setHeadPose(angle);
+        final PacketPlayOutEntityMetadata packet = new PacketPlayOutEntityMetadata(this.armorStand.getId(), this.armorStand.getDataWatcher(), true);
+        this.sendPacket(packet);
     }
 
     /**
@@ -148,7 +162,7 @@ public class DisplayArmorstand implements PacketArmorstand {
      */
     @Override
     public EulerAngle getHeadPose() {
-        return ((ArmorStand) this.armorStand).getHeadPose();
+        return ((ArmorStand) this.armorStand.getBukkitEntity()).getHeadPose();
     }
 
     /**
@@ -197,57 +211,42 @@ public class DisplayArmorstand implements PacketArmorstand {
      * @param packet packet
      */
     private void sendPacket(Packet<?> packet) {
-        ((CraftPlayer) this.player).getHandle().playerConnection.sendPacket(packet);
+        this.sendPacket(packet, this.player);
+        for (final Player player : this.watchers) {
+            this.sendPacket(packet, player);
+        }
+    }
+
+    /**
+     * Sends the packet
+     *
+     * @param player player
+     * @param packet packet
+     */
+    private void sendPacket(Packet<?> packet, Player player) {
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+    }
+
+    /**
+     * Returns the craftArmorstand
+     *
+     * @return stand
+     */
+    private CraftArmorStand getCraftEntity() {
+        return (CraftArmorStand) this.armorStand.getBukkitEntity();
     }
 
     /**
      * Closes this resource, relinquishing any underlying resources.
      * This method is invoked automatically on objects managed by the
      * {@code try}-with-resources statement.
-     * <p>
-     * <p>While this interface method is declared to throw {@code
-     * Exception}, implementers are <em>strongly</em> encouraged to
-     * declare concrete implementations of the {@code close} method to
-     * throw more specific exceptions, or to throw no exception at all
-     * if the close operation cannot fail.
-     * <p>
-     * <p> Cases where the close operation may fail require careful
-     * attention by implementers. It is strongly advised to relinquish
-     * the underlying resources and to internally <em>mark</em> the
-     * resource as closed, prior to throwing the exception. The {@code
-     * close} method is unlikely to be invoked more than once and so
-     * this ensures that the resources are released in a timely manner.
-     * Furthermore it reduces problems that could arise when the resource
-     * wraps, or is wrapped, by another resource.
-     * <p>
-     * <p><em>Implementers of this interface are also strongly advised
-     * to not have the {@code close} method throw {@link
-     * InterruptedException}.</em>
-     * <p>
-     * This exception interacts with a thread's interrupted status,
-     * and runtime misbehavior is likely to occur if an {@code
-     * InterruptedException} is {@linkplain Throwable#addSuppressed
-     * suppressed}.
-     * <p>
-     * More generally, if it would cause problems for an
-     * exception to be suppressed, the {@code AutoCloseable.close}
-     * method should not throw it.
-     * <p>
-     * <p>Note that unlike the {@link Closeable#close close}
-     * method of {@link Closeable}, this {@code close} method
-     * is <em>not</em> required to be idempotent.  In other words,
-     * calling this {@code close} method more than once may have some
-     * visible side effect, unlike {@code Closeable.close} which is
-     * required to have no effect if called more than once.
-     * <p>
-     * However, implementers of this interface are strongly encouraged
-     * to make their {@code close} methods idempotent.
      *
      * @throws Exception if this resource cannot be closed
      */
     @Override
     public void close() throws Exception {
         this.remove();
+        this.watchers = null;
         this.player = null;
     }
 }

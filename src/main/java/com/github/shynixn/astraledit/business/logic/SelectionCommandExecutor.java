@@ -1,6 +1,6 @@
 package com.github.shynixn.astraledit.business.logic;
 
-import com.github.shynixn.astraledit.api.AstralEdit;
+import com.github.shynixn.astraledit.api.AstralEditApi;
 import com.github.shynixn.astraledit.api.entity.Selection;
 import com.github.shynixn.astraledit.business.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.business.bukkit.Permission;
@@ -182,8 +182,7 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             try {
                 player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Removing blocks and rendering selection asynchronly...");
                 this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
-                    final Selection selection = AstralEdit.renderAndDestroy(player);
-                    this.manager.addSelection(player, selection);
+                    AstralEditApi.renderAndDestroy(player);
                     player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished converting selection.");
                 });
             } catch (final Exception e) {
@@ -206,10 +205,11 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
                 player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Converting render ...");
                 final Operation operation = new Operation(OperationType.PLACE);
                 operation.setOperationData(((SelectionHolder) this.manager.getSelection(player)).getTemporaryStorage());
-                this.manager.getSelection(player).placeBlocks();
-                this.manager.clearSelection(player);
-                this.manager.addOperation(player, operation);
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished converting render.");
+                this.manager.getSelection(player).placeBlocks(() -> {
+                    this.manager.clearSelection(player);
+                    this.manager.addOperation(player, operation);
+                    player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished converting render.");
+                });
             }
         });
     }
@@ -423,9 +423,10 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
                 player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Placing render ...");
                 final Operation operation = new Operation(OperationType.PLACE);
                 operation.setOperationData(((SelectionHolder) this.manager.getSelection(player)).getTemporaryStorage());
-                this.manager.getSelection(player).placeBlocks();
-                this.manager.addOperation(player, operation);
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished placing render.");
+                this.manager.getSelection(player).placeBlocks(() -> {
+                    this.manager.addOperation(player, operation);
+                    player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished placing render.");
+                });
             }
         });
     }
@@ -470,7 +471,7 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
     private void createRenderCommand(final Player player) {
         this.runAsyncTask(() -> {
             player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Rendering WorldEdit-Selection asynchronly...");
-            final Selection selection = AstralEdit.render(player);
+            final Selection selection = AstralEditApi.render(player);
             if (selection == null) {
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "Failed rendering WE selection!");
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "Check if you selected an area with Worldedit.");

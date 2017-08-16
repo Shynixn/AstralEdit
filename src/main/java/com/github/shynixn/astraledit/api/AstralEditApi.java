@@ -1,7 +1,7 @@
 package com.github.shynixn.astraledit.api;
 
 import com.github.shynixn.astraledit.api.entity.Selection;
-import com.github.shynixn.astraledit.business.bukkit.dependencies.WorldEditConnection;
+import com.github.shynixn.astraledit.business.bukkit.dependencies.worldedit.WorldEditConnection;
 import com.github.shynixn.astraledit.business.logic.SelectionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -10,15 +10,15 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.logging.Level;
 
-public final class AstralEdit {
+public final class AstralEditApi {
 
     private static int maxAmountOfBlocksPerPerson = 10000;
     private static SelectionManager manager;
 
     /**
-     * Init
+     * Initialize
      */
-    private AstralEdit() {
+    private AstralEditApi() {
         super();
     }
 
@@ -28,7 +28,7 @@ public final class AstralEdit {
      * @param plugin plugin
      */
     private static void initialize(Plugin plugin) {
-        AstralEdit.manager = new SelectionManager(plugin);
+        AstralEditApi.manager = new SelectionManager(plugin);
         maxAmountOfBlocksPerPerson = plugin.getConfig().getInt("general.max-selected-blocks-amount");
     }
 
@@ -72,6 +72,7 @@ public final class AstralEdit {
     /**
      * Generates a visualized object between the two corners
      *
+     * @param player  player
      * @param corner1 corner 1
      * @param corner2 corner 2
      * @return Rendered object
@@ -95,6 +96,7 @@ public final class AstralEdit {
     /**
      * Generates a visualized object between the two corners
      *
+     * @param player player
      * @return Rendered object
      */
     public static Selection render(Player player) {

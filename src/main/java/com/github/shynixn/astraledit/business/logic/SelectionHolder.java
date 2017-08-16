@@ -15,7 +15,9 @@ import org.bukkit.util.EulerAngle;
 
 import java.io.Closeable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 class SelectionHolder implements Selection {
 
@@ -33,8 +35,9 @@ class SelectionHolder implements Selection {
     private boolean isMirrored;
     private boolean flipped;
     private boolean upSideDown;
-    private boolean hidden;
+    private boolean hidden = true;
     private Player player;
+    private Set<Player> watchers = new HashSet<>();
 
     /**
      * Initializes a new selectionHolder
@@ -105,9 +108,12 @@ class SelectionHolder implements Selection {
      * Places the selection at the current location
      */
     @Override
-    public void placeBlocks() {
+    public void placeBlocks(Runnable callback) {
         this.tearApart();
-        getPlugin().getServer().getScheduler().runTask(getPlugin(), () -> this.changeSetter(0, 0, 0, 0));
+        getPlugin().getServer().getScheduler().runTask(getPlugin(), () -> {
+            SelectionHolder.this.changeSetter(0, 0, 0, 0);
+            callback.run();
+        });
     }
 
     /**
@@ -174,16 +180,17 @@ class SelectionHolder implements Selection {
      */
     @Override
     public void show(Player... players) {
+        for (final Player player : players) {
+            if (!player.equals(this.getOwner())) {
+                this.watchers.add(player);
+            }
+        }
         for (int i = 0; i < this.getXWidth(); i++) {
             for (int j = 0; j < this.getYWidth(); j++) {
                 for (int k = 0; k < this.getZWidth(); k++) {
                     if (this.stands[i][j][k] != null) {
-                        for (final Player player : players) {
-                            if (!player.equals(this.player)) {
-                                this.stands[i][j][k].remove();
-                                this.stands[i][j][k].spawn();
-                            }
-                        }
+                        this.stands[i][j][k].remove();
+                        this.stands[i][j][k].spawn();
                     }
                 }
             }
@@ -202,15 +209,17 @@ class SelectionHolder implements Selection {
             for (int j = 0; j < this.getYWidth(); j++) {
                 for (int k = 0; k < this.getZWidth(); k++) {
                     if (this.stands[i][j][k] != null) {
-                        for (final Player player : players) {
-                            if (!player.equals(this.player)) {
-                                this.stands[i][j][k].remove();
-                            }
-                        }
+                        this.stands[i][j][k].remove();
                     }
                 }
             }
         }
+        for (final Player player : players) {
+            if (this.watchers.contains(player)) {
+                this.watchers.remove(player);
+            }
+        }
+        this.show();
         this.hidden = true;
     }
 
@@ -518,7 +527,7 @@ class SelectionHolder implements Selection {
                         final Location loc = new Location(location.getWorld(), location.getBlockX() + i, location.getBlockY() + j, location.getBlockZ() + k);
                         if (loc.getBlock().getType() != Material.AIR) {
                             this.stands[i][j][k] = NMSRegistry.createPacketArmorstand(this.player
-                                    , new Location(loc.getWorld(), loc.getX() + 0.5, loc.getY() - 1.2, loc.getZ() + 0.5), loc.getBlock().getTypeId(), loc.getBlock().getData());
+                                    , new Location(loc.getWorld(), loc.getX() + 0.5, loc.getY() - 1.2, loc.getZ() + 0.5), loc.getBlock().getTypeId(), loc.getBlock().getData(), this.watchers);
                             this.stands[i][j][k].spawn();
                         }
                     }
@@ -745,6 +754,8 @@ class SelectionHolder implements Selection {
                 }
             }
         }
+        this.watchers.clear();
+        this.watchers = null;
         this.player = null;
         this.isDestroyed = true;
     }

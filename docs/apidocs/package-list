@@ -1,0 +1,16 @@
+com.github.shynixn.astraledit.api
+com.github.shynixn.astraledit.api.entity
+com.github.shynixn.astraledit.business.bukkit
+com.github.shynixn.astraledit.business.bukkit.dependencies
+com.github.shynixn.astraledit.business.bukkit.dependencies.worldedit
+com.github.shynixn.astraledit.business.bukkit.nms
+com.github.shynixn.astraledit.business.bukkit.nms.v1_10_R1
+com.github.shynixn.astraledit.business.bukkit.nms.v1_11_R1
+com.github.shynixn.astraledit.business.bukkit.nms.v1_12_R1
+com.github.shynixn.astraledit.business.bukkit.nms.v1_8_R1
+com.github.shynixn.astraledit.business.bukkit.nms.v1_8_R2
+com.github.shynixn.astraledit.business.bukkit.nms.v1_8_R3
+com.github.shynixn.astraledit.business.bukkit.nms.v1_9_R1
+com.github.shynixn.astraledit.business.bukkit.nms.v1_9_R2
+com.github.shynixn.astraledit.business.logic
+com.github.shynixn.astraledit.lib

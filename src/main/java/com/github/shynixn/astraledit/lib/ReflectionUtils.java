@@ -77,21 +77,20 @@ public final class ReflectionUtils {
      * @param clazz      clazz
      * @param paramTypes paramTypes
      * @param params     params
-     * @param <T>        classType
      * @return instance
      * @throws IllegalAccessException    exception
      * @throws InvocationTargetException exception
      * @throws InstantiationException    exception
      * @throws NoSuchMethodException     exception
      */
-    public static <T> T invokeConstructor(Class<T> clazz, Class<?>[] paramTypes, Object[] params) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
+    public static Object invokeConstructor(Class<?> clazz, Class<?>[] paramTypes, Object[] params) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
         if (clazz == null)
             throw new IllegalArgumentException("Class cannot be null!");
         if (paramTypes == null)
             throw new IllegalArgumentException("ParamTypes cannot be null");
         if (params == null)
             throw new IllegalArgumentException("Params cannot be null!");
-        final Constructor<T> constructor = clazz.getDeclaredConstructor(paramTypes);
+        final Constructor constructor = clazz.getDeclaredConstructor(paramTypes);
         constructor.setAccessible(true);
         return constructor.newInstance(params);
     }
