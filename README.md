@@ -15,7 +15,7 @@ WorldEdit Extension to modify your world in a way you have not seen before.
 * Modify your world in a unique and funny way
 * Helps being more productive
 * Version support 1.8.R1 - 1.12.R1
-* Check out the [AstralEdit-Spigot-Page](COMING SOON) to get more information. 
+* Check out the [AstralEdit-Spigot-Page](https://www.spigotmc.org/resources/renderedworldedit_lite.11409/) to get more information. 
 
 ## Installation
 
@@ -88,7 +88,7 @@ Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 });
 ```
 
-* Check out the [AstralEdit-Spigot-Page](COMING SOON) to get more information. 
+* Check out the [AstralEdit-Spigot-Page](https://www.spigotmc.org/resources/renderedworldedit_lite.11409/) to get more information. 
 
 ## Screenshots
 

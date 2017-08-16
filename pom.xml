@@ -9,7 +9,7 @@
     <description>WorldEdit Extension to modify your world in a way you have not seen before.</description>
     <url>https://github.com/Shynixn/AstralEdit</url>
     <packaging>jar</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <developers>
         <developer>
