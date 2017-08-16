@@ -3,7 +3,7 @@
 | branch        | status        | download      |
 | ------------- | --------------| --------------| 
 | master        | [![Build Status](https://travis-ci.org/Shynixn/AstralEdit.svg?branch=master)](https://travis-ci.org/Shynixn/AstralEdit) |[Download latest release (recommend)](https://github.com/Shynixn/AstralEdit/releases)|
-| experimental      | [![Build Status](https://travis-ci.org/Shynixn/AstralEdit.svg?branch=workflow)](https://travis-ci.org/Shynixn/AstralEdit) | [Download snapshots](https://oss.sonatype.org/content/repositories/snapshots/com/github/shynixn/astraledit/) |
+| experimental      | [![Build Status](https://travis-ci.org/Shynixn/AstralEdit.svg?branch=experimental)](https://travis-ci.org/Shynixn/AstralEdit) | [Download snapshots](https://oss.sonatype.org/content/repositories/snapshots/com/github/shynixn/astraledit/) |
 
 JavaDocs: https://shynixn.github.io/AstralEdit/apidocs/
 
