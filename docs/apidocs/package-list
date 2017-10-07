@@ -13,4 +13,5 @@ com.github.shynixn.astraledit.business.bukkit.nms.v1_8_R3
 com.github.shynixn.astraledit.business.bukkit.nms.v1_9_R1
 com.github.shynixn.astraledit.business.bukkit.nms.v1_9_R2
 com.github.shynixn.astraledit.business.logic
+com.github.shynixn.astraledit.business.metrics
 com.github.shynixn.astraledit.lib

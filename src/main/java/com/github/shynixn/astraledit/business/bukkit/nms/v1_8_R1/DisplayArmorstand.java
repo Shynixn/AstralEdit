@@ -51,7 +51,7 @@ public class DisplayArmorstand implements PacketArmorstand {
     private final EntityArmorStand armorStand;
     private int storedId;
     private byte storedData;
-    private Set<Player> watchers;
+    private final Set<Player> watchers;
 
     /**
      * Initializes the armorstand

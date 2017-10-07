@@ -1,7 +1,6 @@
 package com.github.shynixn.astraledit.api.entity;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.util.EulerAngle;
 
 /**

@@ -52,7 +52,7 @@ public class SimpleListener implements Listener {
     }
 
     /**
-     * Initializes a new listener by pluginname
+     * Initializes a new listener by pluginName
      *
      * @param plugin plugin
      */

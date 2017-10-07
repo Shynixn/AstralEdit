@@ -39,5 +39,5 @@ enum OperationType {
     COMBINE,
     PLACE,
     MOVE,
-    CONVERTOBLOCKS;
+    CONVERTOBLOCKS
 }

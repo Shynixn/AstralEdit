@@ -58,7 +58,7 @@ public final class SelectionManager implements Runnable, AutoCloseable {
                 this.selections.put(player, (SelectionHolder) selection);
             }
         } catch (final Exception e) {
-            Bukkit.getLogger().log(Level.WARNING, "Failed to clear selection.", e);
+            AstralEditPlugin.logger().log(Level.WARNING, "Failed to clear selection.", e);
         }
     }
 
@@ -97,7 +97,7 @@ public final class SelectionManager implements Runnable, AutoCloseable {
                 this.selections.remove(player);
             }
         } catch (final Exception e) {
-            Bukkit.getLogger().log(Level.WARNING, "Failed to clear selection.", e);
+            AstralEditPlugin.logger().log(Level.WARNING, "Failed to clear selection.", e);
         }
     }
 
@@ -152,7 +152,7 @@ public final class SelectionManager implements Runnable, AutoCloseable {
             } else if (operation.getType() == OperationType.COMBINE) {
                 this.getSelection(player).tearApart();
             } else if (operation.getType() == OperationType.ROTATE) {
-                this.selections.get(player).unsecureRotate((Double) operation.getOperationData());
+                this.selections.get(player).unSecureRotate((Double) operation.getOperationData());
             } else if (operation.getType() == OperationType.ANGLES) {
                 this.getSelection(player).setBlockAngle((EulerAngle) operation.getOperationData());
             } else if (operation.getType() == OperationType.PLACE || operation.getType() == OperationType.CONVERTOBLOCKS) {
@@ -186,7 +186,7 @@ public final class SelectionManager implements Runnable, AutoCloseable {
                 selectionHolder.teleport(player.getLocation());
             }
             if (selectionHolder.isAutoFollowRotateEnabled()) {
-                selectionHolder.unsecureRotate(player.getLocation().getYaw());
+                selectionHolder.unSecureRotate(player.getLocation().getYaw());
             }
         }
     }

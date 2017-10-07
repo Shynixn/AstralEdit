@@ -1,8 +1,8 @@
 package com.github.shynixn.astraledit.business.bukkit.nms;
 
 import com.github.shynixn.astraledit.api.entity.PacketArmorstand;
+import com.github.shynixn.astraledit.business.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.lib.ReflectionUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -62,7 +62,7 @@ public class NMSRegistry {
                             , new Class[]{Player.class, Location.class, int.class, byte.class, Set.class}
                             , new Object[]{player, location, id, data, watchers});
         } catch (IllegalAccessException | InvocationTargetException | InstantiationException | NoSuchMethodException | ClassNotFoundException e) {
-            Bukkit.getLogger().log(Level.WARNING, "Failed to create packetArmorstand.", e);
+            AstralEditPlugin.logger().log(Level.WARNING, "Failed to create packetArmorstand.", e);
             throw new RuntimeException("Failed to create packetArmorstand.");
         }
     }

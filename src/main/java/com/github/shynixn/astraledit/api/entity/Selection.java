@@ -99,7 +99,7 @@ public interface Selection extends AutoCloseable {
     void upSideDown();
 
     /**
-     * Mirros the selection
+     * Mirrors the selection
      */
     void mirror();
 

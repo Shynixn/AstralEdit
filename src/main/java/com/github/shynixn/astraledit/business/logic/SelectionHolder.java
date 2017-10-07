@@ -4,7 +4,6 @@ import com.github.shynixn.astraledit.api.entity.PacketArmorstand;
 import com.github.shynixn.astraledit.api.entity.Selection;
 import com.github.shynixn.astraledit.business.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.business.bukkit.nms.NMSRegistry;
-import com.github.shynixn.astraledit.lib.DirectionHelper;
 import com.github.shynixn.astraledit.lib.LocationBuilder;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,7 +30,6 @@ class SelectionHolder implements Selection {
     private PacketArmorstand[][][] stands;
     private Location lastLocation;
     private boolean isDestroyed = true;
-    private double yaw = -50;
     private boolean isMirrored;
     private boolean flipped;
     private boolean upSideDown;
@@ -155,7 +153,7 @@ class SelectionHolder implements Selection {
     }
 
     /**
-     * Mirros the selection
+     * Mirrors the selection
      */
     @Override
     public void mirror() {
@@ -373,11 +371,11 @@ class SelectionHolder implements Selection {
     }
 
     /**
-     * Rotates the selection unsecure
+     * Rotates the selection unSecure
      *
      * @param yaw yaw
      */
-    void unsecureRotate(double yaw) {
+    void unSecureRotate(double yaw) {
         final Location location = this.getLocation();
         location.setYaw((float) yaw);
         this.rotate(location);
@@ -430,7 +428,9 @@ class SelectionHolder implements Selection {
             for (int j = 0; j < this.getYWidth(); j++) {
                 for (int k = 0; k < this.getZWidth(); k++) {
                     if (this.stands[i][j][k] != null) {
-                        double x = 0, y = 0, z = 0;
+                        double x = 0;
+                        double y = 0;
+                        double z = 0;
                         if (i > 0)
                             x = -0.4 * i;
                         if (j > 0)
@@ -461,9 +461,9 @@ class SelectionHolder implements Selection {
             yaw = 0;
         }
         yaw += amount;
-        this.yaw = yaw;
+        final double yaw1 = yaw;
         final Location location = this.getLocation();
-        location.setYaw((float) this.yaw);
+        location.setYaw((float) yaw1);
         return location;
     }
 
@@ -477,27 +477,27 @@ class SelectionHolder implements Selection {
             for (int j = 0; j < this.getYWidth(); j++) {
                 for (int k = 0; k < this.getZWidth(); k++) {
                     if (this.stands[i][j][k] != null) {
-                        Location location2;
+                        final LocationBuilder location2 = new LocationBuilder(location);
                         if (!this.isMirrored) {
-                            location2 = DirectionHelper.getLocationTo(location, DirectionHelper.Direction.LEFT, i);
+                            location2.relativePosition(i, LocationBuilder.Direction.LEFT);
                             if (!this.flipped) {
-                                location2 = DirectionHelper.getLocationTo(location2, DirectionHelper.Direction.UP, j);
-                                location2 = DirectionHelper.getLocationTo(location2, DirectionHelper.Direction.FRONT, k);
+                                location2.relativePosition(j, LocationBuilder.Direction.UP);
+                                location2.relativePosition(k, LocationBuilder.Direction.FORWARD);
                             } else {
-                                location2 = DirectionHelper.getLocationTo(location2, DirectionHelper.Direction.FRONT, j);
-                                location2 = DirectionHelper.getLocationTo(location2, DirectionHelper.Direction.UP, k);
+                                location2.relativePosition(j, LocationBuilder.Direction.FORWARD);
+                                location2.relativePosition(k, LocationBuilder.Direction.UP);
                             }
                         } else {
-                            location2 = DirectionHelper.getLocationTo(location, DirectionHelper.Direction.FRONT, i);
+                            location2.relativePosition(i, LocationBuilder.Direction.FORWARD);
                             if (!this.flipped) {
-                                location2 = DirectionHelper.getLocationTo(location2, DirectionHelper.Direction.UP, j);
-                                location2 = DirectionHelper.getLocationTo(location2, DirectionHelper.Direction.LEFT, k);
+                                location2.relativePosition(j, LocationBuilder.Direction.UP);
+                                location2.relativePosition(k, LocationBuilder.Direction.LEFT);
                             } else {
-                                location2 = DirectionHelper.getLocationTo(location2, DirectionHelper.Direction.LEFT, j);
-                                location2 = DirectionHelper.getLocationTo(location2, DirectionHelper.Direction.UP, k);
+                                location2.relativePosition(j, LocationBuilder.Direction.LEFT);
+                                location2.relativePosition(k, LocationBuilder.Direction.UP);
                             }
                         }
-                        this.stands[i][j][k].teleport(location2);
+                        this.stands[i][j][k].teleport(location2.toLocation());
                     }
                 }
             }
@@ -541,12 +541,12 @@ class SelectionHolder implements Selection {
     }
 
     /**
-     * Settter calculation
+     * Setter calculation
      *
      * @param a       a
      * @param b       b
      * @param c       c
-     * @param counter coutner
+     * @param counter counter
      */
     private void changeSetter(final int a, final int b, final int c, final int counter) {
         if (this.stands[a][b][c] != null) {
@@ -566,7 +566,7 @@ class SelectionHolder implements Selection {
      * @param a       a
      * @param b       b
      * @param c       c
-     * @param counter coutner
+     * @param counter counter
      */
     private void changeCalculation(final int a, final int b, final int c, final int counter) {
         if ((a + 1) < this.getXWidth()) {

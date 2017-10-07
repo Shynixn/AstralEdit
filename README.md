@@ -21,7 +21,7 @@ WorldEdit Extension to modify your world in a way you have not seen before.
 
 * [Download the plugin AstralEdit](https://github.com/Shynixn/AstralEdit/releases)
 * Put the plugin into your plugin folder
-* Start the server (1.8.0 - 1.12.1, Java 8)
+* Start the server (1.8.0 - 1.12.2, Java 8/Java 9)
 * Join and play :)
 
 ## API
@@ -35,7 +35,8 @@ WorldEdit Extension to modify your world in a way you have not seen before.
 <dependency>
      <groupId>com.github.shynixn</groupId>
      <artifactId>astraledit</artifactId>
-     <version>1.0.0</version>
+     <version>1.1.0</version>
+     <scope>provided</scope>
 </dependency>
 ```
 
@@ -43,7 +44,7 @@ WorldEdit Extension to modify your world in a way you have not seen before.
 
 ```xml
 dependencies {
-    compileOnly 'com.github.shynixn:astraledit:1.0.0'
+    compileOnly 'com.github.shynixn:astraledit:1.1.0'
 }
 ```
 

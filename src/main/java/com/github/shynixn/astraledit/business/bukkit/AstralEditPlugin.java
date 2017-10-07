@@ -3,14 +3,18 @@ package com.github.shynixn.astraledit.business.bukkit;
 import com.github.shynixn.astraledit.api.AstralEditApi;
 import com.github.shynixn.astraledit.business.bukkit.dependencies.DependencySupport;
 import com.github.shynixn.astraledit.business.bukkit.nms.VersionSupport;
+import com.github.shynixn.astraledit.business.metrics.Metrics;
 import com.github.shynixn.astraledit.lib.ReflectionUtils;
+import com.github.shynixn.astraledit.lib.UpdateUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Copyright 2017 Shynixn
@@ -42,27 +46,40 @@ import java.util.logging.Level;
  * SOFTWARE.
  */
 public class AstralEditPlugin extends JavaPlugin {
+    private static final long SPIGOT_RESOURCEID = 11409;
     public static final String PLUGIN_NAME = "AstralEdit";
     public static final String PREFIX_CONSOLE = ChatColor.LIGHT_PURPLE + "[AstralEdit] ";
-    public static final String PREFIX = ChatColor.DARK_RED + "" + ChatColor.BOLD + "[" + ChatColor.RED + "" + ChatColor.BOLD + ChatColor.ITALIC + "AE" + ChatColor.DARK_RED + "" + ChatColor.BOLD + "] " + ChatColor.RED;
+    public static final String PREFIX = ChatColor.DARK_RED + "" + ChatColor.BOLD + '[' + ChatColor.RED + "" + ChatColor.BOLD + ChatColor.ITALIC + "AE" + ChatColor.DARK_RED + "" + ChatColor.BOLD + "] " + ChatColor.RED;
     public static final String PREFIX_SUCCESS = PREFIX + ChatColor.GREEN;
     public static final String PREFIX_ERROR = PREFIX + ChatColor.RED;
+    private static Logger logger;
 
     /**
      * Enables the plugin
      */
     @Override
     public void onEnable() {
+        logger = this.getLogger();
         if (!VersionSupport.isServerVersionSupported(PLUGIN_NAME, PREFIX_CONSOLE) || !DependencySupport.areRequiredDependenciesInstalled(PLUGIN_NAME, PREFIX_CONSOLE)) {
             Bukkit.getPluginManager().disablePlugin(this);
         } else {
             try {
                 Bukkit.getServer().getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Loading AstralEdit ...");
                 this.saveDefaultConfig();
+                if (this.getConfig().getBoolean("metrics")) {
+                    new Metrics(this);
+                }
+                this.getServer().getScheduler().runTaskAsynchronously(this, () -> {
+                    try {
+                        UpdateUtils.checkPluginUpToDateAndPrintMessage(SPIGOT_RESOURCEID, PREFIX_CONSOLE, PLUGIN_NAME, AstralEditPlugin.this);
+                    } catch (final IOException e) {
+                        AstralEditPlugin.logger().log(Level.WARNING, "Failed to check for updates.");
+                    }
+                });
                 ReflectionUtils.invokeMethodByClass(AstralEditApi.class, "initialize", new Class[]{Plugin.class}, new Object[]{this});
                 Bukkit.getServer().getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Enabled AstralEdit " + this.getDescription().getVersion() + " by Shynixn");
             } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-                Bukkit.getLogger().log(Level.WARNING, "Failed to initialize plugin.", e);
+                AstralEditPlugin.logger().log(Level.WARNING, "Failed to initialize plugin.", e);
             }
         }
     }
@@ -75,7 +92,16 @@ public class AstralEditPlugin extends JavaPlugin {
         try {
             ReflectionUtils.invokeMethodByClass(AstralEditApi.class, "shutdown", new Class[0], new Object[0]);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            Bukkit.getLogger().log(Level.WARNING, "Failed to initialize plugin.", e);
+            AstralEditPlugin.logger().log(Level.WARNING, "Failed to initialize plugin.", e);
         }
+    }
+
+    /**
+     * Returns the logger of the AstralEdit plugin
+     *
+     * @return logger
+     */
+    public static Logger logger() {
+        return logger;
     }
 }

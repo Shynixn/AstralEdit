@@ -54,16 +54,32 @@ public enum Permission {
     HIDE_OTHER("astraledit.commands.hideother"),
     SHOW_OTHER("astraledit.commands.showother"),;
 
-    private String text;
+    private final String text;
 
+    /**
+     * Initializes a new permission
+     *
+     * @param text text
+     */
     Permission(String text) {
         this.text = text;
     }
 
+    /**
+     * Returns if the given player has permissions
+     *
+     * @param player player
+     * @return has
+     */
     public boolean hasPermission(Player player) {
         return player.hasPermission(this.text);
     }
 
+    /**
+     * Returns the text of the permission
+     *
+     * @return text
+     */
     public String getText() {
         return this.text;
     }
