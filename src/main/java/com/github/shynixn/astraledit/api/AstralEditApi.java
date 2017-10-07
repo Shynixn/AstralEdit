@@ -1,6 +1,7 @@
 package com.github.shynixn.astraledit.api;
 
 import com.github.shynixn.astraledit.api.entity.Selection;
+import com.github.shynixn.astraledit.business.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.business.bukkit.dependencies.worldedit.WorldEditConnection;
 import com.github.shynixn.astraledit.business.logic.SelectionManager;
 import org.bukkit.Bukkit;
@@ -42,7 +43,7 @@ public final class AstralEditApi {
                 manager = null;
             }
         } catch (final Exception e) {
-            Bukkit.getLogger().log(Level.WARNING, "Failed to clean up.", e);
+            AstralEditPlugin.logger().log(Level.WARNING, "Failed to clean up.", e);
         }
     }
 

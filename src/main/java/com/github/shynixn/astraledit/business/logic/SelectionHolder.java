@@ -4,7 +4,6 @@ import com.github.shynixn.astraledit.api.entity.PacketArmorstand;
 import com.github.shynixn.astraledit.api.entity.Selection;
 import com.github.shynixn.astraledit.business.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.business.bukkit.nms.NMSRegistry;
-import com.github.shynixn.astraledit.lib.DirectionHelper;
 import com.github.shynixn.astraledit.lib.LocationBuilder;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -477,27 +476,27 @@ class SelectionHolder implements Selection {
             for (int j = 0; j < this.getYWidth(); j++) {
                 for (int k = 0; k < this.getZWidth(); k++) {
                     if (this.stands[i][j][k] != null) {
-                        Location location2;
+                        final LocationBuilder location2 = new LocationBuilder(location);
                         if (!this.isMirrored) {
-                            location2 = DirectionHelper.getLocationTo(location, DirectionHelper.Direction.LEFT, i);
+                            location2.relativePosition(i, LocationBuilder.Direction.LEFT);
                             if (!this.flipped) {
-                                location2 = DirectionHelper.getLocationTo(location2, DirectionHelper.Direction.UP, j);
-                                location2 = DirectionHelper.getLocationTo(location2, DirectionHelper.Direction.FRONT, k);
+                                location2.relativePosition(j, LocationBuilder.Direction.UP);
+                                location2.relativePosition(k, LocationBuilder.Direction.FORWARD);
                             } else {
-                                location2 = DirectionHelper.getLocationTo(location2, DirectionHelper.Direction.FRONT, j);
-                                location2 = DirectionHelper.getLocationTo(location2, DirectionHelper.Direction.UP, k);
+                                location2.relativePosition(j, LocationBuilder.Direction.FORWARD);
+                                location2.relativePosition(k, LocationBuilder.Direction.UP);
                             }
                         } else {
-                            location2 = DirectionHelper.getLocationTo(location, DirectionHelper.Direction.FRONT, i);
+                            location2.relativePosition(i, LocationBuilder.Direction.FORWARD);
                             if (!this.flipped) {
-                                location2 = DirectionHelper.getLocationTo(location2, DirectionHelper.Direction.UP, j);
-                                location2 = DirectionHelper.getLocationTo(location2, DirectionHelper.Direction.LEFT, k);
+                                location2.relativePosition(j, LocationBuilder.Direction.UP);
+                                location2.relativePosition(k, LocationBuilder.Direction.LEFT);
                             } else {
-                                location2 = DirectionHelper.getLocationTo(location2, DirectionHelper.Direction.LEFT, j);
-                                location2 = DirectionHelper.getLocationTo(location2, DirectionHelper.Direction.UP, k);
+                                location2.relativePosition(j, LocationBuilder.Direction.LEFT);
+                                location2.relativePosition(k, LocationBuilder.Direction.UP);
                             }
                         }
-                        this.stands[i][j][k].teleport(location2);
+                        this.stands[i][j][k].teleport(location2.toLocation());
                     }
                 }
             }

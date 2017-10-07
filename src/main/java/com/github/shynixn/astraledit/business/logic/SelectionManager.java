@@ -58,7 +58,7 @@ public final class SelectionManager implements Runnable, AutoCloseable {
                 this.selections.put(player, (SelectionHolder) selection);
             }
         } catch (final Exception e) {
-            Bukkit.getLogger().log(Level.WARNING, "Failed to clear selection.", e);
+            AstralEditPlugin.logger().log(Level.WARNING, "Failed to clear selection.", e);
         }
     }
 
@@ -97,7 +97,7 @@ public final class SelectionManager implements Runnable, AutoCloseable {
                 this.selections.remove(player);
             }
         } catch (final Exception e) {
-            Bukkit.getLogger().log(Level.WARNING, "Failed to clear selection.", e);
+            AstralEditPlugin.logger().log(Level.WARNING, "Failed to clear selection.", e);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.github.shynixn.astraledit.business.bukkit.dependencies.worldedit;
 
+import com.github.shynixn.astraledit.business.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.lib.ReflectionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -102,7 +103,7 @@ public class WorldEditConnection {
             if (object != null)
                 return (Location) ReflectionUtils.invokeMethodByObject(object, type, new Class[0], new Object[0], Class.forName("com.sk89q.worldedit.bukkit.selections.RegionSelection"));
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException | ClassNotFoundException e) {
-            Bukkit.getLogger().log(Level.WARNING, "Cannot access WorldEdit.", e);
+            AstralEditPlugin.logger().log(Level.WARNING, "Cannot access WorldEdit.", e);
         }
         return null;
     }

@@ -1,5 +1,6 @@
 package com.github.shynixn.astraledit.lib;
 
+import com.github.shynixn.astraledit.business.bukkit.AstralEditPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -132,7 +133,7 @@ public class SimpleCommandExecutor {
          */
         public UnRegistered(String command, JavaPlugin plugin) {
             this(command, '/' + command, "", command + ".admin", "You are not allowed to use this command.", plugin);
-            Bukkit.getLogger().log(Level.WARNING, "This is only for production useage and should be replaced in the release version.");
+            AstralEditPlugin.logger().log(Level.WARNING, "This is only for production useage and should be replaced in the release version.");
         }
 
         /**
@@ -233,7 +234,7 @@ public class SimpleCommandExecutor {
                 final SimpleCommandMap map = (SimpleCommandMap) server.getClass().getDeclaredMethod("getCommandMap").invoke(server);
                 map.register(command, this);
             } catch (final Exception ex) {
-                Bukkit.getLogger().log(Level.WARNING, "Cannot register dynamic command.", ex);
+                AstralEditPlugin.logger().log(Level.WARNING, "Cannot register dynamic command.", ex);
             }
         }
 

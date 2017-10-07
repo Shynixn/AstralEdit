@@ -11,15 +11,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Copyright 2017 Shynixn
+ * Manages positions and relative locations.
  * <p>
- * Do not remove this header!
- * <p>
- * Version 1.0
+ * Version 1.1
  * <p>
  * MIT License
  * <p>
- * Copyright (c) 2016
+ * Copyright (c) 2017 by Shynixn
  * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -389,17 +387,17 @@ public class LocationBuilder implements ConfigurationSerializable {
      */
     public LocationBuilder relativePosition(double distance, Direction direction) {
         if (direction == Direction.FORWARD) {
-            this.x += (distance * Math.sin(Math.toRadians(this.yaw + 90)));
-            this.z += (distance * Math.cos(Math.toRadians(this.yaw + 90)));
+            this.x += (distance * Math.cos(Math.toRadians(this.yaw + 90)));
+            this.z += (distance * Math.sin(Math.toRadians(this.yaw + 90)));
         } else if (direction == Direction.BACKWARDS) {
-            this.x += (-1 * distance * Math.sin(Math.toRadians(this.yaw + 90)));
-            this.z += (-1 * distance * Math.cos(Math.toRadians(this.yaw + 90)));
+            this.x -= (distance * Math.cos(Math.toRadians(this.yaw + 90)));
+            this.z -= (distance * Math.sin(Math.toRadians(this.yaw + 90)));
         } else if (direction == Direction.LEFT) {
-            this.x += (distance * Math.sin(Math.toRadians(this.yaw)));
-            this.z += (distance * Math.cos(Math.toRadians(this.yaw)));
+            this.x += (distance * Math.cos(Math.toRadians(this.yaw)));
+            this.z += (distance * Math.sin(Math.toRadians(this.yaw)));
         } else if (direction == Direction.RIGHT) {
-            this.x += (-1 * distance * Math.sin(Math.toRadians(this.yaw)));
-            this.z += (-1 * distance * Math.cos(Math.toRadians(this.yaw)));
+            this.x -= (distance * Math.cos(Math.toRadians(this.yaw)));
+            this.z -= (distance * Math.sin(Math.toRadians(this.yaw)));
         } else if (direction == Direction.UP) {
             this.y += distance;
         } else if (direction == Direction.DOWN) {
