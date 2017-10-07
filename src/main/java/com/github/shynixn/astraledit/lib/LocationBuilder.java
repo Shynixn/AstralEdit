@@ -116,21 +116,6 @@ public class LocationBuilder implements ConfigurationSerializable {
     }
 
     /**
-     * Parses the location out of the map
-     *
-     * @param items items
-     * @throws Exception mapParseException
-     */
-    public LocationBuilder(Map<String, Object> items) throws Exception {
-        this.x = (double) items.get("x");
-        this.y = (double) items.get("y");
-        this.z = (double) items.get("z");
-        this.yaw = (double) items.get("yaw");
-        this.pitch = (double) items.get("pitch");
-        this.world = (String) items.get("worldname");
-    }
-
-    /**
      * Sets the coordinates x, y, z
      *
      * @param x x
@@ -430,8 +415,8 @@ public class LocationBuilder implements ConfigurationSerializable {
     @Override
     public String toString() {
         if (this.getWorld() == null)
-            return "location {" + " w unloaded" + " x " + this.getBlockX() + " y " + this.getBlockY() + " z " + this.getBlockZ() + "}";
-        return "location {" + " w " + this.getWorldName() + " x " + this.getBlockX() + " y " + this.getBlockY() + " z " + this.getBlockZ() + "}";
+            return "location {" + " w unloaded" + " x " + this.getBlockX() + " y " + this.getBlockY() + " z " + this.getBlockZ() + '}';
+        return "location {" + " w " + this.getWorldName() + " x " + this.getBlockX() + " y " + this.getBlockY() + " z " + this.getBlockZ() + '}';
     }
 
     /**

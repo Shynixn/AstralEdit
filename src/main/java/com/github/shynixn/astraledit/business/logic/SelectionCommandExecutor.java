@@ -180,7 +180,7 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
     private void convertToRenderCommand(final Player player) {
         this.runAsyncTask(() -> {
             try {
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Removing blocks and rendering selection asynchronly...");
+                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Removing blocks and rendering selection asynchronously...");
                 this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
                     AstralEditApi.renderAndDestroy(player);
                     player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished converting selection.");
@@ -339,7 +339,7 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
     }
 
     /**
-     * Mirros the given selection
+     * Mirrors the given selection
      *
      * @param player player
      */
@@ -470,7 +470,7 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
      */
     private void createRenderCommand(final Player player) {
         this.runAsyncTask(() -> {
-            player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Rendering WorldEdit-Selection asynchronly...");
+            player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Rendering WorldEdit-Selection asynchronously...");
             final Selection selection = AstralEditApi.render(player);
             if (selection == null) {
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "Failed rendering WE selection!");
@@ -482,7 +482,7 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
     }
 
     /**
-     * Runs task asynchronly
+     * Runs task asynchronously
      *
      * @param runnable runnable
      */

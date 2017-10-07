@@ -14,7 +14,6 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.util.EulerAngle;
 
-import java.io.Closeable;
 import java.util.Set;
 
 /**
@@ -52,7 +51,7 @@ public class DisplayArmorstand implements PacketArmorstand {
     private final EntityArmorStand armorStand;
     private int storedId;
     private byte storedData;
-    private Set<Player> watchers;
+    private final Set<Player> watchers;
 
     /**
      * Initializes the armorstand

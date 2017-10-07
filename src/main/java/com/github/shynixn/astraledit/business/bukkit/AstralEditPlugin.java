@@ -45,7 +45,7 @@ import java.util.logging.Logger;
 public class AstralEditPlugin extends JavaPlugin {
     public static final String PLUGIN_NAME = "AstralEdit";
     public static final String PREFIX_CONSOLE = ChatColor.LIGHT_PURPLE + "[AstralEdit] ";
-    public static final String PREFIX = ChatColor.DARK_RED + "" + ChatColor.BOLD + "[" + ChatColor.RED + "" + ChatColor.BOLD + ChatColor.ITALIC + "AE" + ChatColor.DARK_RED + "" + ChatColor.BOLD + "] " + ChatColor.RED;
+    public static final String PREFIX = ChatColor.DARK_RED + "" + ChatColor.BOLD + '[' + ChatColor.RED + "" + ChatColor.BOLD + ChatColor.ITALIC + "AE" + ChatColor.DARK_RED + "" + ChatColor.BOLD + "] " + ChatColor.RED;
     public static final String PREFIX_SUCCESS = PREFIX + ChatColor.GREEN;
     public static final String PREFIX_ERROR = PREFIX + ChatColor.RED;
     private static Logger logger;

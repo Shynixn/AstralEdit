@@ -32,9 +32,9 @@ import com.github.shynixn.astraledit.lib.LocationBuilder;
  * SOFTWARE.
  */
 class Container {
-    int id;
-    byte data;
-    LocationBuilder location;
+    final int id;
+    final byte data;
+    final LocationBuilder location;
 
     /**
      * Initializes a new container

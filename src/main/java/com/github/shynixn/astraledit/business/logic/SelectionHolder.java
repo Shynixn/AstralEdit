@@ -30,7 +30,6 @@ class SelectionHolder implements Selection {
     private PacketArmorstand[][][] stands;
     private Location lastLocation;
     private boolean isDestroyed = true;
-    private double yaw = -50;
     private boolean isMirrored;
     private boolean flipped;
     private boolean upSideDown;
@@ -154,7 +153,7 @@ class SelectionHolder implements Selection {
     }
 
     /**
-     * Mirros the selection
+     * Mirrors the selection
      */
     @Override
     public void mirror() {
@@ -372,11 +371,11 @@ class SelectionHolder implements Selection {
     }
 
     /**
-     * Rotates the selection unsecure
+     * Rotates the selection unSecure
      *
      * @param yaw yaw
      */
-    void unsecureRotate(double yaw) {
+    void unSecureRotate(double yaw) {
         final Location location = this.getLocation();
         location.setYaw((float) yaw);
         this.rotate(location);
@@ -429,7 +428,9 @@ class SelectionHolder implements Selection {
             for (int j = 0; j < this.getYWidth(); j++) {
                 for (int k = 0; k < this.getZWidth(); k++) {
                     if (this.stands[i][j][k] != null) {
-                        double x = 0, y = 0, z = 0;
+                        double x = 0;
+                        double y = 0;
+                        double z = 0;
                         if (i > 0)
                             x = -0.4 * i;
                         if (j > 0)
@@ -460,9 +461,9 @@ class SelectionHolder implements Selection {
             yaw = 0;
         }
         yaw += amount;
-        this.yaw = yaw;
+        final double yaw1 = yaw;
         final Location location = this.getLocation();
-        location.setYaw((float) this.yaw);
+        location.setYaw((float) yaw1);
         return location;
     }
 
@@ -540,12 +541,12 @@ class SelectionHolder implements Selection {
     }
 
     /**
-     * Settter calculation
+     * Setter calculation
      *
      * @param a       a
      * @param b       b
      * @param c       c
-     * @param counter coutner
+     * @param counter counter
      */
     private void changeSetter(final int a, final int b, final int c, final int counter) {
         if (this.stands[a][b][c] != null) {
@@ -565,7 +566,7 @@ class SelectionHolder implements Selection {
      * @param a       a
      * @param b       b
      * @param c       c
-     * @param counter coutner
+     * @param counter counter
      */
     private void changeCalculation(final int a, final int b, final int c, final int counter) {
         if ((a + 1) < this.getXWidth()) {

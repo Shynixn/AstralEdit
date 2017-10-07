@@ -177,7 +177,7 @@ public class SimpleCommandExecutor {
             this.plugin = plugin;
             this.setPermission(permission);
             this.setPermissionMessage(permissionMessage);
-            this.setAliases(new ArrayList<String>());
+            this.setAliases(new ArrayList<>());
             this.registerDynamicCommand(command);
         }
 

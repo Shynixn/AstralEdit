@@ -49,10 +49,9 @@ class SelectionListener extends SimpleListener {
      * Clears remaining data
      *
      * @param event event
-     * @throws Exception exception
      */
     @EventHandler
-    public void onPlayerQuitEvent(PlayerQuitEvent event) throws Exception {
+    public void onPlayerQuitEvent(PlayerQuitEvent event) {
         this.manager.clearSelection(event.getPlayer());
         this.manager.clearOperations(event.getPlayer());
     }
