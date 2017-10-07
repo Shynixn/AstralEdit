@@ -27,11 +27,29 @@
 # admin      Allows to hide your selection              astraledit.commands.hideother
 # admin      Allows to show your selection              astraledit.commands.showother
 
+############################
+
+# Data-collecting settings
+
+# Settings to send anonymous stats to https://bstats.org/plugin/bukkit/AstralEdit.
+# As this does not have an impact on your AstralEdit experience at all I would like you to set it on true as knowing that my
+# plugin gets used by many server helps me focusing on new updates ;)
+
+############################
+
+metrics: true
+
+############################
+
 # General settings
+
+# Settings to manage performance and cache which the plugin can use.
 
 # max-selected-blocks-amount: Amount of blocks which can be rendered at once.
 #                             As it's handled via packets the server won't lag at all but the client might crash if he selects too many blocks
 # max-undo-amount: Amount of operations per player which can be undone#
+
+############################
 
 general:
   max-selected-blocks-amount: 10000

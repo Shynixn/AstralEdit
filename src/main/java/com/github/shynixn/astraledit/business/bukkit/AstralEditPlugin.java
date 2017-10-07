@@ -3,6 +3,7 @@ package com.github.shynixn.astraledit.business.bukkit;
 import com.github.shynixn.astraledit.api.AstralEditApi;
 import com.github.shynixn.astraledit.business.bukkit.dependencies.DependencySupport;
 import com.github.shynixn.astraledit.business.bukkit.nms.VersionSupport;
+import com.github.shynixn.astraledit.business.metrics.Metrics;
 import com.github.shynixn.astraledit.lib.ReflectionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -62,6 +63,9 @@ public class AstralEditPlugin extends JavaPlugin {
             try {
                 Bukkit.getServer().getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Loading AstralEdit ...");
                 this.saveDefaultConfig();
+                if (this.getConfig().getBoolean("metrics")) {
+                    new Metrics(this);
+                }
                 ReflectionUtils.invokeMethodByClass(AstralEditApi.class, "initialize", new Class[]{Plugin.class}, new Object[]{this});
                 Bukkit.getServer().getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Enabled AstralEdit " + this.getDescription().getVersion() + " by Shynixn");
             } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
