@@ -57,7 +57,7 @@ public class NMSRegistry {
     public static PacketArmorstand createPacketArmorstand(Player player, Location location, int id, byte data, Set<Player> watchers) {
         try {
             return (PacketArmorstand) ReflectionUtils
-                    .invokeConstructor(ReflectionUtils.invokeClass("com.github.shynixn.astraledit.business.bukkit.nms.VERSION.DisplayArmorstand"
+                    .invokeConstructor(ReflectionUtils.invokeClass("com.github.shynixn.astraledit.bukkit.logic.business.nms.VERSION.DisplayArmorstand"
                                     .replace("VERSION", VersionSupport.getServerVersion().getVersionText()))
                             , new Class[]{Player.class, Location.class, int.class, byte.class, Set.class}
                             , new Object[]{player, location, id, data, watchers});
