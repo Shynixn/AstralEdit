@@ -6,7 +6,7 @@ cache:
   timeout: 1000
   directories:
   - $HOME/.m2/repository/org/spigotmc
-install: true
+install:
    - cd /home/travis/build/Shynixn/AstralEdit/
    - mkdir lib
    - wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastStableBuild/artifact/target/BuildTools.jar -P /home/travis/build/Shynixn/AstralEdit/lib/
