@@ -91,31 +91,31 @@
                     <relocations>
                         <relocation>
                             <pattern>kotlin</pattern>
-                            <shadedPattern>com.github.shynixn.blockball.lib.kotlin</shadedPattern>
+                            <shadedPattern>com.github.shynixn.astraledit.lib.kotlin</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.intellij</pattern>
-                            <shadedPattern>com.github.shynixn.blockball.lib.org.intellij</shadedPattern>
+                            <shadedPattern>com.github.shynixn.astraledit.lib.org.intellij</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.jetbrains</pattern>
-                            <shadedPattern>com.github.shynixn.blockball.lib.org.jetbrains</shadedPattern>
+                            <shadedPattern>com.github.shynixn.astraledit.lib.org.jetbrains</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>javax.inject</pattern>
-                            <shadedPattern>com.github.shynixn.blockball.lib.javax.inject</shadedPattern>
+                            <shadedPattern>com.github.shynixn.astraledit.lib.javax.inject</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.aopalliance</pattern>
-                            <shadedPattern>com.github.shynixn.blockball.lib.org.aopalliance</shadedPattern>
+                            <shadedPattern>com.github.shynixn.astraledit.lib.org.aopalliance</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.slf4j</pattern>
-                            <shadedPattern>com.github.shynixn.blockball.lib.org.slf4j</shadedPattern>
+                            <shadedPattern>com.github.shynixn.astraledit.lib.org.slf4j</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.google</pattern>
-                            <shadedPattern>com.github.shynixn.blockball.lib.com.google</shadedPattern>
+                            <shadedPattern>com.github.shynixn.astraledit.lib.com.google</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
