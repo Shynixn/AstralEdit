@@ -1,9 +1,11 @@
 package com.github.shynixn.astraledit.bukkit.logic.business;
 
 import com.github.shynixn.astraledit.api.bukkit.AstralEditApi;
+import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
 import com.github.shynixn.astraledit.api.bukkit.business.entity.Selection;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
+import com.github.shynixn.astraledit.bukkit.logic.business.command.AutoRotateCommand;
 import com.github.shynixn.astraledit.bukkit.logic.lib.SimpleCommandExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,6 +19,7 @@ import java.util.List;
 
 class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
     private final SelectionManager manager;
+    private final List<PlayerCommand> commands = new ArrayList<>();
 
     /**
      * Initializes the commandExecutor
@@ -26,6 +29,8 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
     SelectionCommandExecutor(SelectionManager manager) {
         super("awe", JavaPlugin.getPlugin(AstralEditPlugin.class));
         this.manager = manager;
+
+        this.commands.add(new AutoRotateCommand(manager));
     }
 
     /**
@@ -36,6 +41,14 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
      */
     @Override
     public void onPlayerExecuteCommand(Player player, String[] args) {
+        for (final PlayerCommand command : this.commands) {
+            final boolean executed = command.onPlayerExecuteCommand(player, args);
+
+            if (executed) {
+                return;
+            }
+        }
+
         if (args.length == 1 && args[0].equalsIgnoreCase("render") && Permission.RENDER.hasPermission(player))
             this.createRenderCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("join") && Permission.JOIN.hasPermission(player))
@@ -74,8 +87,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             this.teleportPlayerToRenderCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("auto-follow") && Permission.AUTO_FOLLOW.hasPermission(player))
             this.toggleAutoFollowCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("auto-rotate") && Permission.AUTO_ROTATE.hasPermission(player))
-            this.toggleAutoFollowRotateCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("3")) {
             player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "                      AstralEdit                    ");
             player.sendMessage("");
@@ -114,25 +125,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             player.sendMessage("");
             player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "                           ┌1/3┐                            ");
             player.sendMessage("");
-        }
-    }
-
-    /**
-     * Toggles autoRotate
-     *
-     * @param player player
-     */
-    private void toggleAutoFollowRotateCommand(Player player) {
-        if (!this.manager.hasSelection(player)) {
-            player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-        } else {
-            final Selection selection = this.manager.getSelection(player);
-            selection.setAutoFollowRotateEnabled(!selection.isAutoFollowRotateEnabled());
-            if (selection.isAutoFollowRotateEnabled()) {
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Enabled auto-rotate.");
-            } else {
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Disabled auto-rotate.");
-            }
         }
     }
 

@@ -32,7 +32,6 @@ import org.bukkit.entity.Player;
  * SOFTWARE.
  */
 public interface SelectionController extends AutoCloseable {
-
     /**
      * Creates a new selection for the given player, corner1, corner2.
      *
@@ -50,6 +49,14 @@ public interface SelectionController extends AutoCloseable {
      * @param selection selection
      */
     void addSelection(Player player, Selection selection);
+
+    /**
+     * Checks if the player has got a selection.
+     *
+     * @param player player
+     * @return selection
+     */
+    boolean hasSelection(Player player);
 
     /**
      * Returns the selection of a player
