@@ -10,6 +10,8 @@ import java.util.logging.Level;
 
 public final class AstralEditApi {
 
+    private static final AstralEditApi INSTANCE = new AstralEditApi();
+    
     private static int maxAmountOfBlocksPerPerson = 10000;
     private static SelectionController manager;
     private static Plugin plugin;
