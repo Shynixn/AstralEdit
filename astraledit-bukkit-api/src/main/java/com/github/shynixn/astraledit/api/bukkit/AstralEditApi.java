@@ -135,4 +135,4 @@ public final class AstralEditApi {
     public static void clearRenderedObject(Player player) {
         manager.clearSelection(player);
     }
-}
+} // Ebd of class AstralEditApi
