@@ -132,8 +132,7 @@
                         </relocation>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <!-- Replace this with your package! -->
-                            <shadedPattern>com.github.shynixn.astraledit.bukkit</shadedPattern>
+                            <shadedPattern>com.github.shynixn.astraledit.lib.org.bstats</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

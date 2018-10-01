@@ -5,7 +5,6 @@ import com.github.shynixn.astraledit.api.bukkit.business.controller.SelectionCon
 import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import com.github.shynixn.astraledit.bukkit.logic.business.dependencies.DependencySupport;
 import com.github.shynixn.astraledit.bukkit.logic.business.nms.VersionSupport;
-import com.github.shynixn.astraledit.bukkit.logic.lib.ReflectionUtils;
 import com.github.shynixn.astraledit.bukkit.logic.lib.UpdateUtils;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -15,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -78,7 +78,11 @@ public class AstralEditPlugin extends JavaPlugin {
                         AstralEditPlugin.logger().log(Level.WARNING, "Failed to check for updates.");
                     }
                 });
-                ReflectionUtils.invokeMethodByClass(AstralEditApi.class, "initialize", new Class[]{Plugin.class, SelectionController.class}, new Object[]{this, new SelectionManager(this)});
+
+                final Method method = AstralEditApi.class.getDeclaredMethod("initialize", Plugin.class, SelectionController.class);
+                method.setAccessible(true);
+                method.invoke(AstralEditApi.INSTANCE, this, new SelectionManager(this));
+
                 Bukkit.getServer().getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Enabled AstralEdit " + this.getDescription().getVersion() + " by Shynixn");
             } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
                 AstralEditPlugin.logger().log(Level.WARNING, "Failed to initialize plugin.", e);
@@ -92,7 +96,9 @@ public class AstralEditPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         try {
-            ReflectionUtils.invokeMethodByClass(AstralEditApi.class, "shutdown", new Class[0], new Object[0]);
+            final Method method = AstralEditApi.class.getDeclaredMethod("shutdown");
+            method.setAccessible(true);
+            method.invoke(AstralEditApi.INSTANCE);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             AstralEditPlugin.logger().log(Level.WARNING, "Failed to initialize plugin.", e);
         }
