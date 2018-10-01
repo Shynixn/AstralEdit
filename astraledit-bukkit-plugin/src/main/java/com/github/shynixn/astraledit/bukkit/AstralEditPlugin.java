@@ -7,7 +7,7 @@ import com.github.shynixn.astraledit.bukkit.logic.business.dependencies.Dependen
 import com.github.shynixn.astraledit.bukkit.logic.business.nms.VersionSupport;
 import com.github.shynixn.astraledit.bukkit.logic.lib.ReflectionUtils;
 import com.github.shynixn.astraledit.bukkit.logic.lib.UpdateUtils;
-import com.github.shynixn.astraledit.bukkit.logic.metrics.Metrics;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;

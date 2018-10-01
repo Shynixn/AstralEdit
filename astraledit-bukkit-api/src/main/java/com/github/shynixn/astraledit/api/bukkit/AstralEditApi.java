@@ -10,6 +10,8 @@ import java.util.logging.Level;
 
 public final class AstralEditApi {
 
+    private static final AstralEditApi INSTANCE = new AstralEditApi();
+    
     private static int maxAmountOfBlocksPerPerson = 10000;
     private static SelectionController manager;
     private static Plugin plugin;
@@ -26,7 +28,7 @@ public final class AstralEditApi {
      *
      * @param plugin plugin
      */
-    private static void initialize(Plugin plugin, SelectionController selectionController) {
+    private void initialize(Plugin plugin, SelectionController selectionController) {
         AstralEditApi.manager = selectionController;
         AstralEditApi.plugin = plugin;
         maxAmountOfBlocksPerPerson = plugin.getConfig().getInt("general.max-selected-blocks-amount");
@@ -35,7 +37,7 @@ public final class AstralEditApi {
     /**
      * Shutdowns the api
      */
-    private static void shutdown() {
+    private void shutdown() {
         try {
             if (manager != null) {
                 manager.close();
@@ -55,7 +57,7 @@ public final class AstralEditApi {
      * @param destroy destroy
      * @return selection
      */
-    private static Selection render(Player player, Location corner1, Location corner2, boolean destroy) {
+    private Selection render(Player player, Location corner1, Location corner2, boolean destroy) {
         if (corner1 == null || corner2 == null)
             throw new IllegalArgumentException("Corner1 or Corner2 cannot be null!");
         final Selection selection = manager.create(player, corner1, corner2);
@@ -77,7 +79,7 @@ public final class AstralEditApi {
      * @param corner2 corner 2
      * @return Rendered object
      */
-    public static Selection render(Player player, Location corner1, Location corner2) {
+    public Selection render(Player player, Location corner1, Location corner2) {
         return render(player, corner1, corner2, false);
     }
 
@@ -89,7 +91,7 @@ public final class AstralEditApi {
      * @param corner2 corner2
      * @return Rendered object
      */
-    public static Selection renderAndDestroy(Player player, Location corner1, Location corner2) {
+    public Selection renderAndDestroy(Player player, Location corner1, Location corner2) {
         return render(player, corner1, corner2, true);
     }
 
@@ -99,7 +101,7 @@ public final class AstralEditApi {
      * @param player player
      * @return Rendered object
      */
-    public static Selection render(Player player) {
+    public Selection render(Player player) {
         if (!manager.getWorldEditController().hasSelections(player))
             return null;
         return render(player, manager.getWorldEditController().getLeftSelection(player), manager.getWorldEditController().getRightSelection(player), false);
@@ -111,7 +113,7 @@ public final class AstralEditApi {
      * @param player player
      * @return Rendered object
      */
-    public static Selection renderAndDestroy(Player player) {
+    public Selection renderAndDestroy(Player player) {
         if (!manager.getWorldEditController().hasSelections(player))
             return null;
         return render(player, manager.getWorldEditController().getLeftSelection(player), manager.getWorldEditController().getRightSelection(player), true);
@@ -123,7 +125,7 @@ public final class AstralEditApi {
      * @param player player
      * @return Rendered object
      */
-    public static Selection getRenderedObject(Player player) {
+    public Selection getRenderedObject(Player player) {
         return manager.getSelection(player);
     }
 
@@ -132,7 +134,7 @@ public final class AstralEditApi {
      *
      * @param player player
      */
-    public static void clearRenderedObject(Player player) {
+    public void clearRenderedObject(Player player) {
         manager.clearSelection(player);
     }
 }
