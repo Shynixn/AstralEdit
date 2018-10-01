@@ -12,11 +12,24 @@
     <artifactId>astraledit-bukkit-plugin</artifactId>
     <version>1.1.0</version>
 
+    <repositories>
+        <repository>
+            <id>bstats-repo</id>
+            <url>http://repo.bstats.org/content/repositories/releases/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>com.github.shynixn.astraledit</groupId>
             <artifactId>astraledit-bukkit-api</artifactId>
             <version>1.1.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -116,6 +129,10 @@
                         <relocation>
                             <pattern>com.google</pattern>
                             <shadedPattern>com.github.shynixn.astraledit.lib.com.google</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.bstats</pattern>
+                            <shadedPattern>com.github.shynixn.astraledit.lib.org.bstats</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

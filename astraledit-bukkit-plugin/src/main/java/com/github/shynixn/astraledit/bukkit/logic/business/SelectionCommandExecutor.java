@@ -174,7 +174,7 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             try {
                 player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Removing blocks and rendering selection asynchronously...");
                 this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
-                    AstralEditApi.renderAndDestroy(player);
+                    AstralEditApi.INSTANCE.renderAndDestroy(player);
                     player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished converting selection.");
                 });
             } catch (final Exception e) {
@@ -463,7 +463,7 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
     private void createRenderCommand(final Player player) {
         this.runAsyncTask(() -> {
             player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Rendering WorldEdit-Selection asynchronously...");
-            final Selection selection = AstralEditApi.render(player);
+            final Selection selection = AstralEditApi.INSTANCE.render(player);
             if (selection == null) {
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "Failed rendering WE selection!");
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "Check if you selected an area with Worldedit.");
