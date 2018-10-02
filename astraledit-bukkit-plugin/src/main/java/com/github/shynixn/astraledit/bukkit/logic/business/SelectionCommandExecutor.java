@@ -6,6 +6,7 @@ import com.github.shynixn.astraledit.api.bukkit.business.entity.Selection;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
 import com.github.shynixn.astraledit.bukkit.logic.business.command.AutoRotateCommand;
+import com.github.shynixn.astraledit.bukkit.logic.business.command.MirrorCommand;
 import com.github.shynixn.astraledit.bukkit.logic.lib.SimpleCommandExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,6 +32,7 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         this.manager = manager;
 
         this.commands.add(new AutoRotateCommand(manager));
+        this.commands.add(new MirrorCommand(plugin, manager));
     }
 
     /**
@@ -63,8 +65,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             this.moveRenderToPlayer(player);
         else if (args.length == 4 && args[0].equalsIgnoreCase("move") && tryParseDouble(args[1]) && tryParseDouble(args[2]) && tryParseDouble(args[3]) && Permission.MOVE_COORDINATE.hasPermission(player))
             this.moveRenderCommand(player, Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3]));
-        else if (args.length == 1 && args[0].equalsIgnoreCase("mirror") && Permission.MIRROR.hasPermission(player))
-            this.mirrorRenderCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("flip") && Permission.FLIP.hasPermission(player))
             this.flipRenderCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("upsidedown") && Permission.UPSIDEDOWN.hasPermission(player))
@@ -326,22 +326,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             } else {
                 this.manager.getSelection(player).flip();
                 this.manager.addOperation(player, new Operation(OperationType.FLIP));
-            }
-        });
-    }
-
-    /**
-     * Mirrors the given selection
-     *
-     * @param player player
-     */
-    private void mirrorRenderCommand(Player player) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                this.manager.getSelection(player).mirror();
-                this.manager.addOperation(player, new Operation(OperationType.MIRROR));
             }
         });
     }
