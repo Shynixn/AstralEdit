@@ -6,6 +6,7 @@ import com.github.shynixn.astraledit.api.bukkit.business.entity.Selection;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
 import com.github.shynixn.astraledit.bukkit.logic.business.command.AutoRotateCommand;
+import com.github.shynixn.astraledit.bukkit.logic.business.command.JoinCommand;
 import com.github.shynixn.astraledit.bukkit.logic.lib.SimpleCommandExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,6 +32,7 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         this.manager = manager;
 
         this.commands.add(new AutoRotateCommand(manager));
+        this.commands.add(new JoinCommand(manager, plugin));
     }
 
     /**
@@ -51,8 +53,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
 
         if (args.length == 1 && args[0].equalsIgnoreCase("render") && Permission.RENDER.hasPermission(player))
             this.createRenderCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("join") && Permission.JOIN.hasPermission(player))
-            this.combineCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("tear") && Permission.TEAR.hasPermission(player))
             this.unCombineCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("place") && Permission.PLACE.hasPermission(player))
@@ -435,22 +435,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             } else if (this.manager.getSelection(player).isJoined()) {
                 this.manager.getSelection(player).tearApart();
                 this.manager.addOperation(player, new Operation(OperationType.UNCOMBINE));
-            }
-        });
-    }
-
-    /**
-     * Joins the rendered Object
-     *
-     * @param player player
-     */
-    private void combineCommand(Player player) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else if (!SelectionCommandExecutor.this.manager.getSelection(player).isJoined()) {
-                this.manager.getSelection(player).join();
-                this.manager.addOperation(player, new Operation(OperationType.COMBINE));
             }
         });
     }
