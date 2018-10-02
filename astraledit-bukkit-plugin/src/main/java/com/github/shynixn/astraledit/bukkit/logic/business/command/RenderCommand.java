@@ -9,8 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class RenderCommand implements PlayerCommand {
-
-    private Plugin plugin;
+    private final Plugin plugin;
 
     /**
      * Creates an instance of RenderCommand which depends on a Plugin
@@ -33,7 +32,7 @@ public class RenderCommand implements PlayerCommand {
         if (args.length != 1 || !args[0].equalsIgnoreCase("render") || !Permission.RENDER.hasPermission(player)) {
             return false;
         } else {
-            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
                 player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Rendering WorldEdit-Selection asynchronously...");
                 final Selection selection = AstralEditApi.INSTANCE.render(player);
                 if (selection == null) {

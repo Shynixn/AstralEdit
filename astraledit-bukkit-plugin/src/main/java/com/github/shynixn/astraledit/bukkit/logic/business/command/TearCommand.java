@@ -10,9 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class TearCommand implements PlayerCommand {
-
-    private Plugin plugin;
-    private SelectionManager manager;
+    private final Plugin plugin;
+    private final SelectionManager manager;
 
     /**
      * Creates an instance of TearCommand which depends on
@@ -38,16 +37,15 @@ public class TearCommand implements PlayerCommand {
         if (args.length != 1 || !args[0].equalsIgnoreCase("tear") || !Permission.TEAR.hasPermission(player)) {
             return false;
         } else {
-            plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
-                if (!manager.hasSelection(player)) {
+            this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
+                if (!this.manager.hasSelection(player)) {
                     player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-                } else if (manager.getSelection(player).isJoined()) {
-                    manager.getSelection(player).tearApart();
-                    manager.addOperation(player, new Operation(OperationType.UNCOMBINE));
+                } else if (this.manager.getSelection(player).isJoined()) {
+                    this.manager.getSelection(player).tearApart();
+                    this.manager.addOperation(player, new Operation(OperationType.UNCOMBINE));
                 }
             });
             return true;
         }
-
     }
 }
