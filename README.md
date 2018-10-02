@@ -57,7 +57,7 @@ dependencies {
 Player player;
 Plugin plugin;
 
- //It is highly recommend to work with selections asynchronly to increase server performance
+ //It is highly recommend to work with selections asynchrony to increase server performance
 Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
    @Override
    public void run() {
