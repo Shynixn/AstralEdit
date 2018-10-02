@@ -5,17 +5,13 @@ import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
 import com.github.shynixn.astraledit.api.bukkit.business.entity.Selection;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
-import com.github.shynixn.astraledit.bukkit.logic.business.command.AutoRotateCommand;
-import com.github.shynixn.astraledit.bukkit.logic.business.command.PlaceCommand;
-import com.github.shynixn.astraledit.bukkit.logic.business.command.TearCommand;
-import com.github.shynixn.astraledit.bukkit.logic.business.command.RenderCommand;
+import com.github.shynixn.astraledit.bukkit.logic.business.command.*;
 import com.github.shynixn.astraledit.bukkit.logic.lib.SimpleCommandExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.EulerAngle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +34,8 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         this.commands.add(new RenderCommand(plugin));
         this.commands.add(new AutoRotateCommand(manager));
         this.commands.add(new PlaceCommand(plugin, manager));
-        this.commands.add(new TearCommand(manager, plugin));        
+        this.commands.add(new TearCommand(manager, plugin));
+        this.commands.add(new AnglesCommand(manager, plugin));
     }
 
     /**
@@ -77,8 +74,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             this.hideCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("show") && Permission.SHOW_OTHER.hasPermission(player))
             this.showCommand(player);
-        else if (args.length == 4 && args[0].equalsIgnoreCase("angles") && tryParseDouble(args[1]) && tryParseDouble(args[2]) && tryParseDouble(args[3]) && Permission.ANGLES.hasPermission(player))
-            this.setAnglesCommand(player, Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3]));
         else if (args.length == 2 && args[0].equalsIgnoreCase("rotate") && tryParseDouble(args[1]) && Permission.ROTATE.hasPermission(player))
             this.rotateRenderCommand(player, Double.parseDouble(args[1]));
         else if (args.length == 1 && args[0].equalsIgnoreCase("convertToBlocks") && Permission.CONVERT_TO_BLOCKS.hasPermission(player))
@@ -204,27 +199,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
                     this.manager.addOperation(player, operation);
                     player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished converting render.");
                 });
-            }
-        });
-    }
-
-    /**
-     * Rotates the blocks for the given angle
-     *
-     * @param player player
-     * @param x      x
-     * @param y      y
-     * @param z      z
-     */
-    private void setAnglesCommand(Player player, double x, double y, double z) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                final Operation operation = new Operation(OperationType.ANGLES);
-                operation.setOperationData(this.manager.getSelection(player).getBlockAngle());
-                this.manager.getSelection(player).setBlockAngle(new EulerAngle(x, y, z));
-                this.manager.addOperation(player, operation);
             }
         });
     }
