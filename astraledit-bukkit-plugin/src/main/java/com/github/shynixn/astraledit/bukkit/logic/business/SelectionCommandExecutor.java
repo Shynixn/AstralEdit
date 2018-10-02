@@ -32,6 +32,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
 
         this.commands.add(new RenderCommand(plugin));
         this.commands.add(new AutoRotateCommand(manager));
+        this.commands.add(new ClearCommand(plugin, manager));
         this.commands.add(new MirrorCommand(plugin, manager));
         this.commands.add(new PlaceCommand(plugin, manager));
         this.commands.add(new TearCommand(manager, plugin));        
@@ -56,8 +57,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
 
         if (args.length == 1 && args[0].equalsIgnoreCase("join") && Permission.JOIN.hasPermission(player))
             this.combineCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("clear") && Permission.CLEAR.hasPermission(player))
-            this.clearRenderCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("move") && Permission.MOVE_PLAYER.hasPermission(player))
             this.moveRenderToPlayer(player);
         else if (args.length == 4 && args[0].equalsIgnoreCase("move") && tryParseDouble(args[1]) && tryParseDouble(args[2]) && tryParseDouble(args[3]) && Permission.MOVE_COORDINATE.hasPermission(player))
@@ -342,23 +341,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
                 operation.setOperationData(this.manager.getSelection(player).getLocation().clone());
                 this.manager.getSelection(player).move(player.getLocation().add(0, -2, 0));
                 this.manager.addOperation(player, operation);
-            }
-        });
-    }
-
-    /**
-     * Clears the rendered Object
-     *
-     * @param player player
-     */
-    private void clearRenderCommand(Player player) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Destroying render ...");
-                this.manager.clearSelection(player);
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished destroying render.");
             }
         });
     }
