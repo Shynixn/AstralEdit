@@ -36,6 +36,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         this.commands.add(new MirrorCommand(plugin, manager));
         this.commands.add(new PlaceCommand(plugin, manager));
         this.commands.add(new TearCommand(manager, plugin));        
+        this.commands.add(new HideCommand(manager, plugin));
         this.commands.add(new ShowCommand(manager, plugin));
     }
 
@@ -67,8 +68,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             this.upSideDownCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("undo") && Permission.UNDO.hasPermission(player))
             this.undoCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("hide") && Permission.HIDE_OTHER.hasPermission(player))
-            this.hideCommand(player);
         else if (args.length == 4 && args[0].equalsIgnoreCase("angles") && tryParseDouble(args[1]) && tryParseDouble(args[2]) && tryParseDouble(args[3]) && Permission.ANGLES.hasPermission(player))
             this.setAnglesCommand(player, Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3]));
         else if (args.length == 2 && args[0].equalsIgnoreCase("rotate") && tryParseDouble(args[1]) && Permission.ROTATE.hasPermission(player))
@@ -241,24 +240,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
     }
 
     /**
-     * Hides the renderedObject from other players
-     *
-     * @param player player
-     */
-    private void hideCommand(Player player) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                if (!this.manager.getSelection(player).isHidden()) {
-                    this.manager.getSelection(player).hide(getOnlinePlayers().toArray(new Player[getOnlinePlayers().size()]));
-                    player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Your render is now invisible to other players.");
-                }
-            }
-        });
-    }
-
-    /**
      * Undos the last operation
      *
      * @param player player
@@ -369,19 +350,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
      */
     private void runAsyncTask(Runnable runnable) {
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, runnable);
-    }
-
-    /**
-     * Returns online players
-     *
-     * @return players
-     */
-    public static List<Player> getOnlinePlayers() {
-        final List<Player> players = new ArrayList<>();
-        for (final World world : Bukkit.getWorlds()) {
-            players.addAll(world.getPlayers());
-        }
-        return players;
     }
 
     /**
