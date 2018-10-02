@@ -6,6 +6,7 @@ import com.github.shynixn.astraledit.api.bukkit.business.entity.Selection;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
 import com.github.shynixn.astraledit.bukkit.logic.business.command.AutoRotateCommand;
+import com.github.shynixn.astraledit.bukkit.logic.business.command.PlaceCommand;
 import com.github.shynixn.astraledit.bukkit.logic.lib.SimpleCommandExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,6 +32,7 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         this.manager = manager;
 
         this.commands.add(new AutoRotateCommand(manager));
+        this.commands.add(new PlaceCommand(plugin, manager));
     }
 
     /**
@@ -55,8 +57,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             this.combineCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("tear") && Permission.TEAR.hasPermission(player))
             this.unCombineCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("place") && Permission.PLACE.hasPermission(player))
-            this.placeCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("clear") && Permission.CLEAR.hasPermission(player))
             this.clearRenderCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("move") && Permission.MOVE_PLAYER.hasPermission(player))
@@ -398,27 +398,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
                 player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Destroying render ...");
                 this.manager.clearSelection(player);
                 player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished destroying render.");
-            }
-        });
-    }
-
-    /**
-     * Places the rendered Object to blocks at the current location
-     *
-     * @param player player
-     */
-    private void placeCommand(Player player) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Placing render ...");
-                final Operation operation = new Operation(OperationType.PLACE);
-                operation.setOperationData(((SelectionHolder) this.manager.getSelection(player)).getTemporaryStorage());
-                this.manager.getSelection(player).placeBlocks(() -> {
-                    this.manager.addOperation(player, operation);
-                    player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished placing render.");
-                });
             }
         });
     }
