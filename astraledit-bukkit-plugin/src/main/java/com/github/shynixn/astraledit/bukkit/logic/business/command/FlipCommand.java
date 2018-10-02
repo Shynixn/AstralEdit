@@ -17,8 +17,8 @@ public class FlipCommand implements PlayerCommand {
     /**
      * The Command flips the current selection depending on the Plugin and SelectionManager.
      *
-     * @param plugin
-     * @param manager
+     * @param plugin the Plugin
+     * @param manager the current SelectionManager
      */
     public FlipCommand(Plugin plugin, SelectionManager manager) {
         this.plugin = plugin;

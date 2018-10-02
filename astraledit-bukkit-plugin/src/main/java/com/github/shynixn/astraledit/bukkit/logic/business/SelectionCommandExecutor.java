@@ -5,10 +5,7 @@ import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
 import com.github.shynixn.astraledit.api.bukkit.business.entity.Selection;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
-import com.github.shynixn.astraledit.bukkit.logic.business.command.AutoRotateCommand;
-import com.github.shynixn.astraledit.bukkit.logic.business.command.PlaceCommand;
-import com.github.shynixn.astraledit.bukkit.logic.business.command.TearCommand;
-import com.github.shynixn.astraledit.bukkit.logic.business.command.RenderCommand;
+import com.github.shynixn.astraledit.bukkit.logic.business.command.*;
 import com.github.shynixn.astraledit.bukkit.logic.lib.SimpleCommandExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -36,7 +33,8 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         this.commands.add(new RenderCommand(plugin));
         this.commands.add(new AutoRotateCommand(manager));
         this.commands.add(new PlaceCommand(plugin, manager));
-        this.commands.add(new TearCommand(manager, plugin));        
+        this.commands.add(new TearCommand(manager, plugin));
+        this.commands.add(new FlipCommand(plugin, manager));
     }
 
     /**
