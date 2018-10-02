@@ -48,7 +48,7 @@ public class Operation {
      *
      * @return type
      */
-    OperationType getType() {
+    public OperationType getType() {
         return this.type;
     }
 
@@ -57,7 +57,7 @@ public class Operation {
      *
      * @return data
      */
-    Object getOperationData() {
+    public Object getOperationData() {
         return this.operationData;
     }
 
@@ -66,7 +66,7 @@ public class Operation {
      *
      * @param operationData operationsData
      */
-    void setOperationData(Object operationData) {
+    public void setOperationData(Object operationData) {
         this.operationData = operationData;
     }
 }
