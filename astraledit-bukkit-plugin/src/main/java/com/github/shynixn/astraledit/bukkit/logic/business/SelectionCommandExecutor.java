@@ -5,10 +5,7 @@ import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
 import com.github.shynixn.astraledit.api.bukkit.business.entity.Selection;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
-import com.github.shynixn.astraledit.bukkit.logic.business.command.AutoRotateCommand;
-import com.github.shynixn.astraledit.bukkit.logic.business.command.PlaceCommand;
-import com.github.shynixn.astraledit.bukkit.logic.business.command.TearCommand;
-import com.github.shynixn.astraledit.bukkit.logic.business.command.RenderCommand;
+import com.github.shynixn.astraledit.bukkit.logic.business.command.*;
 import com.github.shynixn.astraledit.bukkit.logic.lib.SimpleCommandExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -37,6 +34,7 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         this.commands.add(new AutoRotateCommand(manager));
         this.commands.add(new PlaceCommand(plugin, manager));
         this.commands.add(new TearCommand(manager, plugin));        
+        this.commands.add(new ShowCommand(manager, plugin));
     }
 
     /**
@@ -73,8 +71,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             this.undoCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("hide") && Permission.HIDE_OTHER.hasPermission(player))
             this.hideCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("show") && Permission.SHOW_OTHER.hasPermission(player))
-            this.showCommand(player);
         else if (args.length == 4 && args[0].equalsIgnoreCase("angles") && tryParseDouble(args[1]) && tryParseDouble(args[2]) && tryParseDouble(args[3]) && Permission.ANGLES.hasPermission(player))
             this.setAnglesCommand(player, Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3]));
         else if (args.length == 2 && args[0].equalsIgnoreCase("rotate") && tryParseDouble(args[1]) && Permission.ROTATE.hasPermission(player))
@@ -242,24 +238,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
                 operation.setOperationData(this.manager.getSelection(player).getRotation());
                 this.manager.getSelection(player).rotate(amount);
                 this.manager.addOperation(player, operation);
-            }
-        });
-    }
-
-    /**
-     * Shows the rendered object to other players
-     *
-     * @param player player
-     */
-    private void showCommand(Player player) {
-        this.runAsyncTask(() -> {
-            if (!SelectionCommandExecutor.this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                if (SelectionCommandExecutor.this.manager.getSelection(player).isHidden()) {
-                    SelectionCommandExecutor.this.manager.getSelection(player).show(getOnlinePlayers().toArray(new Player[getOnlinePlayers().size()]));
-                    player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Your render is now visible to other players.");
-                }
             }
         });
     }
