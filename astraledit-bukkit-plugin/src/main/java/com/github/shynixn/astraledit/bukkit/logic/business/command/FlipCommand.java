@@ -34,7 +34,7 @@ public class FlipCommand implements PlayerCommand {
      */
     @Override
     public boolean onPlayerExecuteCommand(Player player, String[] args) {
-        if (args.length != 1 && !args[0].equalsIgnoreCase("flip") && !Permission.FLIP.hasPermission(player)) {
+        if (args.length != 1 || !args[0].equalsIgnoreCase("flip") || !Permission.FLIP.hasPermission(player)) {
             return false;
         }
 
