@@ -17,7 +17,7 @@ import org.bukkit.util.EulerAngle;
 import java.util.ArrayList;
 import java.util.List;
 
-class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
+public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
     private final SelectionManager manager;
     private final List<PlayerCommand> commands = new ArrayList<>();
 
@@ -411,7 +411,7 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
      *
      * @return players
      */
-    private static List<Player> getOnlinePlayers() {
+    public static List<Player> getOnlinePlayers() {
         final List<Player> players = new ArrayList<>();
         for (final World world : Bukkit.getWorlds()) {
             players.addAll(world.getPlayers());

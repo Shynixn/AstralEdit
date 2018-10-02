@@ -4,13 +4,10 @@ import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
 import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.List;
+import static com.github.shynixn.astraledit.bukkit.logic.business.SelectionCommandExecutor.getOnlinePlayers;
 
 /**
  * Created by Shynixn 2018.
@@ -63,7 +60,7 @@ public class ShowCommand implements PlayerCommand {
      */
     @Override
     public boolean onPlayerExecuteCommand(Player player, String[] args) {
-        if(args.length == 1 && args[0].equalsIgnoreCase("show") && Permission.SHOW_OTHER.hasPermission(player)) {
+        if(args.length != 1 || !args[0].equalsIgnoreCase("show") || !Permission.SHOW_OTHER.hasPermission(player)) {
             return false;
         } else {
             this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
@@ -71,21 +68,12 @@ public class ShowCommand implements PlayerCommand {
                     player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
                 } else {
                     if (this.manager.getSelection(player).isHidden()) {
-                        this.manager.getSelection(player)
-                                    .show(getOnlinePlayers().toArray(new Player[getOnlinePlayers().size()]));
+                        this.manager.getSelection(player).show(getOnlinePlayers().toArray(new Player[getOnlinePlayers().size()]));
                         player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Your render is now visible to other players.");
                     }
                 }
             });
             return true;
         }
-    }
-
-    private List<Player> getOnlinePlayers() {
-        final List<Player> players = new ArrayList<>();
-        for (final World world : Bukkit.getWorlds()) {
-            players.addAll(world.getPlayers());
-        }
-        return players;
     }
 }
