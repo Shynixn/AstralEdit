@@ -4,10 +4,9 @@ import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
 import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
+import com.github.shynixn.astraledit.bukkit.logic.lib.Utils;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-
-import static com.github.shynixn.astraledit.bukkit.logic.lib.Utils.getOnlinePlayers;
 
 /**
  * Created by Shynixn 2018.
@@ -68,12 +67,13 @@ public class HideCommand implements PlayerCommand {
                     player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
                 } else {
                     if (!this.manager.getSelection(player).isHidden()) {
-                        this.manager.getSelection(player).hide(getOnlinePlayers().toArray(new Player[getOnlinePlayers().size()]));
+                        this.manager.getSelection(player).hide(Utils.getOnlinePlayers().toArray(new Player[Utils.getOnlinePlayers().size()]));
                         player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Your render is now invisible to other players.");
                     }
                 }
             });
-            return false;
+
+            return true;
         }
     }
 }

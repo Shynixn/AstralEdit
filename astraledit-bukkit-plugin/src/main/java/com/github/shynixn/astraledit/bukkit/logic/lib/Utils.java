@@ -38,15 +38,17 @@ import java.util.List;
  */
 public class Utils {
     /**
-     * Returns online players
+     * Returns online players.
      *
      * @return players
      */
     public static List<Player> getOnlinePlayers() {
         final List<Player> players = new ArrayList<>();
+
         for (final World world : Bukkit.getWorlds()) {
             players.addAll(world.getPlayers());
         }
+
         return players;
     }
 }

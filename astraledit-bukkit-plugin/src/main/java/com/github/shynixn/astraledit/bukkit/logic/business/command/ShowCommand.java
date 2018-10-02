@@ -4,10 +4,9 @@ import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
 import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
+import com.github.shynixn.astraledit.bukkit.logic.lib.Utils;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-
-import static com.github.shynixn.astraledit.bukkit.logic.business.SelectionCommandExecutor.getOnlinePlayers;
 
 /**
  * Created by Shynixn 2018.
@@ -60,7 +59,7 @@ public class ShowCommand implements PlayerCommand {
      */
     @Override
     public boolean onPlayerExecuteCommand(Player player, String[] args) {
-        if(args.length != 1 || !args[0].equalsIgnoreCase("show") || !Permission.SHOW_OTHER.hasPermission(player)) {
+        if (args.length != 1 || !args[0].equalsIgnoreCase("show") || !Permission.SHOW_OTHER.hasPermission(player)) {
             return false;
         } else {
             this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
@@ -68,7 +67,7 @@ public class ShowCommand implements PlayerCommand {
                     player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
                 } else {
                     if (this.manager.getSelection(player).isHidden()) {
-                        this.manager.getSelection(player).show(getOnlinePlayers().toArray(new Player[getOnlinePlayers().size()]));
+                        this.manager.getSelection(player).show(Utils.getOnlinePlayers().toArray(new Player[Utils.getOnlinePlayers().size()]));
                         player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Your render is now visible to other players.");
                     }
                 }
