@@ -33,9 +33,8 @@ public class RenderCommand implements PlayerCommand {
             return false;
         } else {
             createRenderCommand(player);
+            return true;
         }
-
-        return false;
     }
 
     /**
