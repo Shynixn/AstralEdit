@@ -6,6 +6,7 @@ import com.github.shynixn.astraledit.api.bukkit.business.entity.Selection;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
 import com.github.shynixn.astraledit.bukkit.logic.business.command.AutoRotateCommand;
+import com.github.shynixn.astraledit.bukkit.logic.business.command.PlaceCommand;
 import com.github.shynixn.astraledit.bukkit.logic.business.command.TearCommand;
 import com.github.shynixn.astraledit.bukkit.logic.business.command.RenderCommand;
 import com.github.shynixn.astraledit.bukkit.logic.lib.SimpleCommandExecutor;
@@ -34,6 +35,7 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
 
         this.commands.add(new RenderCommand(plugin));
         this.commands.add(new AutoRotateCommand(manager));
+        this.commands.add(new PlaceCommand(plugin, manager));
         this.commands.add(new TearCommand(manager, plugin));        
     }
 
@@ -55,8 +57,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
 
         if (args.length == 1 && args[0].equalsIgnoreCase("join") && Permission.JOIN.hasPermission(player))
             this.combineCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("place") && Permission.PLACE.hasPermission(player))
-            this.placeCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("clear") && Permission.CLEAR.hasPermission(player))
             this.clearRenderCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("move") && Permission.MOVE_PLAYER.hasPermission(player))
@@ -403,29 +403,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
     }
 
     /**
-     * Places the rendered Object to blocks at the current location
-     *
-     * @param player player
-     */
-    private void placeCommand(Player player) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Placing render ...");
-                final Operation operation = new Operation(OperationType.PLACE);
-                operation.setOperationData(((SelectionHolder) this.manager.getSelection(player)).getTemporaryStorage());
-                this.manager.getSelection(player).placeBlocks(() -> {
-                    this.manager.addOperation(player, operation);
-                    player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished placing render.");
-                });
-            }
-        });
-    }
-
-
-
-    /**
      * Joins the rendered Object
      *
      * @param player player
@@ -462,21 +439,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             players.addAll(world.getPlayers());
         }
         return players;
-    }
-
-    /**
-     * Checks if the string can be parsed to int
-     *
-     * @param value value
-     * @return success
-     */
-    private static boolean tryParseInt(String value) {
-        try {
-            Integer.parseInt(value);
-        } catch (final NumberFormatException nfe) {
-            return false;
-        }
-        return true;
     }
 
     /**
