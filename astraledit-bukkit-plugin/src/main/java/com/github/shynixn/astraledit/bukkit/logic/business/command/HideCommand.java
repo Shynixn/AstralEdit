@@ -42,7 +42,7 @@ public class HideCommand implements PlayerCommand {
 
     /**
      * Creates an instance of {@link HideCommand} which depends on
-     * a {@link SelectionManager] and a {@link Plugin}
+     * a {@link SelectionManager} and a {@link Plugin}
      *
      * @param manager SelectionManager
      */
