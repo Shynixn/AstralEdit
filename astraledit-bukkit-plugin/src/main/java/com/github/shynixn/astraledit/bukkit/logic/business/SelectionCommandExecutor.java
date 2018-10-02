@@ -20,6 +20,8 @@ import org.bukkit.util.EulerAngle;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.shynixn.astraledit.bukkit.logic.lib.Utils.tryParseDouble;
+
 class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
     private final SelectionManager manager;
     private final List<PlayerCommand> commands = new ArrayList<>();
@@ -439,20 +441,5 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             players.addAll(world.getPlayers());
         }
         return players;
-    }
-
-    /**
-     * Checks if the string can be parsed to double
-     *
-     * @param value value
-     * @return success
-     */
-    private static boolean tryParseDouble(String value) {
-        try {
-            Double.parseDouble(value);
-        } catch (final NumberFormatException nfe) {
-            return false;
-        }
-        return true;
     }
 }
