@@ -29,7 +29,7 @@ package com.github.shynixn.astraledit.bukkit.logic.business;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-class Operation {
+public class Operation {
     private final OperationType type;
     private Object operationData;
 
@@ -38,7 +38,7 @@ class Operation {
      *
      * @param type type
      */
-    Operation(OperationType type) {
+    public Operation(OperationType type) {
         super();
         this.type = type;
     }
