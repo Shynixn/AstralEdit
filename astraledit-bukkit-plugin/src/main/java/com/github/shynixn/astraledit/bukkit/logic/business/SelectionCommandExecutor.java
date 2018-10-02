@@ -442,21 +442,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
     }
 
     /**
-     * Checks if the string can be parsed to int
-     *
-     * @param value value
-     * @return success
-     */
-    private static boolean tryParseInt(String value) {
-        try {
-            Integer.parseInt(value);
-        } catch (final NumberFormatException nfe) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * Checks if the string can be parsed to double
      *
      * @param value value

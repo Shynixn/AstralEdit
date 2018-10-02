@@ -1,9 +1,9 @@
-# AstralEdit [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg)](https://raw.githubusercontent.com/Shynixn/AstralEdit/master/LICENSE)
+# AstralEdit [![Build Status](https://maven-badges.herokuapp.com/maven-central/com.github.shynixn/astraledit/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/com.github.shynixn.astraledit/astraledit-bukkit-api) [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat-square)](https://raw.githubusercontent.com/Shynixn/AstralEdit/master/LICENSE)
 
 | branch        | status        | download      |
 | ------------- | --------------| --------------| 
-| master        | [![Build Status](https://travis-ci.org/Shynixn/AstralEdit.svg?branch=master)](https://travis-ci.org/Shynixn/AstralEdit) |[Download latest release (recommend)](https://github.com/Shynixn/AstralEdit/releases)|
-| experimental      | [![Build Status](https://travis-ci.org/Shynixn/AstralEdit.svg?branch=experimental)](https://travis-ci.org/Shynixn/AstralEdit) | [Download snapshots](https://oss.sonatype.org/content/repositories/snapshots/com/github/shynixn/astraledit/) |
+| master        | [![Build Status](https://img.shields.io/travis/Shynixn/AstralEdit/master.svg?style=flat-square)](https://travis-ci.org/Shynixn/AstralEdit) |[Download latest release (recommend)](https://github.com/Shynixn/AstralEdit/releases)|
+| experimental      | [![Build Status](https://img.shields.io/travis/Shynixn/AstralEdit/experimental.svg?style=flat-square)](https://travis-ci.org/Shynixn/AstralEdit) | [Download snapshots](https://oss.sonatype.org/content/repositories/snapshots/com/github/shynixn/astraledit/) |
 
 JavaDocs: https://shynixn.github.io/AstralEdit/apidocs/
 

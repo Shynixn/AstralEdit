@@ -56,5 +56,4 @@ public class PlaceCommand implements PlayerCommand {
 
         return true;
     }
-
 }
