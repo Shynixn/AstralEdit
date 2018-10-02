@@ -7,7 +7,7 @@ import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import static com.github.shynixn.astraledit.bukkit.logic.business.SelectionCommandExecutor.getOnlinePlayers;
+import static com.github.shynixn.astraledit.bukkit.logic.lib.Utils.getOnlinePlayers;
 
 /**
  * Created by Shynixn 2018.
