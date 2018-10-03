@@ -147,7 +147,7 @@ public final class SelectionManager implements Runnable, SelectionController {
      *
      * @param player player
      */
-    boolean undoOperation(Player player) {
+    public boolean undoOperation(Player player) {
         if (!this.hasSelection(player))
             return false;
         if (!this.operations.containsKey(player))

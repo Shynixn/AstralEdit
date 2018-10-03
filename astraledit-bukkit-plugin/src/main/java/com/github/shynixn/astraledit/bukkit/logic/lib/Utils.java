@@ -1,5 +1,11 @@
 package com.github.shynixn.astraledit.bukkit.logic.lib;
 
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 /**
  * Copyright 2018 Shynixn
  * <p>
@@ -30,9 +36,8 @@ package com.github.shynixn.astraledit.bukkit.logic.lib;
  * SOFTWARE.
  */
 public class Utils {
-
     /**
-     * Checks if the string can be parsed to double
+     * Checks if the string can be parsed to double.
      *
      * @param value value
      * @return success
@@ -44,5 +49,20 @@ public class Utils {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Returns online players.
+     *
+     * @return players
+     */
+    public static List<Player> getOnlinePlayers() {
+        final List<Player> players = new ArrayList<>();
+
+        for (final World world : Bukkit.getWorlds()) {
+            players.addAll(world.getPlayers());
+        }
+
+        return players;
     }
 }
