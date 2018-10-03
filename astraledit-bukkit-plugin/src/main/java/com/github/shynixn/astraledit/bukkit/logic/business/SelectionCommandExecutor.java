@@ -34,6 +34,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         this.commands.add(new ClearCommand(plugin, manager));
         this.commands.add(new MirrorCommand(plugin, manager));
         this.commands.add(new PlaceCommand(plugin, manager));
+        this.commands.add(new MoveCommand(manager));
         this.commands.add(new AnglesCommand(manager, plugin));
         this.commands.add(new FlipCommand(plugin, manager));
         this.commands.add(new TearCommand(manager, plugin));        
@@ -61,10 +62,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
 
         if (args.length == 1 && args[0].equalsIgnoreCase("join") && Permission.JOIN.hasPermission(player))
             this.combineCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("move") && Permission.MOVE_PLAYER.hasPermission(player))
-            this.moveRenderToPlayer(player);
-        else if (args.length == 4 && args[0].equalsIgnoreCase("move") && tryParseDouble(args[1]) && tryParseDouble(args[2]) && tryParseDouble(args[3]) && Permission.MOVE_COORDINATE.hasPermission(player))
-            this.moveRenderCommand(player, Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3]));
         else if (args.length == 2 && args[0].equalsIgnoreCase("rotate") && tryParseDouble(args[1]) && Permission.ROTATE.hasPermission(player))
             this.rotateRenderCommand(player, Double.parseDouble(args[1]));
         else if (args.length == 1 && args[0].equalsIgnoreCase("convertToBlocks") && Permission.CONVERT_TO_BLOCKS.hasPermission(player))
@@ -208,45 +205,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
                 final Operation operation = new Operation(OperationType.ROTATE);
                 operation.setOperationData(this.manager.getSelection(player).getRotation());
                 this.manager.getSelection(player).rotate(amount);
-                this.manager.addOperation(player, operation);
-            }
-        });
-    }
-  
-    /**
-     * Moves the rendered Object to the given coordinates
-     *
-     * @param player player
-     * @param x      x
-     * @param y      y
-     * @param z      z
-     */
-    private void moveRenderCommand(Player player, double x, double y, double z) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                final Operation operation = new Operation(OperationType.MOVE);
-                operation.setOperationData(this.manager.getSelection(player).getLocation().clone());
-                this.manager.getSelection(player).move(this.manager.getSelection(player).getLocation().add(x, y, z));
-                this.manager.addOperation(player, operation);
-            }
-        });
-    }
-
-    /**
-     * Moves the rendered Object to the player
-     *
-     * @param player player
-     */
-    private void moveRenderToPlayer(Player player) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                final Operation operation = new Operation(OperationType.MOVE);
-                operation.setOperationData(this.manager.getSelection(player).getLocation().clone());
-                this.manager.getSelection(player).move(player.getLocation().add(0, -2, 0));
                 this.manager.addOperation(player, operation);
             }
         });
