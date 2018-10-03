@@ -6,7 +6,7 @@ import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
 import com.github.shynixn.astraledit.bukkit.logic.business.Operation;
 import com.github.shynixn.astraledit.bukkit.logic.business.OperationType;
-import com.github.shynixn.astraledit.bukkit.logic.business.SelectionCommandExecutor;
+import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -39,16 +39,16 @@ import org.bukkit.plugin.Plugin;
  */
 public class JoinCommand implements PlayerCommand {
 
-    private final SelectionController selectionController;
+    private final SelectionManager manager;
     private final Plugin plugin;
 
     /**
      * Creates a new instance of the JoinCommand with SelectionController as dependency.
      *
-     * @param selectionController dependency.
+     * @param manager dependency.
      */
-    public JoinCommand(SelectionController selectionController, Plugin plugin) {
-        this.selectionController = selectionController;
+    public JoinCommand(SelectionManager manager, Plugin plugin) {
+        this.manager = manager;
         this.plugin = plugin;
     }
 
@@ -67,11 +67,11 @@ public class JoinCommand implements PlayerCommand {
         }
 
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
-            if (!this.selectionController.hasSelection(player)) {
+            if (!this.manager.hasSelection(player)) {
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else if (!this.selectionController.getSelection(player).isJoined()) {
-                this.selectionController.getSelection(player).join();
-                this.selectionController.addOperation(player, new Operation(OperationType.COMBINE));
+            } else if (!this.manager.getSelection(player).isJoined()) {
+                this.manager.getSelection(player).join();
+                this.manager.addOperation(player, new Operation(OperationType.COMBINE));
             }
         });
 
