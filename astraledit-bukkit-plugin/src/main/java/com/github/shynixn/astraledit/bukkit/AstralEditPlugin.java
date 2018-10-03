@@ -2,9 +2,11 @@ package com.github.shynixn.astraledit.bukkit;
 
 import com.github.shynixn.astraledit.api.bukkit.AstralEditApi;
 import com.github.shynixn.astraledit.api.bukkit.business.controller.SelectionController;
+import com.github.shynixn.astraledit.api.business.service.DependencyService;
 import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
-import com.github.shynixn.astraledit.bukkit.logic.business.dependencies.DependencySupport;
 import com.github.shynixn.astraledit.bukkit.logic.business.nms.VersionSupport;
+import com.github.shynixn.astraledit.bukkit.logic.business.service.DependencyServiceImpl;
+import com.github.shynixn.astraledit.bukkit.logic.business.service.DependencyWorldEditServiceImpl;
 import com.github.shynixn.astraledit.bukkit.logic.lib.UpdateUtils;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -62,11 +64,16 @@ public class AstralEditPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         logger = this.getLogger();
-        if (!VersionSupport.isServerVersionSupported(PLUGIN_NAME, PREFIX_CONSOLE) || !DependencySupport.areRequiredDependenciesInstalled(PLUGIN_NAME, PREFIX_CONSOLE)) {
+
+        Bukkit.getServer().getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Loading AstralEdit ...");
+
+        final DependencyService dependencyService = new DependencyServiceImpl(this);
+        final boolean requiredDependenciesInstalled = dependencyService.checkForInstalledDependencies();
+
+        if (!VersionSupport.isServerVersionSupported(PLUGIN_NAME, PREFIX_CONSOLE) || !requiredDependenciesInstalled) {
             Bukkit.getPluginManager().disablePlugin(this);
         } else {
             try {
-                Bukkit.getServer().getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Loading AstralEdit ...");
                 this.saveDefaultConfig();
                 if (this.getConfig().getBoolean("metrics")) {
                     new Metrics(this);
@@ -81,8 +88,7 @@ public class AstralEditPlugin extends JavaPlugin {
 
                 final Method method = AstralEditApi.class.getDeclaredMethod("initialize", Plugin.class, SelectionController.class);
                 method.setAccessible(true);
-                method.invoke(AstralEditApi.INSTANCE, this, new SelectionManager(this));
-
+                method.invoke(AstralEditApi.INSTANCE, this, new SelectionManager(new DependencyWorldEditServiceImpl(this), this));
                 Bukkit.getServer().getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Enabled AstralEdit " + this.getDescription().getVersion() + " by Shynixn");
             } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
                 AstralEditPlugin.logger().log(Level.WARNING, "Failed to initialize plugin.", e);

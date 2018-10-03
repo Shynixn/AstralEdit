@@ -8,9 +8,7 @@ import com.github.shynixn.astraledit.bukkit.Permission;
 import com.github.shynixn.astraledit.bukkit.logic.business.command.*;
 import com.github.shynixn.astraledit.bukkit.logic.lib.SimpleCommandExecutor;
 import com.github.shynixn.astraledit.bukkit.logic.lib.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,19 +28,19 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         super("awe", JavaPlugin.getPlugin(AstralEditPlugin.class));
         this.manager = manager;
 
-        this.commands.add(new RenderCommand(plugin));
+        this.commands.add(new RenderCommand(this.plugin));
         this.commands.add(new AutoRotateCommand(manager));
-        this.commands.add(new ClearCommand(plugin, manager));
-        this.commands.add(new MirrorCommand(plugin, manager));
-        this.commands.add(new PlaceCommand(plugin, manager));
-        this.commands.add(new MoveCommand(manager));
-        this.commands.add(new AnglesCommand(manager, plugin));
-        this.commands.add(new FlipCommand(plugin, manager));
-        this.commands.add(new TearCommand(manager, plugin));        
-        this.commands.add(new UndoCommand(manager, plugin));
-        this.commands.add(new UpsidedownCommand(manager, plugin));
-        this.commands.add(new HideCommand(manager, plugin));
-        this.commands.add(new ShowCommand(manager, plugin));
+        this.commands.add(new ClearCommand(this.plugin, manager));
+        this.commands.add(new MirrorCommand(this.plugin, manager));
+        this.commands.add(new PlaceCommand(this.plugin, manager));
+        this.commands.add(new MoveCommand(manager, this.plugin));
+        this.commands.add(new AnglesCommand(manager, this.plugin));
+        this.commands.add(new FlipCommand(this.plugin, manager));
+        this.commands.add(new TearCommand(manager, this.plugin));
+        this.commands.add(new UndoCommand(manager, this.plugin));
+        this.commands.add(new UpsidedownCommand(manager, this.plugin));
+        this.commands.add(new HideCommand(manager, this.plugin));
+        this.commands.add(new ShowCommand(manager, this.plugin));
     }
 
     /**
@@ -132,7 +130,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             }
         }
     }
-  
+
     //SYNC
 
     /**

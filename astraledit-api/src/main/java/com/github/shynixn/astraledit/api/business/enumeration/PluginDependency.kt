@@ -1,7 +1,4 @@
-package com.github.shynixn.astraledit.api.bukkit.business.controller;
-
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
+package com.github.shynixn.astraledit.api.business.enumeration
 
 /**
  * Created by Shynixn 2018.
@@ -30,28 +27,14 @@ import org.bukkit.entity.Player;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public interface WorldEditController {
-    /**
-     * Returns the WorldEdit selection of the player rightClicking
-     *
-     * @param player player
-     * @return worldEditSelectionLocation
-     */
-    Location getRightSelection(Player player);
+enum class PluginDependency(
+        /**
+         * Plugin name.
+         */
+        val pluginName: String) {
 
     /**
-     * Returns the worldEdit selection of the player leftClicking
-     *
-     * @param player player
-     * @return worldEditSelection
+     * WorldEdit plugin.
      */
-    Location getLeftSelection(Player player);
-
-    /**
-     * Returns if the player has selected something with worldEdit
-     *
-     * @param player player
-     * @return isSelected
-     */
-    boolean hasSelections(Player player);
+    WORLEDIT("WorldEdit")
 }
