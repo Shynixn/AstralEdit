@@ -37,6 +37,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         this.commands.add(new PlaceCommand(plugin, manager));
         this.commands.add(new FlipCommand(plugin, manager));
         this.commands.add(new TearCommand(manager, plugin));        
+        this.commands.add(new UndoCommand(manager, plugin));
         this.commands.add(new UpsidedownCommand(manager, plugin));
         this.commands.add(new HideCommand(manager, plugin));
         this.commands.add(new ShowCommand(manager, plugin));
@@ -64,8 +65,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             this.moveRenderToPlayer(player);
         else if (args.length == 4 && args[0].equalsIgnoreCase("move") && tryParseDouble(args[1]) && tryParseDouble(args[2]) && tryParseDouble(args[3]) && Permission.MOVE_COORDINATE.hasPermission(player))
             this.moveRenderCommand(player, Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3]));
-        else if (args.length == 1 && args[0].equalsIgnoreCase("undo") && Permission.UNDO.hasPermission(player))
-            this.undoCommand(player);
         else if (args.length == 4 && args[0].equalsIgnoreCase("angles") && tryParseDouble(args[1]) && tryParseDouble(args[2]) && tryParseDouble(args[3]) && Permission.ANGLES.hasPermission(player))
             this.setAnglesCommand(player, Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3]));
         else if (args.length == 2 && args[0].equalsIgnoreCase("rotate") && tryParseDouble(args[1]) && Permission.ROTATE.hasPermission(player))
@@ -236,23 +235,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             }
         });
     }
-
-    /**
-     * Undos the last operation
-     *
-     * @param player player
-     */
-    private void undoCommand(Player player) {
-        this.runAsyncTask(() -> {
-            player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Undoing operation ...");
-            if (!this.manager.undoOperation(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You cannot undo the last operation.");
-            } else {
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished undoing the last operation.");
-            }
-        });
-    }
-
+  
     /**
      * Moves the rendered Object to the given coordinates
      *
