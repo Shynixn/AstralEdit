@@ -35,8 +35,9 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         this.commands.add(new ClearCommand(plugin, manager));
         this.commands.add(new MirrorCommand(plugin, manager));
         this.commands.add(new PlaceCommand(plugin, manager));
-        this.commands.add(new TearCommand(manager, plugin));
         this.commands.add(new FlipCommand(plugin, manager));
+        this.commands.add(new TearCommand(manager, plugin));        
+        this.commands.add(new UpsidedownCommand(manager, plugin));
         this.commands.add(new HideCommand(manager, plugin));
         this.commands.add(new ShowCommand(manager, plugin));
     }
@@ -63,8 +64,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             this.moveRenderToPlayer(player);
         else if (args.length == 4 && args[0].equalsIgnoreCase("move") && tryParseDouble(args[1]) && tryParseDouble(args[2]) && tryParseDouble(args[3]) && Permission.MOVE_COORDINATE.hasPermission(player))
             this.moveRenderCommand(player, Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3]));
-        else if (args.length == 1 && args[0].equalsIgnoreCase("upsidedown") && Permission.UPSIDEDOWN.hasPermission(player))
-            this.upSideDownCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("undo") && Permission.UNDO.hasPermission(player))
             this.undoCommand(player);
         else if (args.length == 4 && args[0].equalsIgnoreCase("angles") && tryParseDouble(args[1]) && tryParseDouble(args[2]) && tryParseDouble(args[3]) && Permission.ANGLES.hasPermission(player))
@@ -250,22 +249,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You cannot undo the last operation.");
             } else {
                 player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished undoing the last operation.");
-            }
-        });
-    }
-
-    /**
-     * UpsideDowns the given selection
-     *
-     * @param player player
-     */
-    private void upSideDownCommand(Player player) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                this.manager.getSelection(player).upSideDown();
-                this.manager.addOperation(player, new Operation(OperationType.UPSIDEDOWN));
             }
         });
     }
