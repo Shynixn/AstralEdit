@@ -1,15 +1,13 @@
-package com.github.shynixn.astraledit.bukkit.logic.business;
+package com.github.shynixn.astraledit.api.business.proxy
 
 /**
- * Copyright 2017 Shynixn
+ * Created by Shynixn 2018.
  * <p>
- * Do not remove this header!
- * <p>
- * Version 1.0
+ * Version 1.2
  * <p>
  * MIT License
  * <p>
- * Copyright (c) 2017
+ * Copyright (c) 2018 by Shynixn
  * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,15 +27,5 @@ package com.github.shynixn.astraledit.bukkit.logic.business;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public enum OperationType {
-    MIRROR,
-    FLIP,
-    UPSIDEDOWN,
-    ROTATE,
-    ANGLES,
-    UNCOMBINE,
-    COMBINE,
-    PLACE,
-    MOVE,
-    CONVERTOBLOCKS
+interface SelectionProxy {
 }

@@ -1,15 +1,15 @@
-package com.github.shynixn.astraledit.bukkit.logic.business;
+package com.github.shynixn.astraledit.api.business.service
+
+import java.util.*
 
 /**
- * Copyright 2017 Shynixn
+ * Created by Shynixn 2018.
  * <p>
- * Do not remove this header!
- * <p>
- * Version 1.0
+ * Version 1.2
  * <p>
  * MIT License
  * <p>
- * Copyright (c) 2017
+ * Copyright (c) 2018 by Shynixn
  * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,15 +29,18 @@ package com.github.shynixn.astraledit.bukkit.logic.business;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public enum OperationType {
-    MIRROR,
-    FLIP,
-    UPSIDEDOWN,
-    ROTATE,
-    ANGLES,
-    UNCOMBINE,
-    COMBINE,
-    PLACE,
-    MOVE,
-    CONVERTOBLOCKS
+interface DependencyWorldEditService {
+    /**
+     * Returns the LeftClick WorldEdit selection of the given [player].
+     * @param [L] Location.
+     * @param [P] Player.
+     */
+    fun <L, P> getLeftClickLocation(player: P): Optional<L>
+
+    /**
+     * Returns the RightClick WorldEdit selection of the given [player].
+     * @param [L] Location.
+     * @param [P] Player.
+     */
+    fun <L, P> getRightClickLocation(player: P): Optional<L>
 }
