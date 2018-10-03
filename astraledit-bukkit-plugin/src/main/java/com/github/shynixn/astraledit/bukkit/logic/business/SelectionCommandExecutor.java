@@ -12,12 +12,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.EulerAngle;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
+public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
     private final SelectionManager manager;
     private final List<PlayerCommand> commands = new ArrayList<>();
 
@@ -26,15 +25,23 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
      *
      * @param manager manager
      */
-    SelectionCommandExecutor(SelectionManager manager) {
+    public SelectionCommandExecutor(SelectionManager manager) {
         super("awe", JavaPlugin.getPlugin(AstralEditPlugin.class));
         this.manager = manager;
 
         this.commands.add(new RenderCommand(plugin));
         this.commands.add(new AutoRotateCommand(manager));
+        this.commands.add(new ClearCommand(plugin, manager));
+        this.commands.add(new MirrorCommand(plugin, manager));
         this.commands.add(new PlaceCommand(plugin, manager));
-        this.commands.add(new TearCommand(manager, plugin));
         this.commands.add(new MoveCommand(manager));
+        this.commands.add(new AnglesCommand(manager, plugin));
+        this.commands.add(new FlipCommand(plugin, manager));
+        this.commands.add(new TearCommand(manager, plugin));        
+        this.commands.add(new UndoCommand(manager, plugin));
+        this.commands.add(new UpsidedownCommand(manager, plugin));
+        this.commands.add(new HideCommand(manager, plugin));
+        this.commands.add(new ShowCommand(manager, plugin));
     }
 
     /**
@@ -55,22 +62,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
 
         if (args.length == 1 && args[0].equalsIgnoreCase("join") && Permission.JOIN.hasPermission(player))
             this.combineCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("clear") && Permission.CLEAR.hasPermission(player))
-            this.clearRenderCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("mirror") && Permission.MIRROR.hasPermission(player))
-            this.mirrorRenderCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("flip") && Permission.FLIP.hasPermission(player))
-            this.flipRenderCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("upsidedown") && Permission.UPSIDEDOWN.hasPermission(player))
-            this.upSideDownCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("undo") && Permission.UNDO.hasPermission(player))
-            this.undoCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("hide") && Permission.HIDE_OTHER.hasPermission(player))
-            this.hideCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("show") && Permission.SHOW_OTHER.hasPermission(player))
-            this.showCommand(player);
-        else if (args.length == 4 && args[0].equalsIgnoreCase("angles") && tryParseDouble(args[1]) && tryParseDouble(args[2]) && tryParseDouble(args[3]) && Permission.ANGLES.hasPermission(player))
-            this.setAnglesCommand(player, Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3]));
         else if (args.length == 2 && args[0].equalsIgnoreCase("rotate") && tryParseDouble(args[1]) && Permission.ROTATE.hasPermission(player))
             this.rotateRenderCommand(player, Double.parseDouble(args[1]));
         else if (args.length == 1 && args[0].equalsIgnoreCase("convertToBlocks") && Permission.CONVERT_TO_BLOCKS.hasPermission(player))
@@ -140,7 +131,7 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             }
         }
     }
-
+  
     //SYNC
 
     /**
@@ -201,27 +192,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
     }
 
     /**
-     * Rotates the blocks for the given angle
-     *
-     * @param player player
-     * @param x      x
-     * @param y      y
-     * @param z      z
-     */
-    private void setAnglesCommand(Player player, double x, double y, double z) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                final Operation operation = new Operation(OperationType.ANGLES);
-                operation.setOperationData(this.manager.getSelection(player).getBlockAngle());
-                this.manager.getSelection(player).setBlockAngle(new EulerAngle(x, y, z));
-                this.manager.addOperation(player, operation);
-            }
-        });
-    }
-
-    /**
      * Rotates the selection for the given angle
      *
      * @param player player
@@ -236,125 +206,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
                 operation.setOperationData(this.manager.getSelection(player).getRotation());
                 this.manager.getSelection(player).rotate(amount);
                 this.manager.addOperation(player, operation);
-            }
-        });
-    }
-
-    /**
-     * Shows the rendered object to other players
-     *
-     * @param player player
-     */
-    private void showCommand(Player player) {
-        this.runAsyncTask(() -> {
-            if (!SelectionCommandExecutor.this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                if (SelectionCommandExecutor.this.manager.getSelection(player).isHidden()) {
-                    SelectionCommandExecutor.this.manager.getSelection(player).show(getOnlinePlayers().toArray(new Player[getOnlinePlayers().size()]));
-                    player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Your render is now visible to other players.");
-                }
-            }
-        });
-    }
-
-    /**
-     * Hides the renderedObject from other players
-     *
-     * @param player player
-     */
-    private void hideCommand(Player player) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                if (!this.manager.getSelection(player).isHidden()) {
-                    this.manager.getSelection(player).hide(getOnlinePlayers().toArray(new Player[getOnlinePlayers().size()]));
-                    player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Your render is now invisible to other players.");
-                }
-            }
-        });
-    }
-
-    /**
-     * Undos the last operation
-     *
-     * @param player player
-     */
-    private void undoCommand(Player player) {
-        this.runAsyncTask(() -> {
-            player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Undoing operation ...");
-            if (!this.manager.undoOperation(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You cannot undo the last operation.");
-            } else {
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished undoing the last operation.");
-            }
-        });
-    }
-
-    /**
-     * UpsideDowns the given selection
-     *
-     * @param player player
-     */
-    private void upSideDownCommand(Player player) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                this.manager.getSelection(player).upSideDown();
-                this.manager.addOperation(player, new Operation(OperationType.UPSIDEDOWN));
-            }
-        });
-    }
-
-    /**
-     * Flips the given selection
-     *
-     * @param player player
-     */
-    private void flipRenderCommand(Player player) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                this.manager.getSelection(player).flip();
-                this.manager.addOperation(player, new Operation(OperationType.FLIP));
-            }
-        });
-    }
-
-    /**
-     * Mirrors the given selection
-     *
-     * @param player player
-     */
-    private void mirrorRenderCommand(Player player) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                this.manager.getSelection(player).mirror();
-                this.manager.addOperation(player, new Operation(OperationType.MIRROR));
-            }
-        });
-    }
-
-
-
-    /**
-     * Clears the rendered Object
-     *
-     * @param player player
-     */
-    private void clearRenderCommand(Player player) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Destroying render ...");
-                this.manager.clearSelection(player);
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished destroying render.");
             }
         });
     }
@@ -375,7 +226,6 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         });
     }
 
-
     /**
      * Runs task asynchronously
      *
@@ -383,33 +233,5 @@ class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
      */
     private void runAsyncTask(Runnable runnable) {
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, runnable);
-    }
-
-    /**
-     * Returns online players
-     *
-     * @return players
-     */
-    private static List<Player> getOnlinePlayers() {
-        final List<Player> players = new ArrayList<>();
-        for (final World world : Bukkit.getWorlds()) {
-            players.addAll(world.getPlayers());
-        }
-        return players;
-    }
-
-    /**
-     * Checks if the string can be parsed to double
-     *
-     * @param value value
-     * @return success
-     */
-    private static boolean tryParseDouble(String value) {
-        try {
-            Double.parseDouble(value);
-        } catch (final NumberFormatException nfe) {
-            return false;
-        }
-        return true;
     }
 }
