@@ -1,21 +1,15 @@
-package com.github.shynixn.astraledit.bukkit.logic.lib;
+package com.github.shynixn.astraledit.api.business.service
 
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
+import java.util.*
 
-import java.util.ArrayList;
-import java.util.List;
 /**
- * Copyright 2018 Shynixn
- * <p>
- * Do not remove this header!
+ * Created by Shynixn 2018.
  * <p>
  * Version 1.2
  * <p>
  * MIT License
  * <p>
- * Copyright (c) 2018
+ * Copyright (c) 2018 by Shynixn
  * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,34 +29,18 @@ import java.util.List;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class Utils {
+interface DependencyWorldEditService {
     /**
-     * Checks if the string can be parsed to double.
-     *
-     * @param value value
-     * @return success
+     * Returns the LeftClick WorldEdit selection of the given [player].
+     * @param [L] Location.
+     * @param [P] Player.
      */
-    public static boolean tryParseDouble(String value) {
-        try {
-            Double.parseDouble(value);
-        } catch (final NumberFormatException nfe) {
-            return false;
-        }
-        return true;
-    }
+    fun <L, P> getLeftClickLocation(player: P): Optional<L>
 
     /**
-     * Returns online players.
-     *
-     * @return players
+     * Returns the RightClick WorldEdit selection of the given [player].
+     * @param [L] Location.
+     * @param [P] Player.
      */
-    public static List<Player> getOnlinePlayers() {
-        final List<Player> players = new ArrayList<>();
-
-        for (final World world : Bukkit.getWorlds()) {
-            players.addAll(world.getPlayers());
-        }
-
-        return players;
-    }
+    fun <L, P> getRightClickLocation(player: P): Optional<L>
 }

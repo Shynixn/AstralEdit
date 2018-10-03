@@ -1,9 +1,9 @@
 package com.github.shynixn.astraledit.bukkit.logic.business;
+
 import com.github.shynixn.astraledit.api.bukkit.business.controller.SelectionController;
-import com.github.shynixn.astraledit.api.bukkit.business.controller.WorldEditController;
 import com.github.shynixn.astraledit.api.bukkit.business.entity.Selection;
+import com.github.shynixn.astraledit.api.business.service.DependencyWorldEditService;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
-import com.github.shynixn.astraledit.bukkit.logic.business.dependencies.worldedit.WorldEditConnection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -19,15 +19,16 @@ public final class SelectionManager implements Runnable, SelectionController {
     private final HashMap<Player, Operation[]> operations = new HashMap<>();
     private final HashMap<Player, SelectionHolder> selections = new HashMap<>();
     private final int maxUndoAmount;
-    private final WorldEditConnection worldEditConnection = new WorldEditConnection();
+    private final DependencyWorldEditService dependencyWorldEditService;
 
     /**
      * Initializes the selection Manager
      *
      * @param plugin plugin
      */
-    public SelectionManager(Plugin plugin) {
+    public SelectionManager(DependencyWorldEditService dependencyWorldEditService, Plugin plugin) {
         super();
+        this.dependencyWorldEditService = dependencyWorldEditService;
         this.maxUndoAmount = plugin.getConfig().getInt("general.max-undo-amount");
         new SelectionListener(this, plugin);
         new SelectionCommandExecutor(this);
@@ -42,6 +43,7 @@ public final class SelectionManager implements Runnable, SelectionController {
      * @param corner2 corner2
      * @return selection
      */
+    @Override
     public Selection create(Player player, Location corner1, Location corner2) {
         return new SelectionHolder(player, corner1, corner2);
     }
@@ -52,6 +54,7 @@ public final class SelectionManager implements Runnable, SelectionController {
      * @param player    player
      * @param selection selection
      */
+    @Override
     public void addSelection(Player player, Selection selection) {
         try {
             if (this.hasSelection(player)) {
@@ -71,6 +74,7 @@ public final class SelectionManager implements Runnable, SelectionController {
      * @param player player
      * @return selection
      */
+    @Override
     public Selection getSelection(Player player) {
         if (this.selections.containsKey(player)) {
             return this.selections.get(player);
@@ -84,6 +88,7 @@ public final class SelectionManager implements Runnable, SelectionController {
      * @param player player
      * @return selection
      */
+    @Override
     public boolean hasSelection(Player player) {
         return this.selections.containsKey(player);
     }
@@ -93,6 +98,7 @@ public final class SelectionManager implements Runnable, SelectionController {
      *
      * @param player player
      */
+    @Override
     public void clearSelection(Player player) {
         try {
             if (this.selections.containsKey(player)) {
@@ -107,11 +113,11 @@ public final class SelectionManager implements Runnable, SelectionController {
     /**
      * Gets the worldedit controller.
      *
-     * @return controll
+     * @return controller
      */
     @Override
-    public WorldEditController getWorldEditController() {
-        return worldEditConnection;
+    public DependencyWorldEditService getWorldEditController() {
+        return this.dependencyWorldEditService;
     }
 
     /**
@@ -137,9 +143,7 @@ public final class SelectionManager implements Runnable, SelectionController {
      * @param player player
      */
     void clearOperations(Player player) {
-        if (this.operations.containsKey(player)) {
-            this.operations.remove(player);
-        }
+        this.operations.remove(player);
     }
 
     /**
@@ -147,7 +151,7 @@ public final class SelectionManager implements Runnable, SelectionController {
      *
      * @param player player
      */
-    boolean undoOperation(Player player) {
+    public boolean undoOperation(Player player) {
         if (!this.hasSelection(player))
             return false;
         if (!this.operations.containsKey(player))
@@ -250,10 +254,9 @@ public final class SelectionManager implements Runnable, SelectionController {
      * This method is invoked automatically on objects managed by the
      * {@code try}-with-resources statement.
      *
-     * @throws Exception if this resource cannot be closed
      */
     @Override
-    public void close() throws Exception {
+    public void close() {
         for (final Player player : this.selections.keySet()) {
             this.clearSelection(player);
         }

@@ -101,9 +101,9 @@ public final class AstralEditApi {
      * @return Rendered object
      */
     public Selection render(Player player) {
-        if (!this.manager.getWorldEditController().hasSelections(player))
+        if (!this.manager.getWorldEditController().getLeftClickLocation(player).isPresent() || !this.manager.getWorldEditController().getRightClickLocation(player).isPresent())
             return null;
-        return this.render(player, this.manager.getWorldEditController().getLeftSelection(player), this.manager.getWorldEditController().getRightSelection(player), false);
+        return this.render(player, this.manager.getWorldEditController().<Location, Player>getLeftClickLocation(player).get(), this.manager.getWorldEditController().<Location, Player>getRightClickLocation(player).get(), false);
     }
 
     /**
@@ -113,9 +113,9 @@ public final class AstralEditApi {
      * @return Rendered object
      */
     public Selection renderAndDestroy(Player player) {
-        if (!this.manager.getWorldEditController().hasSelections(player))
+        if (!this.manager.getWorldEditController().getLeftClickLocation(player).isPresent() || !this.manager.getWorldEditController().getRightClickLocation(player).isPresent())
             return null;
-        return this.render(player, this.manager.getWorldEditController().getLeftSelection(player), this.manager.getWorldEditController().getRightSelection(player), true);
+        return this.render(player, this.manager.getWorldEditController().<Location, Player>getLeftClickLocation(player).get(), this.manager.getWorldEditController().<Location, Player>getRightClickLocation(player).get(), true);
     }
 
     /**
