@@ -1,21 +1,15 @@
-package com.github.shynixn.astraledit.bukkit.logic.lib;
+package com.github.shynixn.astraledit.api.business.service
 
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
+import com.github.shynixn.astraledit.api.business.enumeration.PluginDependency
 
-import java.util.ArrayList;
-import java.util.List;
 /**
- * Copyright 2018 Shynixn
- * <p>
- * Do not remove this header!
+ * Created by Shynixn 2018.
  * <p>
  * Version 1.2
  * <p>
  * MIT License
  * <p>
- * Copyright (c) 2018
+ * Copyright (c) 2018 by Shynixn
  * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,34 +29,15 @@ import java.util.List;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class Utils {
+interface DependencyService {
     /**
-     * Checks if the string can be parsed to double.
-     *
-     * @param value value
-     * @return success
+     * Checks for installed dependencies and shows console output.
+     * @return True when all required dependencies are installed.
      */
-    public static boolean tryParseDouble(String value) {
-        try {
-            Double.parseDouble(value);
-        } catch (final NumberFormatException nfe) {
-            return false;
-        }
-        return true;
-    }
+    fun checkForInstalledDependencies(): Boolean
 
     /**
-     * Returns online players.
-     *
-     * @return players
+     * Returns if the given [pluginDependency] is installed.
      */
-    public static List<Player> getOnlinePlayers() {
-        final List<Player> players = new ArrayList<>();
-
-        for (final World world : Bukkit.getWorlds()) {
-            players.addAll(world.getPlayers());
-        }
-
-        return players;
-    }
+    fun isInstalled(pluginDependency: PluginDependency): Boolean
 }

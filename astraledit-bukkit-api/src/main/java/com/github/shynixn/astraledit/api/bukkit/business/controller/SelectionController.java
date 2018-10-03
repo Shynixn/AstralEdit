@@ -1,6 +1,7 @@
 package com.github.shynixn.astraledit.api.bukkit.business.controller;
 
 import com.github.shynixn.astraledit.api.bukkit.business.entity.Selection;
+import com.github.shynixn.astraledit.api.business.service.DependencyWorldEditService;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -78,5 +79,5 @@ public interface SelectionController extends AutoCloseable {
      *
      * @return controll
      */
-    WorldEditController getWorldEditController();
+    DependencyWorldEditService getWorldEditController();
 }

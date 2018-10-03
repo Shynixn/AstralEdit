@@ -8,6 +8,9 @@ import com.github.shynixn.astraledit.bukkit.logic.business.OperationType;
 import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.util.EulerAngle;
+
+import static com.github.shynixn.astraledit.bukkit.logic.lib.Utils.tryParseDouble;
 
 /**
  * Created by Shynixn 2018.
@@ -36,20 +39,19 @@ import org.bukkit.plugin.Plugin;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class JoinCommand implements PlayerCommand {
-    private final SelectionManager manager;
+public class AnglesCommand implements PlayerCommand {
     private final Plugin plugin;
-
+    private final SelectionManager manager;
     /**
-     * Creates a new instance of the JoinCommand with SelectionController as dependency.
+     * Creates an instance of {@link AnglesCommand} which depends on
+     * a {@link SelectionManager} and a {@link Plugin}
      *
-     * @param manager dependency.
+     * @param manager SelectionManager
      */
-    public JoinCommand(SelectionManager manager, Plugin plugin) {
+    public AnglesCommand(SelectionManager manager, Plugin plugin) {
         this.manager = manager;
         this.plugin = plugin;
     }
-
     /**
      * Executes the given command if the arguments match.
      *
@@ -59,16 +61,20 @@ public class JoinCommand implements PlayerCommand {
      */
     @Override
     public boolean onPlayerExecuteCommand(Player player, String[] args) {
-        if (args.length != 1 || !args[0].equalsIgnoreCase("join") || !Permission.JOIN.hasPermission(player)) {
+        if (args.length != 4 || !args[0].equalsIgnoreCase("angles") ||
+            !tryParseDouble(args[1]) || !tryParseDouble(args[2]) || !tryParseDouble(args[3]) ||
+            !Permission.ANGLES.hasPermission(player)) {
             return false;
         }
 
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
             if (!this.manager.hasSelection(player)) {
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else if (!this.manager.getSelection(player).isJoined()) {
-                this.manager.getSelection(player).join();
-                this.manager.addOperation(player, new Operation(OperationType.COMBINE));
+            } else {
+                final Operation operation = new Operation(OperationType.ANGLES);
+                operation.setOperationData(this.manager.getSelection(player).getBlockAngle());
+                this.manager.getSelection(player).setBlockAngle(new EulerAngle(Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3])));
+                this.manager.addOperation(player, operation);
             }
         });
 

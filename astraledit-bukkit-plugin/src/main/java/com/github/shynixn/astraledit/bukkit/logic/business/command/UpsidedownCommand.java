@@ -36,16 +36,17 @@ import org.bukkit.plugin.Plugin;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class JoinCommand implements PlayerCommand {
-    private final SelectionManager manager;
+public class UpsidedownCommand implements PlayerCommand {
     private final Plugin plugin;
+    private final SelectionManager manager;
 
     /**
-     * Creates a new instance of the JoinCommand with SelectionController as dependency.
+     * Creates an instance of {@link UpsidedownCommand} which depends on
+     * a {@link SelectionManager} and a {@link Plugin}
      *
-     * @param manager dependency.
+     * @param manager SelectionManager
      */
-    public JoinCommand(SelectionManager manager, Plugin plugin) {
+    public UpsidedownCommand(SelectionManager manager, Plugin plugin) {
         this.manager = manager;
         this.plugin = plugin;
     }
@@ -59,16 +60,16 @@ public class JoinCommand implements PlayerCommand {
      */
     @Override
     public boolean onPlayerExecuteCommand(Player player, String[] args) {
-        if (args.length != 1 || !args[0].equalsIgnoreCase("join") || !Permission.JOIN.hasPermission(player)) {
+        if (args.length != 1 || !args[0].equalsIgnoreCase("upsidedown") || !Permission.UPSIDEDOWN.hasPermission(player)) {
             return false;
         }
 
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
             if (!this.manager.hasSelection(player)) {
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else if (!this.manager.getSelection(player).isJoined()) {
-                this.manager.getSelection(player).join();
-                this.manager.addOperation(player, new Operation(OperationType.COMBINE));
+            } else {
+                this.manager.getSelection(player).upSideDown();
+                this.manager.addOperation(player, new Operation(OperationType.UPSIDEDOWN));
             }
         });
 
