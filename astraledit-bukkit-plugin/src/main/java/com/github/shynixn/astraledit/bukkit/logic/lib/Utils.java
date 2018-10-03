@@ -1,15 +1,22 @@
-package com.github.shynixn.astraledit.bukkit.logic.business;
+package com.github.shynixn.astraledit.bukkit.logic.lib;
+
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Copyright 2017 Shynixn
+ * Copyright 2018 Shynixn
  * <p>
  * Do not remove this header!
  * <p>
- * Version 1.0
+ * Version 1.2
  * <p>
  * MIT License
  * <p>
- * Copyright (c) 2017
+ * Copyright (c) 2018
  * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,15 +36,19 @@ package com.github.shynixn.astraledit.bukkit.logic.business;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public enum OperationType {
-    MIRROR,
-    FLIP,
-    UPSIDEDOWN,
-    ROTATE,
-    ANGLES,
-    UNCOMBINE,
-    COMBINE,
-    PLACE,
-    MOVE,
-    CONVERTOBLOCKS
+public class Utils {
+    /**
+     * Returns online players.
+     *
+     * @return players
+     */
+    public static List<Player> getOnlinePlayers() {
+        final List<Player> players = new ArrayList<>();
+
+        for (final World world : Bukkit.getWorlds()) {
+            players.addAll(world.getPlayers());
+        }
+
+        return players;
+    }
 }

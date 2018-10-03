@@ -120,7 +120,7 @@ public final class SelectionManager implements Runnable, SelectionController {
      * @param player    player
      * @param operation operation
      */
-    void addOperation(Player player, Operation operation) {
+    public void addOperation(Player player, Operation operation) {
         if (!this.operations.containsKey(player))
             this.operations.put(player, new Operation[this.maxUndoAmount]);
         Operation oldOperation;

@@ -3,9 +3,8 @@ package com.github.shynixn.astraledit.bukkit.logic.business.command;
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
-import com.github.shynixn.astraledit.bukkit.logic.business.Operation;
-import com.github.shynixn.astraledit.bukkit.logic.business.OperationType;
 import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
+import com.github.shynixn.astraledit.bukkit.logic.lib.Utils;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -36,17 +35,17 @@ import org.bukkit.plugin.Plugin;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class JoinCommand implements PlayerCommand {
-
-    private final SelectionManager manager;
+public class ShowCommand implements PlayerCommand {
     private final Plugin plugin;
+    private final SelectionManager manager;
 
     /**
-     * Creates a new instance of the JoinCommand with SelectionController as dependency.
+     * Creates an instance of {@link ShowCommand} which depends on
+     * a {@link SelectionManager} and a {@link Plugin}
      *
-     * @param manager dependency.
+     * @param manager SelectionManager
      */
-    public JoinCommand(SelectionManager manager, Plugin plugin) {
+    public ShowCommand(SelectionManager manager, Plugin plugin) {
         this.manager = manager;
         this.plugin = plugin;
     }
@@ -60,20 +59,20 @@ public class JoinCommand implements PlayerCommand {
      */
     @Override
     public boolean onPlayerExecuteCommand(Player player, String[] args) {
-
-        if (args.length != 1 && !args[0].equalsIgnoreCase("join") && !Permission.JOIN.hasPermission(player)) {
+        if (args.length != 1 || !args[0].equalsIgnoreCase("show") || !Permission.SHOW_OTHER.hasPermission(player)) {
             return false;
+        } else {
+            this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
+                if (!this.manager.hasSelection(player)) {
+                    player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
+                } else {
+                    if (this.manager.getSelection(player).isHidden()) {
+                        this.manager.getSelection(player).show(Utils.getOnlinePlayers().toArray(new Player[Utils.getOnlinePlayers().size()]));
+                        player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Your render is now visible to other players.");
+                    }
+                }
+            });
+            return true;
         }
-
-        this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else if (!this.manager.getSelection(player).isJoined()) {
-                this.manager.getSelection(player).join();
-                this.manager.addOperation(player, new Operation(OperationType.COMBINE));
-            }
-        });
-
-        return true;
     }
 }

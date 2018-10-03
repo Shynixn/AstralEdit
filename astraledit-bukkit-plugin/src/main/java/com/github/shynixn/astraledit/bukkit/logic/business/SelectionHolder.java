@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-class SelectionHolder implements Selection {
+public class SelectionHolder implements Selection {
 
     private boolean usingFollow;
     private boolean usingRotationFollow;
@@ -354,7 +354,7 @@ class SelectionHolder implements Selection {
      *
      * @return storage
      */
-    List<Container> getTemporaryStorage() {
+    public List<Container> getTemporaryStorage() {
         final List<Container> temporaryStorage = new ArrayList<>();
         for (int i = 0; i < this.getXWidth(); i++) {
             for (int j = 0; j < this.getYWidth(); j++) {
@@ -386,7 +386,7 @@ class SelectionHolder implements Selection {
      *
      * @param location location
      */
-    void teleport(Location location) {
+    public void teleport(Location location) {
         final float yaw = this.lastLocation.getYaw();
         this.lastLocation = location.clone();
         this.lastLocation.setYaw(yaw);
