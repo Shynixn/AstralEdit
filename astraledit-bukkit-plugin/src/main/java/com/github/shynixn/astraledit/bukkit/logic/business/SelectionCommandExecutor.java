@@ -30,6 +30,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
 
         this.commands.add(new RenderCommand(this.plugin));
         this.commands.add(new AutoRotateCommand(manager));
+        this.commands.add(new JoinCommand(manager, plugin));
         this.commands.add(new ClearCommand(this.plugin, manager));
         this.commands.add(new MirrorCommand(this.plugin, manager));
         this.commands.add(new PlaceCommand(this.plugin, manager));
@@ -59,9 +60,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             }
         }
 
-        if (args.length == 1 && args[0].equalsIgnoreCase("join") && Permission.JOIN.hasPermission(player))
-            this.combineCommand(player);
-        else if (args.length == 2 && args[0].equalsIgnoreCase("rotate") && Utils.tryParseDouble(args[1]) && Permission.ROTATE.hasPermission(player))
+        if (args.length == 2 && args[0].equalsIgnoreCase("rotate") && Utils.tryParseDouble(args[1]) && Permission.ROTATE.hasPermission(player))
             this.rotateRenderCommand(player, Double.parseDouble(args[1]));
         else if (args.length == 1 && args[0].equalsIgnoreCase("convertToBlocks") && Permission.CONVERT_TO_BLOCKS.hasPermission(player))
             this.convertToBlocksCommand(player);
@@ -205,22 +204,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
                 operation.setOperationData(this.manager.getSelection(player).getRotation());
                 this.manager.getSelection(player).rotate(amount);
                 this.manager.addOperation(player, operation);
-            }
-        });
-    }
-
-    /**
-     * Joins the rendered Object
-     *
-     * @param player player
-     */
-    private void combineCommand(Player player) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else if (!SelectionCommandExecutor.this.manager.getSelection(player).isJoined()) {
-                this.manager.getSelection(player).join();
-                this.manager.addOperation(player, new Operation(OperationType.COMBINE));
             }
         });
     }
