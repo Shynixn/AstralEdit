@@ -38,7 +38,6 @@ import org.bukkit.plugin.Plugin;
  * SOFTWARE.
  */
 public class JoinCommand implements PlayerCommand {
-
     private final SelectionManager manager;
     private final Plugin plugin;
 
@@ -61,8 +60,7 @@ public class JoinCommand implements PlayerCommand {
      */
     @Override
     public boolean onPlayerExecuteCommand(Player player, String[] args) {
-
-        if (args.length != 1 && !args[0].equalsIgnoreCase("join") && !Permission.JOIN.hasPermission(player)) {
+        if (args.length != 1 || !args[0].equalsIgnoreCase("join") || !Permission.JOIN.hasPermission(player)) {
             return false;
         }
 

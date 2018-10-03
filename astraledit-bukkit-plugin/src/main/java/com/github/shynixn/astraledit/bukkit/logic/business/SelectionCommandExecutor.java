@@ -30,7 +30,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
 
         this.commands.add(new RenderCommand(this.plugin));
         this.commands.add(new AutoRotateCommand(manager));
-        this.commands.add(new JoinCommand(manager, plugin));
+        this.commands.add(new JoinCommand(manager, this.plugin));
         this.commands.add(new ClearCommand(this.plugin, manager));
         this.commands.add(new MirrorCommand(this.plugin, manager));
         this.commands.add(new PlaceCommand(this.plugin, manager));
