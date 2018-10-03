@@ -12,7 +12,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.EulerAngle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
      *
      * @param manager manager
      */
-    SelectionCommandExecutor(SelectionManager manager) {
+    public SelectionCommandExecutor(SelectionManager manager) {
         super("awe", JavaPlugin.getPlugin(AstralEditPlugin.class));
         this.manager = manager;
 
@@ -35,6 +34,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         this.commands.add(new ClearCommand(plugin, manager));
         this.commands.add(new MirrorCommand(plugin, manager));
         this.commands.add(new PlaceCommand(plugin, manager));
+        this.commands.add(new AnglesCommand(manager, plugin));
         this.commands.add(new FlipCommand(plugin, manager));
         this.commands.add(new TearCommand(manager, plugin));        
         this.commands.add(new UndoCommand(manager, plugin));
@@ -65,8 +65,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             this.moveRenderToPlayer(player);
         else if (args.length == 4 && args[0].equalsIgnoreCase("move") && tryParseDouble(args[1]) && tryParseDouble(args[2]) && tryParseDouble(args[3]) && Permission.MOVE_COORDINATE.hasPermission(player))
             this.moveRenderCommand(player, Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3]));
-        else if (args.length == 4 && args[0].equalsIgnoreCase("angles") && tryParseDouble(args[1]) && tryParseDouble(args[2]) && tryParseDouble(args[3]) && Permission.ANGLES.hasPermission(player))
-            this.setAnglesCommand(player, Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3]));
         else if (args.length == 2 && args[0].equalsIgnoreCase("rotate") && tryParseDouble(args[1]) && Permission.ROTATE.hasPermission(player))
             this.rotateRenderCommand(player, Double.parseDouble(args[1]));
         else if (args.length == 1 && args[0].equalsIgnoreCase("convertToBlocks") && Permission.CONVERT_TO_BLOCKS.hasPermission(player))
@@ -197,27 +195,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
     }
 
     /**
-     * Rotates the blocks for the given angle
-     *
-     * @param player player
-     * @param x      x
-     * @param y      y
-     * @param z      z
-     */
-    private void setAnglesCommand(Player player, double x, double y, double z) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                final Operation operation = new Operation(OperationType.ANGLES);
-                operation.setOperationData(this.manager.getSelection(player).getBlockAngle());
-                this.manager.getSelection(player).setBlockAngle(new EulerAngle(x, y, z));
-                this.manager.addOperation(player, operation);
-            }
-        });
-    }
-
-    /**
      * Rotates the selection for the given angle
      *
      * @param player player
@@ -298,20 +275,5 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
      */
     private void runAsyncTask(Runnable runnable) {
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, runnable);
-    }
-
-    /**
-     * Checks if the string can be parsed to double
-     *
-     * @param value value
-     * @return success
-     */
-    private static boolean tryParseDouble(String value) {
-        try {
-            Double.parseDouble(value);
-        } catch (final NumberFormatException nfe) {
-            return false;
-        }
-        return true;
     }
 }
