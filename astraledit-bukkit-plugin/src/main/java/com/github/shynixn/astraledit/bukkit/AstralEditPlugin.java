@@ -82,7 +82,7 @@ public class AstralEditPlugin extends JavaPlugin {
                             if (!result) {
                                 AstralEditPlugin.logger().log(Level.WARNING, "Failed to check for updates.");
                             }
-                        })
+                        });
                 });
 
                 final Method method = AstralEditApi.class.getDeclaredMethod("initialize", Plugin.class, SelectionController.class);
