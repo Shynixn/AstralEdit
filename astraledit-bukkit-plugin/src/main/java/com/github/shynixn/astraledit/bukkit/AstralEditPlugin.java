@@ -79,11 +79,11 @@ public class AstralEditPlugin extends JavaPlugin {
                     new Metrics(this);
                 }
                 this.getServer().getScheduler().runTaskAsynchronously(this, () -> {
-                    try {
-                        UpdateUtils.checkPluginUpToDateAndPrintMessage(SPIGOT_RESOURCEID, PREFIX_CONSOLE, PLUGIN_NAME, AstralEditPlugin.this);
-                    } catch (final IOException e) {
-                        AstralEditPlugin.logger().log(Level.WARNING, "Failed to check for updates.");
-                    }
+                        new UpdateServiceImpl(this).checkForUpdates().thenAcceptAsync(result -> {
+                            if (!result) {
+                                AstralEditPlugin.logger().log(Level.WARNING, "Failed to check for updates.");
+                            }
+                        })
                 });
 
                 final Method method = AstralEditApi.class.getDeclaredMethod("initialize", Plugin.class, SelectionController.class);
