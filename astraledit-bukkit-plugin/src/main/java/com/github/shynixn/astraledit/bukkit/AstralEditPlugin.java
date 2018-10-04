@@ -7,14 +7,13 @@ import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import com.github.shynixn.astraledit.bukkit.logic.business.nms.VersionSupport;
 import com.github.shynixn.astraledit.bukkit.logic.business.service.DependencyServiceImpl;
 import com.github.shynixn.astraledit.bukkit.logic.business.service.DependencyWorldEditServiceImpl;
-import com.github.shynixn.astraledit.bukkit.logic.lib.UpdateUtils;
+import com.github.shynixn.astraledit.bukkit.logic.business.service.UpdateServiceImpl;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
