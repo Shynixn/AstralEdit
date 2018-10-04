@@ -67,6 +67,7 @@ public class RotateCommand implements PlayerCommand {
           this.manager.addOperation(player, operation);
         }
       });
+
       return true;
     }
 }
