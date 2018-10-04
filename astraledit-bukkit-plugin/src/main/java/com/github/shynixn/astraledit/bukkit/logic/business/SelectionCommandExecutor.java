@@ -42,6 +42,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         this.commands.add(new UpsidedownCommand(manager, this.plugin));
         this.commands.add(new HideCommand(manager, this.plugin));
         this.commands.add(new ShowCommand(manager, this.plugin));
+        this.commands.add(new AutoFollowCommand(manager, this.plugin));
     }
 
     /**
@@ -68,8 +69,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             this.convertToRenderCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("teleport") && Permission.TELEPORT_PLAYER.hasPermission(player))
             this.teleportPlayerToRenderCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("auto-follow") && Permission.AUTO_FOLLOW.hasPermission(player))
-            this.toggleAutoFollowCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("3")) {
             player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "                      AstralEdit                    ");
             player.sendMessage("");
@@ -108,25 +107,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             player.sendMessage("");
             player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "                           ┌1/3┐                            ");
             player.sendMessage("");
-        }
-    }
-
-    /**
-     * Toggles autoFollow
-     *
-     * @param player player
-     */
-    private void toggleAutoFollowCommand(Player player) {
-        if (!this.manager.hasSelection(player)) {
-            player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-        } else {
-            final Selection selection = this.manager.getSelection(player);
-            selection.setAutoFollowEnabled(!selection.isAutoFollowEnabled());
-            if (selection.isAutoFollowEnabled()) {
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Enabled auto-follow.");
-            } else {
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Disabled auto-follow.");
-            }
         }
     }
 
