@@ -30,6 +30,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
 
         this.commands.add(new RenderCommand(this.plugin));
         this.commands.add(new AutoRotateCommand(manager));
+        this.commands.add(new RotateCommand(manager, this.plugin));
         this.commands.add(new JoinCommand(manager, this.plugin));
         this.commands.add(new ClearCommand(this.plugin, manager));
         this.commands.add(new MirrorCommand(this.plugin, manager));
@@ -60,9 +61,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             }
         }
 
-        if (args.length == 2 && args[0].equalsIgnoreCase("rotate") && Utils.tryParseDouble(args[1]) && Permission.ROTATE.hasPermission(player))
-            this.rotateRenderCommand(player, Double.parseDouble(args[1]));
-        else if (args.length == 1 && args[0].equalsIgnoreCase("convertToBlocks") && Permission.CONVERT_TO_BLOCKS.hasPermission(player))
+        if (args.length == 1 && args[0].equalsIgnoreCase("convertToBlocks") && Permission.CONVERT_TO_BLOCKS.hasPermission(player))
             this.convertToBlocksCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("convertToRender") && Permission.CONVERT_TO_RENDER.hasPermission(player))
             this.convertToRenderCommand(player);
@@ -185,25 +184,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
                     this.manager.addOperation(player, operation);
                     player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished converting render.");
                 });
-            }
-        });
-    }
-
-    /**
-     * Rotates the selection for the given angle
-     *
-     * @param player player
-     * @param amount amount
-     */
-    private void rotateRenderCommand(Player player, double amount) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                final Operation operation = new Operation(OperationType.ROTATE);
-                operation.setOperationData(this.manager.getSelection(player).getRotation());
-                this.manager.getSelection(player).rotate(amount);
-                this.manager.addOperation(player, operation);
             }
         });
     }
