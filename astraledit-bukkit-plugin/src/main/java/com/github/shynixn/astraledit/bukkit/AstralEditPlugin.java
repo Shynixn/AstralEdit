@@ -49,7 +49,7 @@ import java.util.logging.Logger;
  * SOFTWARE.
  */
 public class AstralEditPlugin extends JavaPlugin {
-    private static final long SPIGOT_RESOURCEID = 11409;
+    public static final long SPIGOT_RESOURCEID = 11409;
     public static final String PLUGIN_NAME = "AstralEdit";
     public static final String PREFIX_CONSOLE = ChatColor.LIGHT_PURPLE + "[AstralEdit] ";
     public static final String PREFIX = ChatColor.DARK_RED + "" + ChatColor.BOLD + '[' + ChatColor.RED + "" + ChatColor.BOLD + ChatColor.ITALIC + "AE" + ChatColor.DARK_RED + "" + ChatColor.BOLD + "] " + ChatColor.RED;
