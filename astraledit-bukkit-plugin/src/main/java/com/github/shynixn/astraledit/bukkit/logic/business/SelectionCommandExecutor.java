@@ -2,7 +2,6 @@ package com.github.shynixn.astraledit.bukkit.logic.business;
 
 import com.github.shynixn.astraledit.api.bukkit.AstralEditApi;
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
-import com.github.shynixn.astraledit.api.bukkit.business.entity.Selection;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
 import com.github.shynixn.astraledit.bukkit.logic.business.command.*;
@@ -29,20 +28,20 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         this.manager = manager;
 
         this.commands.add(new RenderCommand(this.plugin));
+        this.commands.add(new AutoFollowCommand(manager));
         this.commands.add(new AutoRotateCommand(manager));
+        this.commands.add(new UpsidedownCommand(manager, this.plugin));
+        this.commands.add(new MoveCommand(manager, this.plugin));
+        this.commands.add(new AnglesCommand(manager, this.plugin));
         this.commands.add(new JoinCommand(manager, this.plugin));
+        this.commands.add(new TearCommand(manager, this.plugin));
+        this.commands.add(new UndoCommand(manager, this.plugin));
+        this.commands.add(new HideCommand(manager, this.plugin));
+        this.commands.add(new ShowCommand(manager, this.plugin));
         this.commands.add(new ClearCommand(this.plugin, manager));
         this.commands.add(new MirrorCommand(this.plugin, manager));
         this.commands.add(new PlaceCommand(this.plugin, manager));
-        this.commands.add(new MoveCommand(manager, this.plugin));
-        this.commands.add(new AnglesCommand(manager, this.plugin));
         this.commands.add(new FlipCommand(this.plugin, manager));
-        this.commands.add(new TearCommand(manager, this.plugin));
-        this.commands.add(new UndoCommand(manager, this.plugin));
-        this.commands.add(new UpsidedownCommand(manager, this.plugin));
-        this.commands.add(new HideCommand(manager, this.plugin));
-        this.commands.add(new ShowCommand(manager, this.plugin));
-        this.commands.add(new AutoFollowCommand(manager, this.plugin));
     }
 
     /**

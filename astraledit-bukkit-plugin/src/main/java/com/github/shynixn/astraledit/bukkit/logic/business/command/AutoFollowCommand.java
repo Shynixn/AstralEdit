@@ -37,17 +37,14 @@ import org.bukkit.plugin.Plugin;
  */
 public class AutoFollowCommand implements PlayerCommand {
     private final SelectionManager manager;
-    private final Plugin plugin;
 
     /**
      * Creates a new instance of the JoinCommand with SelectionController as dependency.
      *
      * @param manager dependency.
-     * @param plugin plugin
      */
-    public AutoFollowCommand(SelectionManager manager, Plugin plugin) {
+    public AutoFollowCommand(SelectionManager manager) {
         this.manager = manager;
-        this.plugin = plugin;
     }
 
     /**
