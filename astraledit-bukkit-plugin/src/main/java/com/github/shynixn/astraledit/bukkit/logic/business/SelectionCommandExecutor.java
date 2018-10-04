@@ -38,6 +38,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         this.commands.add(new TearCommand(manager, plugin));        
         this.commands.add(new HideCommand(manager, plugin));
         this.commands.add(new ShowCommand(manager, plugin));
+        this.commands.add(new RotateCommand(manager,plugin));
     }
 
     /**
@@ -70,8 +71,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             this.undoCommand(player);
         else if (args.length == 4 && args[0].equalsIgnoreCase("angles") && tryParseDouble(args[1]) && tryParseDouble(args[2]) && tryParseDouble(args[3]) && Permission.ANGLES.hasPermission(player))
             this.setAnglesCommand(player, Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3]));
-        else if (args.length == 2 && args[0].equalsIgnoreCase("rotate") && tryParseDouble(args[1]) && Permission.ROTATE.hasPermission(player))
-            this.rotateRenderCommand(player, Double.parseDouble(args[1]));
         else if (args.length == 1 && args[0].equalsIgnoreCase("convertToBlocks") && Permission.CONVERT_TO_BLOCKS.hasPermission(player))
             this.convertToBlocksCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("convertToRender") && Permission.CONVERT_TO_RENDER.hasPermission(player))
@@ -220,24 +219,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         });
     }
 
-    /**
-     * Rotates the selection for the given angle
-     *
-     * @param player player
-     * @param amount amount
-     */
-    private void rotateRenderCommand(Player player, double amount) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                final Operation operation = new Operation(OperationType.ROTATE);
-                operation.setOperationData(this.manager.getSelection(player).getRotation());
-                this.manager.getSelection(player).rotate(amount);
-                this.manager.addOperation(player, operation);
-            }
-        });
-    }
 
     /**
      * Undos the last operation
@@ -358,7 +339,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
      * @param value value
      * @return success
      */
-    private static boolean tryParseDouble(String value) {
+     public static boolean tryParseDouble(String value) {
         try {
             Double.parseDouble(value);
         } catch (final NumberFormatException nfe) {
