@@ -1,28 +1,30 @@
 # AstralEdit [![Build Status](https://maven-badges.herokuapp.com/maven-central/com.github.shynixn/astraledit/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/com.github.shynixn.astraledit/astraledit-bukkit-api) [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat-square)](https://raw.githubusercontent.com/Shynixn/AstralEdit/master/LICENSE)
 
-| branch        | status        | download      |
-| ------------- | --------------| --------------| 
-| master        | [![Build Status](https://img.shields.io/travis/Shynixn/AstralEdit/master.svg?style=flat-square)](https://travis-ci.org/Shynixn/AstralEdit) |[Download latest release (recommend)](https://github.com/Shynixn/AstralEdit/releases)|
-| experimental      | [![Build Status](https://img.shields.io/travis/Shynixn/AstralEdit/experimental.svg?style=flat-square)](https://travis-ci.org/Shynixn/AstralEdit) | [Download snapshots](https://oss.sonatype.org/content/repositories/snapshots/com/github/shynixn/astraledit/) |
+| branch        | status        | coverage | version | download |
+| ------------- | ------------- | -------- | --------| ---------| 
+| master        | [![Build Status](https://img.shields.io/travis/Shynixn/AstralEdit/master.svg?style=flat-square)](https://travis-ci.org/Shynixn/AstralEdit) | [![Coverage](https://img.shields.io/codecov/c/github/shynixn/astraledit/master.svg?style=flat-square)](https://codecov.io/gh/Shynixn/AstralEdit/branch/master)|![GitHub license](https://img.shields.io/nexus/r/https/oss.sonatype.org/com.github.shynixn.astraledit/astraledit-bukkit-plugin.svg?style=flat-square)  |[Download latest release](https://github.com/Shynixn/AstralEdit/releases)|
+| experimental   | [![Build Status](https://img.shields.io/travis/Shynixn/AstralEdit/experimental.svg?style=flat-square)](https://travis-ci.org/Shynixn/AstralEdit)|[![Coverage](https://img.shields.io/codecov/c/github/shynixn/astraledit/experimental.svg?style=flat-square)](https://codecov.io/gh/Shynixn/AstralEdit/branch/experimental) |![GitHub license](https://img.shields.io/nexus/s/https/oss.sonatype.org/com.github.shynixn.astraledit/astraledit-bukkit-plugin.svg?style=flat-square) |  [Download snapshots](https://oss.sonatype.org/content/repositories/snapshots/com/github/shynixn/astraledit/astraledit-bukkit-plugin/) |
 
 JavaDocs: https://shynixn.github.io/AstralEdit/apidocs/
 
 ## Description
-AstralEdit is a spigot plugin to pre render WorldEdit selections in Minecraft.
+AstralEdit is a spigot plugin to render WorldEdit selections in Minecraft.
 
 ## Features
 
-* Modify your world in a unique and funny way
-* Helps being more productive
+* View your WorldEdit selection in advance
+* Move, rotate, flip, mirror selections
+* Place your selection anywhere
 * Version support 1.8.R1 - 1.12.R1
-* Check out the [AstralEdit-Spigot-Page](https://www.spigotmc.org/resources/renderedworldedit_lite.11409/) to get more information. 
 
 ## Installation
 
-* [Download the plugin AstralEdit](https://github.com/Shynixn/AstralEdit/releases)
-* Put the plugin into your plugin folder
-* Start the server (1.8.0 - 1.12.2, Java 8/Java 9)
-* Join and play :)
+* Please check out the [AstralEdit-Spigot-Page](https://www.spigotmc.org/resources/11409/) for further information.
+
+## Screenshots
+
+![alt tag](http://www.mediafire.com/convkey/7e52/ruxjmez4fx820jjzg.jpg)
+![alt tag](http://www.mediafire.com/convkey/de9a/s37xusb1guym4fbzg.jpg)
 
 ## API
 
@@ -90,14 +92,6 @@ Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 ```
 
 * Check out the [AstralEdit-Spigot-Page](https://www.spigotmc.org/resources/renderedworldedit_lite.11409/) to get more information. 
-
-## Screenshots
-
-![alt tag](http://www.mediafire.com/convkey/6605/czkr85tdoq751g7zg.jpg)
-
-## Gifs
-
-![alt tag](http://www.mediafire.com/convkey/de9a/s37xusb1guym4fbzg.jpg)
 
 ## Contributing
 
