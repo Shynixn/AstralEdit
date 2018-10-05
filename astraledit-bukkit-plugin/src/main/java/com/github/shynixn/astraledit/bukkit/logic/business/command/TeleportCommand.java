@@ -4,6 +4,7 @@ import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
 import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
+import org.bukkit.entity.Player;
 
 public class TeleportCommand implements PlayerCommand {
     private static final String commandName = "teleport";
