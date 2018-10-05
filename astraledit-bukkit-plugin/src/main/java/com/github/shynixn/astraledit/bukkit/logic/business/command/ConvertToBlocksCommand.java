@@ -59,7 +59,7 @@ public class ConvertToBlocksCommand implements PlayerCommand {
                 this.selectionManager.getSelection(player).placeBlocks(() -> {
                     this.selectionManager.clearSelection(player);
                     this.selectionManager.addOperation(player, operation);
-                    selectionManager.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished converting render.");
+                    player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished converting render.");
                 });
             }
         });
