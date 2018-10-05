@@ -65,8 +65,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             this.rotateRenderCommand(player, Double.parseDouble(args[1]));
         else if (args.length == 1 && args[0].equalsIgnoreCase("convertToBlocks") && Permission.CONVERT_TO_BLOCKS.hasPermission(player))
             this.convertToBlocksCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("convertToRender") && Permission.CONVERT_TO_RENDER.hasPermission(player))
-            this.convertToRenderCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("teleport") && Permission.TELEPORT_PLAYER.hasPermission(player))
             this.teleportPlayerToRenderCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("3")) {
