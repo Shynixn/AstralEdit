@@ -42,6 +42,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         this.commands.add(new MirrorCommand(this.plugin, manager));
         this.commands.add(new PlaceCommand(this.plugin, manager));
         this.commands.add(new FlipCommand(this.plugin, manager));
+        this.commands.add(new ConvertToBlocksCommand(manager, this.plugin));
         this.commands.add(new ConvertToRenderCommand(this.plugin));
     }
 
@@ -63,8 +64,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
 
         if (args.length == 2 && args[0].equalsIgnoreCase("rotate") && Utils.tryParseDouble(args[1]) && Permission.ROTATE.hasPermission(player))
             this.rotateRenderCommand(player, Double.parseDouble(args[1]));
-        else if (args.length == 1 && args[0].equalsIgnoreCase("convertToBlocks") && Permission.CONVERT_TO_BLOCKS.hasPermission(player))
-            this.convertToBlocksCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("teleport") && Permission.TELEPORT_PLAYER.hasPermission(player))
             this.teleportPlayerToRenderCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("3")) {
@@ -121,30 +120,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         } else {
             player.teleport(this.manager.getSelection(player).getLocation());
         }
-    }
-
-    //ASYNC
-
-    /**
-     * Converts the blocks to a rendered object
-     *
-     * @param player player
-     */
-    private void convertToBlocksCommand(Player player) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Converting render ...");
-                final Operation operation = new Operation(OperationType.PLACE);
-                operation.setOperationData(((SelectionHolder) this.manager.getSelection(player)).getTemporaryStorage());
-                this.manager.getSelection(player).placeBlocks(() -> {
-                    this.manager.clearSelection(player);
-                    this.manager.addOperation(player, operation);
-                    player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished converting render.");
-                });
-            }
-        });
     }
 
     /**
