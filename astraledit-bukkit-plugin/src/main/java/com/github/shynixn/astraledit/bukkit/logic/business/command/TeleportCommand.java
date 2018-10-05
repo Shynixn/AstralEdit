@@ -41,7 +41,7 @@ public class TeleportCommand implements PlayerCommand {
      * @param player player
      */
     private void teleportPlayerToRenderCommand(Player player) {
-        if (!this.selectionManager .hasSelection(player)) {
+        if (!this.selectionManager.hasSelection(player)) {
             player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
         } else {
             player.teleport(this.selectionManager.getSelection(player).getLocation());
