@@ -11,6 +11,7 @@
     <modules>
         <module>astraledit-api</module>
         <module>astraledit-bukkit-api</module>
+        <module>astraledit-core</module>
         <module>astraledit-bukkit-plugin</module>
     </modules>
     <version>1.1.0</version>

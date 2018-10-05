@@ -56,7 +56,7 @@ public class AutoFollowCommand implements PlayerCommand {
      */
     @Override
     public boolean onPlayerExecuteCommand(Player player, String[] args) {
-        if (args.length != 1 && !args[0].equalsIgnoreCase("auto-follow") && !Permission.AUTO_FOLLOW.hasPermission(player)) {
+        if (args.length != 1 || !args[0].equalsIgnoreCase("auto-follow") || !Permission.AUTO_FOLLOW.hasPermission(player)) {
             return false;
         }
 
