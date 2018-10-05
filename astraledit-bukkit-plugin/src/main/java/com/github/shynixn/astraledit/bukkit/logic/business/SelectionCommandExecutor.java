@@ -42,6 +42,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         this.commands.add(new MirrorCommand(this.plugin, manager));
         this.commands.add(new PlaceCommand(this.plugin, manager));
         this.commands.add(new FlipCommand(this.plugin, manager));
+        this.commands.add(new ConvertToRenderCommand(this.plugin));
     }
 
     /**
@@ -64,8 +65,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             this.rotateRenderCommand(player, Double.parseDouble(args[1]));
         else if (args.length == 1 && args[0].equalsIgnoreCase("convertToBlocks") && Permission.CONVERT_TO_BLOCKS.hasPermission(player))
             this.convertToBlocksCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("convertToRender") && Permission.CONVERT_TO_RENDER.hasPermission(player))
-            this.convertToRenderCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("teleport") && Permission.TELEPORT_PLAYER.hasPermission(player))
             this.teleportPlayerToRenderCommand(player);
         else if (args.length == 1 && args[0].equalsIgnoreCase("3")) {
@@ -125,26 +124,6 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
     }
 
     //ASYNC
-
-    /**
-     * Converts a rendered object to blocks
-     *
-     * @param player player
-     */
-    private void convertToRenderCommand(final Player player) {
-        this.runAsyncTask(() -> {
-            try {
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Removing blocks and rendering selection asynchronously...");
-                this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
-                    AstralEditApi.INSTANCE.renderAndDestroy(player);
-                    player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished converting selection.");
-                });
-            } catch (final Exception e) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "Failed converting WE selection!");
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "Check if you selected an area with Worldedit.");
-            }
-        });
-    }
 
     /**
      * Converts the blocks to a rendered object
