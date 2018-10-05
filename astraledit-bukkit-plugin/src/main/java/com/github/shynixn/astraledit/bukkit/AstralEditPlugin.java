@@ -7,14 +7,13 @@ import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import com.github.shynixn.astraledit.bukkit.logic.business.nms.VersionSupport;
 import com.github.shynixn.astraledit.bukkit.logic.business.service.DependencyServiceImpl;
 import com.github.shynixn.astraledit.bukkit.logic.business.service.DependencyWorldEditServiceImpl;
-import com.github.shynixn.astraledit.bukkit.logic.lib.UpdateUtils;
+import com.github.shynixn.astraledit.bukkit.logic.business.service.UpdateServiceImpl;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
@@ -50,7 +49,7 @@ import java.util.logging.Logger;
  * SOFTWARE.
  */
 public class AstralEditPlugin extends JavaPlugin {
-    private static final long SPIGOT_RESOURCEID = 11409;
+    public static final long SPIGOT_RESOURCEID = 11409;
     public static final String PLUGIN_NAME = "AstralEdit";
     public static final String PREFIX_CONSOLE = ChatColor.LIGHT_PURPLE + "[AstralEdit] ";
     public static final String PREFIX = ChatColor.DARK_RED + "" + ChatColor.BOLD + '[' + ChatColor.RED + "" + ChatColor.BOLD + ChatColor.ITALIC + "AE" + ChatColor.DARK_RED + "" + ChatColor.BOLD + "] " + ChatColor.RED;
@@ -78,10 +77,9 @@ public class AstralEditPlugin extends JavaPlugin {
                 if (this.getConfig().getBoolean("metrics")) {
                     new Metrics(this);
                 }
-                this.getServer().getScheduler().runTaskAsynchronously(this, () -> {
-                    try {
-                        UpdateUtils.checkPluginUpToDateAndPrintMessage(SPIGOT_RESOURCEID, PREFIX_CONSOLE, PLUGIN_NAME, AstralEditPlugin.this);
-                    } catch (final IOException e) {
+                
+                new UpdateServiceImpl(this).checkForUpdates().thenAcceptAsync(result -> {
+                    if (!result) {
                         AstralEditPlugin.logger().log(Level.WARNING, "Failed to check for updates.");
                     }
                 });
