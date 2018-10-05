@@ -26,10 +26,7 @@ AstralEdit is a spigot plugin to render WorldEdit selections in Minecraft.
 ![alt tag](http://www.mediafire.com/convkey/7e52/ruxjmez4fx820jjzg.jpg)
 ![alt tag](http://www.mediafire.com/convkey/de9a/s37xusb1guym4fbzg.jpg)
 
-## API
-
-* Reference the AstralEdit.jar in your own projects.
-* If you are using maven or gradle you can add it from the central maven repository
+## How to use the API
 
 ### Maven
 
@@ -50,9 +47,7 @@ dependencies {
 }
 ```
 
-## How to use the it
-
-#### Sample: Rendering the WorldEdit selection of the player and moving it to the player's location
+#### Rendering the WorldEdit selection of the player and moving it to the player's location
 
 ```java
 //Get a player and a plugin instance
@@ -68,7 +63,7 @@ Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
    }
 });
 ```
-#### Sample: Rendering the blocks between two given corners, moving it to a targetLocation and placing the blocks. 
+#### Rendering the blocks between two given corners, moving it to a targetLocation and placing the blocks. 
 
 ```java
 //Select the locations
