@@ -10,56 +10,76 @@ import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.plugin.Plugin;
 
 public class UpdateServiceImpl implements UpdateService {
 
+    private static final long SPIGOT_RESOURCEID = 11409;
     private static final String BASE_URL = "https://api.spigotmc.org/legacy/update.php?resource=";
-    private final AstralEditPlugin plugin;
+    private final Plugin plugin;
 
-    public UpdateServiceImpl(AstralEditPlugin plugin) {
+    /**
+     * Created a new instance of UpdateServiceImpl
+     *
+     * @param plugin for running the check async and checking the version
+     */
+    public UpdateServiceImpl(Plugin plugin) {
         this.plugin = plugin;
     }
 
+    /**
+     * Checks if the plugin is up-to-date and notifies the user in console
+     * if they are out-of-date or notifies the user to check for updates
+     * if they are using a snapshot version
+     *
+     * @return True if the check completed successfully
+     */
     @Override
     public CompletableFuture<Boolean> checkForUpdates() {
-        try {
-            boolean isUpToDate = plugin.getDescription().getVersion().equals(getLatestVersion());
-            String prefix = AstralEditPlugin.PREFIX_CONSOLE;
-            String pluginName = AstralEditPlugin.PLUGIN_NAME;
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                String prefix = AstralEditPlugin.PREFIX_CONSOLE;
+                String pluginName = AstralEditPlugin.PLUGIN_NAME;
+                String version = plugin.getDescription().getVersion();
+                boolean isUpToDate = version.equals(getLatestVersion());
 
-            if (!isUpToDate) {
-                if (plugin.getDescription().getVersion().endsWith("SNAPSHOT")) {
-                    Bukkit.getServer().getConsoleSender()
-                          .sendMessage(prefix + ChatColor.YELLOW + "================================================"
-                                        + prefix + ChatColor.YELLOW + "You are using a snapshot of " + pluginName
-                                        + prefix + ChatColor.YELLOW + "Please check regularly if there is a new version"
-                                        + prefix + ChatColor.YELLOW + "================================================");
-                } else {
-                    Bukkit.getServer().getConsoleSender()
-                          .sendMessage(prefix + ChatColor.YELLOW + "================================================"
-                                        + prefix + ChatColor.YELLOW +  pluginName + " is outdated"
-                                        + prefix + ChatColor.YELLOW + "Please download the latest version from spigotmc.org"
-                                        + prefix + ChatColor.YELLOW + "=====================================================x");
+
+                if (!isUpToDate) {
+                    if (version.endsWith("SNAPSHOT")) {
+                        Bukkit.getServer().getConsoleSender()
+                              .sendMessage(prefix + ChatColor.YELLOW + "================================================"
+                                           + prefix + ChatColor.YELLOW + "You are using a snapshot of " + pluginName
+                                           + prefix + ChatColor.YELLOW + "Please check regularly if there is a new version"
+                                           + prefix + ChatColor.YELLOW + "================================================");
+                    } else {
+                        Bukkit.getServer().getConsoleSender()
+                              .sendMessage(prefix + ChatColor.YELLOW + "================================================"
+                                           + prefix + ChatColor.YELLOW +  pluginName + " is outdated"
+                                           + prefix + ChatColor.YELLOW + "Please download the latest version from spigotmc.org"
+                                           + prefix + ChatColor.YELLOW + "=====================================================x");
+                    }
                 }
-            }
 
-            return CompletableFuture.completedFuture(true);
-        } catch (IOException e) {
-            return CompletableFuture.completedFuture(false);
-        }
+                return true;
+            } catch (IOException e) {
+                return false;
+            }
+        }, (runnable) -> plugin.getServer().getScheduler().runTaskAsynchronously(plugin, runnable));
     }
 
+    /**
+     * Get the latest version from SpigotMC with the SPIGOT_RESOURCEID
+     *
+     * @return Version string from SpigotMC
+     * @throws IOException If a connection couldn't be established
+     */
     private String getLatestVersion() throws IOException {
-        InputStream inputStream = new URL(BASE_URL + AstralEditPlugin.SPIGOT_RESOURCEID).openStream();
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-        String line = bufferedReader.readLine();
-
-        inputStream.close();
-        inputStreamReader.close();
-        bufferedReader.close();
-
-        return line;
+        try (InputStream inputStream = new URL(BASE_URL + SPIGOT_RESOURCEID).openStream()) {
+            try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream)) {
+                try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+                    return bufferedReader.readLine();
+                }
+            }
+        }
     }
 }
