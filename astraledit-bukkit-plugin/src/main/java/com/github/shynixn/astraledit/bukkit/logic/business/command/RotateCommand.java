@@ -11,7 +11,8 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.Objects;
 
-import static com.github.shynixn.astraledit.bukkit.logic.business.SelectionCommandExecutor.tryParseDouble;
+import static com.github.shynixn.astraledit.bukkit.logic.lib.Utils.tryParseDouble;
+
 
 public class RotateCommand implements PlayerCommand {
 
@@ -32,7 +33,6 @@ public class RotateCommand implements PlayerCommand {
         this.plugin = Objects.requireNonNull(plugin);
         this.manager = Objects.requireNonNull(manager);
     }
-
 
     /**
      * Rotates the selection for the given angle
@@ -57,9 +57,5 @@ public class RotateCommand implements PlayerCommand {
             return true;
         }
         return false;
-
     }
-
-
 }
-

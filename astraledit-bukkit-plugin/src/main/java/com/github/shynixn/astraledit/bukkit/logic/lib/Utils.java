@@ -51,4 +51,19 @@ public class Utils {
 
         return players;
     }
+
+    /**
+     * Checks if the string can be parsed to double
+     *
+     * @param value value
+     * @return success
+     */
+    public static boolean tryParseDouble(String value) {
+        try {
+            Double.parseDouble(value);
+        } catch (final NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
 }
