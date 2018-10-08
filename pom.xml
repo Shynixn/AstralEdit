@@ -6,10 +6,12 @@
     <groupId>com.github.shynixn.astraledit</groupId>
     <artifactId>root</artifactId>
     <name>AstralEdit</name>
-    <description>AstralEdit is a spigot plugin to pre render WorldEdit selections in Minecraft.</description>
+    <description>AstralEdit is a spigot plugin to render WorldEdit selections in Minecraft.</description>
     <url>https://github.com/Shynixn/AstralEdit</url>
     <modules>
+        <module>astraledit-api</module>
         <module>astraledit-bukkit-api</module>
+        <module>astraledit-core</module>
         <module>astraledit-bukkit-plugin</module>
     </modules>
     <version>1.1.0</version>
@@ -30,6 +32,14 @@
         <contributor>
             <name>beatbrot</name>
             <url>https://github.com/beatbrot</url>
+        </contributor>
+        <contributor>
+            <name>chrisom79</name>
+            <url>https://github.com/chrisom79</url>
+        </contributor>
+        <contributor>
+            <name>meik99</name>
+            <url>https://github.com/meik99</url>
         </contributor>
         <contributor>
             <name>mibac138</name>

@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-
 /**
  * Copyright 2018 Shynixn
  * <p>
@@ -37,6 +36,21 @@ import java.util.List;
  * SOFTWARE.
  */
 public class Utils {
+    /**
+     * Checks if the string can be parsed to double.
+     *
+     * @param value value
+     * @return success
+     */
+    public static boolean tryParseDouble(String value) {
+        try {
+            Double.parseDouble(value);
+        } catch (final NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Returns online players.
      *
