@@ -14,6 +14,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.shynixn.astraledit.bukkit.logic.lib.Utils.tryParseDouble;
+
 public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
     private final SelectionManager manager;
     private final List<PlayerCommand> commands = new ArrayList<>();
@@ -30,6 +32,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         this.commands.add(new RenderCommand(this.plugin));
         this.commands.add(new AutoFollowCommand(manager));
         this.commands.add(new AutoRotateCommand(manager));
+        this.commands.add(new RotateCommand(manager,plugin));
         this.commands.add(new UpsidedownCommand(manager, this.plugin));
         this.commands.add(new MoveCommand(manager, this.plugin));
         this.commands.add(new AnglesCommand(manager, this.plugin));
@@ -63,9 +66,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             }
         }
 
-        if (args.length == 2 && args[0].equalsIgnoreCase("rotate") && Utils.tryParseDouble(args[1]) && Permission.ROTATE.hasPermission(player))
-            this.rotateRenderCommand(player, Double.parseDouble(args[1]));
-        else if (args.length == 1 && args[0].equalsIgnoreCase("3")) {
+        if (args.length == 1 && args[0].equalsIgnoreCase("3")) {
             player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "                      AstralEdit                    ");
             player.sendMessage("");
             player.sendMessage(AstralEditPlugin.PREFIX + "/awe auto-follow - Toggles auto follow of the selection");
@@ -104,33 +105,5 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "                           ┌1/3┐                            ");
             player.sendMessage("");
         }
-    }
-
-    /**
-     * Rotates the selection for the given angle
-     *
-     * @param player player
-     * @param amount amount
-     */
-    private void rotateRenderCommand(Player player, double amount) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                final Operation operation = new Operation(OperationType.ROTATE);
-                operation.setOperationData(this.manager.getSelection(player).getRotation());
-                this.manager.getSelection(player).rotate(amount);
-                this.manager.addOperation(player, operation);
-            }
-        });
-    }
-
-    /**
-     * Runs task asynchronously
-     *
-     * @param runnable runnable
-     */
-    private void runAsyncTask(Runnable runnable) {
-        this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, runnable);
     }
 }
