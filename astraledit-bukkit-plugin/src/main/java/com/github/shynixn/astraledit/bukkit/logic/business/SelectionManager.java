@@ -1,6 +1,8 @@
 package com.github.shynixn.astraledit.bukkit.logic.business;
 import com.github.shynixn.astraledit.api.bukkit.business.controller.SelectionController;
 import com.github.shynixn.astraledit.api.bukkit.business.controller.WorldEditController;
+import com.github.shynixn.astraledit.api.bukkit.business.entity.Operation;
+import com.github.shynixn.astraledit.api.bukkit.business.entity.OperationType;
 import com.github.shynixn.astraledit.api.bukkit.business.entity.Selection;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.logic.business.dependencies.worldedit.WorldEditConnection;
@@ -120,9 +122,10 @@ public final class SelectionManager implements Runnable, SelectionController {
      * @param player    player
      * @param operation operation
      */
+    @Override
     public void addOperation(Player player, Operation operation) {
         if (!this.operations.containsKey(player))
-            this.operations.put(player, new Operation[this.maxUndoAmount]);
+            this.operations.put(player, new OperationImpl[this.maxUndoAmount]);
         Operation oldOperation;
         for (int i = 0; i < this.operations.get(player).length; i++) {
             oldOperation = this.operations.get(player)[i];
@@ -147,11 +150,12 @@ public final class SelectionManager implements Runnable, SelectionController {
      *
      * @param player player
      */
+    @Override
     public boolean undoOperation(Player player) {
         if (!this.hasSelection(player))
             return false;
         if (!this.operations.containsKey(player))
-            this.operations.put(player, new Operation[this.maxUndoAmount]);
+            this.operations.put(player, new OperationImpl[this.maxUndoAmount]);
         final Operation operation = this.operations.get(player)[0];
         if (operation != null) {
             if (operation.getType() == OperationType.MIRROR) {

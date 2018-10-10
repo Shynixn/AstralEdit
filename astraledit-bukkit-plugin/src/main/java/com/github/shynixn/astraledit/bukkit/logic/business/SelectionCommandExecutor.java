@@ -2,14 +2,14 @@ package com.github.shynixn.astraledit.bukkit.logic.business;
 
 import com.github.shynixn.astraledit.api.bukkit.AstralEditApi;
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
+import com.github.shynixn.astraledit.api.bukkit.business.entity.OperationType;
 import com.github.shynixn.astraledit.api.bukkit.business.entity.Selection;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
 import com.github.shynixn.astraledit.bukkit.logic.business.command.*;
+import com.github.shynixn.astraledit.bukkit.logic.lib.DoubleChecker;
 import com.github.shynixn.astraledit.bukkit.logic.lib.SimpleCommandExecutor;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -62,7 +62,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
 
         if (args.length == 1 && args[0].equalsIgnoreCase("join") && Permission.JOIN.hasPermission(player))
             this.combineCommand(player);
-        else if (args.length == 2 && args[0].equalsIgnoreCase("rotate") && tryParseDouble(args[1]) && Permission.ROTATE.hasPermission(player))
+        else if (args.length == 2 && args[0].equalsIgnoreCase("rotate") && new DoubleChecker().isDouble(args[1]) && Permission.ROTATE.hasPermission(player))
             this.rotateRenderCommand(player, Double.parseDouble(args[1]));
         else if (args.length == 1 && args[0].equalsIgnoreCase("convertToBlocks") && Permission.CONVERT_TO_BLOCKS.hasPermission(player))
             this.convertToBlocksCommand(player);
@@ -180,7 +180,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
             } else {
                 player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Converting render ...");
-                final Operation operation = new Operation(OperationType.PLACE);
+                final OperationImpl operation = new OperationImpl(OperationType.PLACE);
                 operation.setOperationData(((SelectionHolder) this.manager.getSelection(player)).getTemporaryStorage());
                 this.manager.getSelection(player).placeBlocks(() -> {
                     this.manager.clearSelection(player);
@@ -202,7 +202,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             if (!this.manager.hasSelection(player)) {
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
             } else {
-                final Operation operation = new Operation(OperationType.ROTATE);
+                final OperationImpl operation = new OperationImpl(OperationType.ROTATE);
                 operation.setOperationData(this.manager.getSelection(player).getRotation());
                 this.manager.getSelection(player).rotate(amount);
                 this.manager.addOperation(player, operation);
@@ -221,7 +221,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
             } else if (!SelectionCommandExecutor.this.manager.getSelection(player).isJoined()) {
                 this.manager.getSelection(player).join();
-                this.manager.addOperation(player, new Operation(OperationType.COMBINE));
+                this.manager.addOperation(player, new OperationImpl(OperationType.COMBINE));
             }
         });
     }

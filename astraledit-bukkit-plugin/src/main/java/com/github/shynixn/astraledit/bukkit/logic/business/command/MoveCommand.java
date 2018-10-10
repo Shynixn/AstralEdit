@@ -1,21 +1,29 @@
 package com.github.shynixn.astraledit.bukkit.logic.business.command;
 
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
+import com.github.shynixn.astraledit.api.bukkit.business.controller.SelectionController;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
-import com.github.shynixn.astraledit.bukkit.logic.business.Operation;
-import com.github.shynixn.astraledit.bukkit.logic.business.OperationType;
+import com.github.shynixn.astraledit.bukkit.logic.business.OperationImpl;
+import com.github.shynixn.astraledit.api.bukkit.business.entity.OperationType;
 import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import com.github.shynixn.astraledit.bukkit.logic.lib.DoubleChecker;
 import org.bukkit.entity.Player;
 
 public class MoveCommand implements PlayerCommand {
-    private final SelectionManager selectionManager;
+    private final SelectionController controller;
 
-    public MoveCommand(SelectionManager selectionManager){
-        this.selectionManager = selectionManager;
+    public MoveCommand(SelectionController controller){
+        this.controller = controller;
     }
 
+    /**
+     * Moves the selection either to the player
+     * or to given coordinates
+     * @param player executing the command.
+     * @param args   arguments.
+     * @return
+     */
     @Override
     public boolean onPlayerExecuteCommand(Player player, String[] args) {
         if(isMoveToPlayerCommand(player, args)){
@@ -43,14 +51,14 @@ public class MoveCommand implements PlayerCommand {
      * @param z      z
      */
     private void moveRenderCommand(Player player, double x, double y, double z) {
-        if (!this.selectionManager.hasSelection(player)) {
+        if (!this.controller.hasSelection(player)) {
             player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
         } else {
-            final Operation operation = new Operation(OperationType.MOVE);
-            operation.setOperationData(this.selectionManager.getSelection(player).getLocation().clone());
-            this.selectionManager.getSelection(player).move(
-                    this.selectionManager.getSelection(player).getLocation().add(x, y, z));
-            this.selectionManager.addOperation(player, operation);
+            final OperationImpl operation = new OperationImpl(OperationType.MOVE);
+            operation.setOperationData(this.controller.getSelection(player).getLocation().clone());
+            this.controller.getSelection(player).move(
+                    this.controller.getSelection(player).getLocation().add(x, y, z));
+            this.controller.addOperation(player, operation);
         }
     }
 
@@ -60,16 +68,6 @@ public class MoveCommand implements PlayerCommand {
      * @param player player
      */
     private void moveRenderToPlayer(Player player) {
-//        this.runAsyncTask(() -> {
-//            if (!this.manager.hasSelection(player)) {
-//                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-//            } else {
-//                final Operation operation = new Operation(OperationType.MOVE);
-//                operation.setOperationData(this.manager.getSelection(player).getLocation().clone());
-//                this.manager.getSelection(player).move(player.getLocation().add(0, -2, 0));
-//                this.manager.addOperation(player, operation);
-//            }
-//        });
         moveRenderCommand(player,
                 player.getLocation().getX(),
                 player.getLocation().getY() - 2,

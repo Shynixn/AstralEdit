@@ -1,4 +1,4 @@
-package com.github.shynixn.astraledit.bukkit.logic.business;
+package com.github.shynixn.astraledit.api.bukkit.business.entity;
 
 /**
  * Copyright 2017 Shynixn

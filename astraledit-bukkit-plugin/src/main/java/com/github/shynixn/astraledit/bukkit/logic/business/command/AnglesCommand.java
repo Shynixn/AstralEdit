@@ -1,10 +1,11 @@
 package com.github.shynixn.astraledit.bukkit.logic.business.command;
 
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
+import com.github.shynixn.astraledit.api.bukkit.business.controller.SelectionController;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
-import com.github.shynixn.astraledit.bukkit.logic.business.Operation;
-import com.github.shynixn.astraledit.bukkit.logic.business.OperationType;
+import com.github.shynixn.astraledit.bukkit.logic.business.OperationImpl;
+import com.github.shynixn.astraledit.api.bukkit.business.entity.OperationType;
 import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -41,15 +42,15 @@ import static com.github.shynixn.astraledit.bukkit.logic.lib.Utils.tryParseDoubl
  */
 public class AnglesCommand implements PlayerCommand {
     private final Plugin plugin;
-    private final SelectionManager manager;
+    private final SelectionController controller;
     /**
      * Creates an instance of {@link AnglesCommand} which depends on
      * a {@link SelectionManager} and a {@link Plugin}
      *
-     * @param manager SelectionManager
+     * @param controller SelectionController
      */
-    public AnglesCommand(SelectionManager manager, Plugin plugin) {
-        this.manager = manager;
+    public AnglesCommand(SelectionController controller, Plugin plugin) {
+        this.controller = controller;
         this.plugin = plugin;
     }
     /**
@@ -68,13 +69,13 @@ public class AnglesCommand implements PlayerCommand {
         }
 
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
-            if (!this.manager.hasSelection(player)) {
+            if (!this.controller.hasSelection(player)) {
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
             } else {
-                final Operation operation = new Operation(OperationType.ANGLES);
-                operation.setOperationData(this.manager.getSelection(player).getBlockAngle());
-                this.manager.getSelection(player).setBlockAngle(new EulerAngle(Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3])));
-                this.manager.addOperation(player, operation);
+                final OperationImpl operation = new OperationImpl(OperationType.ANGLES);
+                operation.setOperationData(this.controller.getSelection(player).getBlockAngle());
+                this.controller.getSelection(player).setBlockAngle(new EulerAngle(Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3])));
+                this.controller.addOperation(player, operation);
             }
         });
 

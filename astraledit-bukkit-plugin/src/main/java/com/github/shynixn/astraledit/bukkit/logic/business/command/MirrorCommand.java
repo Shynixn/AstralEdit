@@ -1,10 +1,11 @@
 package com.github.shynixn.astraledit.bukkit.logic.business.command;
 
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
+import com.github.shynixn.astraledit.api.bukkit.business.controller.SelectionController;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
-import com.github.shynixn.astraledit.bukkit.logic.business.Operation;
-import com.github.shynixn.astraledit.bukkit.logic.business.OperationType;
+import com.github.shynixn.astraledit.bukkit.logic.business.OperationImpl;
+import com.github.shynixn.astraledit.api.bukkit.business.entity.OperationType;
 import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -17,11 +18,11 @@ public class MirrorCommand implements PlayerCommand {
 
     private final Plugin plugin;
 
-    private final SelectionManager selectionManager;
+    private final SelectionController controller;
 
-    public MirrorCommand(Plugin plugin, SelectionManager selectionManager) {
+    public MirrorCommand(Plugin plugin, SelectionController controller) {
         this.plugin = Objects.requireNonNull(plugin);
-        this.selectionManager = Objects.requireNonNull(selectionManager);
+        this.controller = Objects.requireNonNull(controller);
     }
 
     /**
@@ -34,11 +35,11 @@ public class MirrorCommand implements PlayerCommand {
     public boolean onPlayerExecuteCommand(Player player, String[] args) {
         if (args.length == 1 && args[0].equalsIgnoreCase(commandName) && Permission.MIRROR.hasPermission(player)) {
             this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-                if (!this.selectionManager.hasSelection(player)) {
+                if (!this.controller.hasSelection(player)) {
                     player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
                 } else {
-                    this.selectionManager.getSelection(player).mirror();
-                    this.selectionManager.addOperation(player, new Operation(OperationType.MIRROR));
+                    this.controller.getSelection(player).mirror();
+                    this.controller.addOperation(player, new OperationImpl(OperationType.MIRROR));
                 }
             });
             return true;

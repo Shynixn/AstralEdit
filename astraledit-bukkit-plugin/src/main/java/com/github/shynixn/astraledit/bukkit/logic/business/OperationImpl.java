@@ -1,5 +1,8 @@
 package com.github.shynixn.astraledit.bukkit.logic.business;
 
+import com.github.shynixn.astraledit.api.bukkit.business.entity.Operation;
+import com.github.shynixn.astraledit.api.bukkit.business.entity.OperationType;
+
 /**
  * Copyright 2017 Shynixn
  * <p>
@@ -29,7 +32,7 @@ package com.github.shynixn.astraledit.bukkit.logic.business;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class Operation {
+public class OperationImpl implements Operation {
     private final OperationType type;
     private Object operationData;
 
@@ -38,7 +41,7 @@ public class Operation {
      *
      * @param type type
      */
-    public Operation(OperationType type) {
+    public OperationImpl(OperationType type) {
         super();
         this.type = type;
     }
