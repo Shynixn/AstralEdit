@@ -1,22 +1,13 @@
-package com.github.shynixn.astraledit.bukkit.logic.lib;
-
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.github.shynixn.astraledit.api.business.service
 
 /**
- * Copyright 2018 Shynixn
- * <p>
- * Do not remove this header!
+ * Created by Shynixn 2018.
  * <p>
  * Version 1.2
  * <p>
  * MIT License
  * <p>
- * Copyright (c) 2018
+ * Copyright (c) 2018 by Shynixn
  * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,34 +27,14 @@ import java.util.List;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class Utils {
+interface ConcurrencyService {
     /**
-     * Returns online players.
-     *
-     * @return players
+     * Runs the given [function] synchronised with the given [delayTicks] and [repeatingTicks].
      */
-    public static List<Player> getOnlinePlayers() {
-        final List<Player> players = new ArrayList<>();
-
-        for (final World world : Bukkit.getWorlds()) {
-            players.addAll(world.getPlayers());
-        }
-
-        return players;
-    }
+    fun runTaskSync(delayTicks: Long = 0L, repeatingTicks: Long = 0L, function: Runnable)
 
     /**
-     * Checks if the string can be parsed to double.
-     *
-     * @param value value
-     * @return success
+     * Runs the given [function] asynchronous with the given [delayTicks] and [repeatingTicks].
      */
-    public static boolean tryParseDouble(String value) {
-        try {
-            Double.parseDouble(value);
-        } catch (final NumberFormatException nfe) {
-            return false;
-        }
-        return true;
-    }
+    fun runTaskAsync(delayTicks: Long = 0L, repeatingTicks: Long = 0L, function: Runnable)
 }

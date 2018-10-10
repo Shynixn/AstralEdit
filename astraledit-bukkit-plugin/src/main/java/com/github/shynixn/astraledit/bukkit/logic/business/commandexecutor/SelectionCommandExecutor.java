@@ -1,12 +1,10 @@
-package com.github.shynixn.astraledit.bukkit.logic.business;
+package com.github.shynixn.astraledit.bukkit.logic.business.commandexecutor;
 
-import com.github.shynixn.astraledit.api.bukkit.AstralEditApi;
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
-import com.github.shynixn.astraledit.bukkit.Permission;
+import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import com.github.shynixn.astraledit.bukkit.logic.business.command.*;
 import com.github.shynixn.astraledit.bukkit.logic.lib.SimpleCommandExecutor;
-import com.github.shynixn.astraledit.bukkit.logic.lib.Utils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,21 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
-    private final SelectionManager manager;
     private final List<PlayerCommand> commands = new ArrayList<>();
 
     /**
-     * Initializes the commandExecutor
+     * Initializes the commandExecutor.
      *
      * @param manager manager
      */
     public SelectionCommandExecutor(SelectionManager manager) {
         super("awe", JavaPlugin.getPlugin(AstralEditPlugin.class));
-        this.manager = manager;
 
         this.commands.add(new RenderCommand(this.plugin));
         this.commands.add(new AutoFollowCommand(manager));
         this.commands.add(new AutoRotateCommand(manager));
+        this.commands.add(new RotateCommand(manager, this.plugin));
         this.commands.add(new UpsidedownCommand(manager, this.plugin));
         this.commands.add(new MoveCommand(manager, this.plugin));
         this.commands.add(new AnglesCommand(manager, this.plugin));
@@ -42,6 +39,9 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
         this.commands.add(new MirrorCommand(this.plugin, manager));
         this.commands.add(new PlaceCommand(this.plugin, manager));
         this.commands.add(new FlipCommand(this.plugin, manager));
+        this.commands.add(new TeleportCommand(manager));
+        this.commands.add(new ConvertToBlocksCommand(manager, this.plugin));
+        this.commands.add(new ConvertToRenderCommand(this.plugin));
     }
 
     /**
@@ -60,15 +60,7 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             }
         }
 
-        if (args.length == 2 && args[0].equalsIgnoreCase("rotate") && Utils.tryParseDouble(args[1]) && Permission.ROTATE.hasPermission(player))
-            this.rotateRenderCommand(player, Double.parseDouble(args[1]));
-        else if (args.length == 1 && args[0].equalsIgnoreCase("convertToBlocks") && Permission.CONVERT_TO_BLOCKS.hasPermission(player))
-            this.convertToBlocksCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("convertToRender") && Permission.CONVERT_TO_RENDER.hasPermission(player))
-            this.convertToRenderCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("teleport") && Permission.TELEPORT_PLAYER.hasPermission(player))
-            this.teleportPlayerToRenderCommand(player);
-        else if (args.length == 1 && args[0].equalsIgnoreCase("3")) {
+        if (args.length == 1 && args[0].equalsIgnoreCase("3")) {
             player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "                      AstralEdit                    ");
             player.sendMessage("");
             player.sendMessage(AstralEditPlugin.PREFIX + "/awe auto-follow - Toggles auto follow of the selection");
@@ -107,92 +99,5 @@ public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
             player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "                           ┌1/3┐                            ");
             player.sendMessage("");
         }
-    }
-
-    //SYNC
-
-    /**
-     * Teleports the given player to the selection
-     *
-     * @param player player
-     */
-    private void teleportPlayerToRenderCommand(Player player) {
-        if (!this.manager.hasSelection(player)) {
-            player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-        } else {
-            player.teleport(this.manager.getSelection(player).getLocation());
-        }
-    }
-
-    //ASYNC
-
-    /**
-     * Converts a rendered object to blocks
-     *
-     * @param player player
-     */
-    private void convertToRenderCommand(final Player player) {
-        this.runAsyncTask(() -> {
-            try {
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Removing blocks and rendering selection asynchronously...");
-                this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
-                    AstralEditApi.INSTANCE.renderAndDestroy(player);
-                    player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished converting selection.");
-                });
-            } catch (final Exception e) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "Failed converting WE selection!");
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "Check if you selected an area with Worldedit.");
-            }
-        });
-    }
-
-    /**
-     * Converts the blocks to a rendered object
-     *
-     * @param player player
-     */
-    private void convertToBlocksCommand(Player player) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Converting render ...");
-                final Operation operation = new Operation(OperationType.PLACE);
-                operation.setOperationData(((SelectionHolder) this.manager.getSelection(player)).getTemporaryStorage());
-                this.manager.getSelection(player).placeBlocks(() -> {
-                    this.manager.clearSelection(player);
-                    this.manager.addOperation(player, operation);
-                    player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished converting render.");
-                });
-            }
-        });
-    }
-
-    /**
-     * Rotates the selection for the given angle
-     *
-     * @param player player
-     * @param amount amount
-     */
-    private void rotateRenderCommand(Player player, double amount) {
-        this.runAsyncTask(() -> {
-            if (!this.manager.hasSelection(player)) {
-                player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-            } else {
-                final Operation operation = new Operation(OperationType.ROTATE);
-                operation.setOperationData(this.manager.getSelection(player).getRotation());
-                this.manager.getSelection(player).rotate(amount);
-                this.manager.addOperation(player, operation);
-            }
-        });
-    }
-
-    /**
-     * Runs task asynchronously
-     *
-     * @param runnable runnable
-     */
-    private void runAsyncTask(Runnable runnable) {
-        this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, runnable);
     }
 }
