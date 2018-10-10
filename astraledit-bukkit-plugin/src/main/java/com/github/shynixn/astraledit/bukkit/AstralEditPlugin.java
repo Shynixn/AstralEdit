@@ -3,11 +3,13 @@ package com.github.shynixn.astraledit.bukkit;
 import com.github.shynixn.astraledit.api.bukkit.AstralEditApi;
 import com.github.shynixn.astraledit.api.bukkit.business.controller.SelectionController;
 import com.github.shynixn.astraledit.api.business.service.DependencyService;
+import com.github.shynixn.astraledit.api.business.service.UpdateCheckService;
 import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import com.github.shynixn.astraledit.bukkit.logic.business.nms.VersionSupport;
+import com.github.shynixn.astraledit.bukkit.logic.business.service.ConcurrencyServiceImpl;
 import com.github.shynixn.astraledit.bukkit.logic.business.service.DependencyServiceImpl;
 import com.github.shynixn.astraledit.bukkit.logic.business.service.DependencyWorldEditServiceImpl;
-import com.github.shynixn.astraledit.bukkit.logic.business.service.UpdateServiceImpl;
+import com.github.shynixn.astraledit.bukkit.logic.business.service.UpdateCheckServiceImpl;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -77,12 +79,9 @@ public class AstralEditPlugin extends JavaPlugin {
                 if (this.getConfig().getBoolean("metrics")) {
                     new Metrics(this);
                 }
-                
-                new UpdateServiceImpl(this).checkForUpdates().thenAcceptAsync(result -> {
-                    if (!result) {
-                        AstralEditPlugin.logger().log(Level.WARNING, "Failed to check for updates.");
-                    }
-                });
+
+                final UpdateCheckService updateCheckService = new UpdateCheckServiceImpl(this, new ConcurrencyServiceImpl(this));
+                updateCheckService.checkForUpdates();
 
                 final Method method = AstralEditApi.class.getDeclaredMethod("initialize", Plugin.class, SelectionController.class);
                 method.setAccessible(true);

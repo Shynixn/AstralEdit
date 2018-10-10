@@ -1,12 +1,10 @@
-package com.github.shynixn.astraledit.bukkit.logic.business;
+package com.github.shynixn.astraledit.bukkit.logic.business.commandexecutor;
 
-import com.github.shynixn.astraledit.api.bukkit.AstralEditApi;
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
-import com.github.shynixn.astraledit.bukkit.Permission;
+import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import com.github.shynixn.astraledit.bukkit.logic.business.command.*;
 import com.github.shynixn.astraledit.bukkit.logic.lib.SimpleCommandExecutor;
-import com.github.shynixn.astraledit.bukkit.logic.lib.Utils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,25 +12,21 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.shynixn.astraledit.bukkit.logic.lib.Utils.tryParseDouble;
-
 public class SelectionCommandExecutor extends SimpleCommandExecutor.Registered {
-    private final SelectionManager manager;
     private final List<PlayerCommand> commands = new ArrayList<>();
 
     /**
-     * Initializes the commandExecutor
+     * Initializes the commandExecutor.
      *
      * @param manager manager
      */
     public SelectionCommandExecutor(SelectionManager manager) {
         super("awe", JavaPlugin.getPlugin(AstralEditPlugin.class));
-        this.manager = manager;
 
         this.commands.add(new RenderCommand(this.plugin));
         this.commands.add(new AutoFollowCommand(manager));
         this.commands.add(new AutoRotateCommand(manager));
-        this.commands.add(new RotateCommand(manager,plugin));
+        this.commands.add(new RotateCommand(manager, this.plugin));
         this.commands.add(new UpsidedownCommand(manager, this.plugin));
         this.commands.add(new MoveCommand(manager, this.plugin));
         this.commands.add(new AnglesCommand(manager, this.plugin));
