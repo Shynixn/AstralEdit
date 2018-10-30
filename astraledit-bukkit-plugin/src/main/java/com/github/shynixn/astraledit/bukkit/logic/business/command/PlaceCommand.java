@@ -1,29 +1,29 @@
 package com.github.shynixn.astraledit.bukkit.logic.business.command;
 
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
+import com.github.shynixn.astraledit.api.bukkit.business.controller.SelectionController;
 import com.github.shynixn.astraledit.api.bukkit.business.entity.Selection;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
 import com.github.shynixn.astraledit.bukkit.logic.business.OperationImpl;
 import com.github.shynixn.astraledit.api.bukkit.business.controller.OperationType;
 import com.github.shynixn.astraledit.bukkit.logic.business.SelectionHolder;
-import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class PlaceCommand implements PlayerCommand {
     private final Plugin plugin;
-    private final SelectionManager manager;
+    private final SelectionController controller;
 
     /**
-     * Creates a new instance of the PlaceCommand which depends on a Plugin and a SelectionManager.
+     * Creates a new instance of the PlaceCommand which depends on a Plugin and a SelectionController.
      *
      * @param plugin the Plugin
-     * @param manager the SelectionManager
+     * @param controller the SelectionController
      */
-    public PlaceCommand(Plugin plugin, SelectionManager manager) {
+    public PlaceCommand(Plugin plugin, SelectionController controller) {
         this.plugin = plugin;
-        this.manager = manager;
+        this.controller = controller;
     }
 
     /**
@@ -40,7 +40,7 @@ public class PlaceCommand implements PlayerCommand {
         }
 
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
-            final Selection selection = this.manager.getSelection(player);
+            final Selection selection = this.controller.getSelection(player);
             if (selection == null) {
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
             } else {
@@ -48,7 +48,7 @@ public class PlaceCommand implements PlayerCommand {
                 final OperationImpl operation = new OperationImpl(OperationType.PLACE);
                 operation.setOperationData(((SelectionHolder) selection).getTemporaryStorage());
                 selection.placeBlocks(() -> {
-                    this.manager.addOperation(player, operation);
+                    this.controller.addOperation(player, operation);
                     player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished placing render.");
                 });
             }

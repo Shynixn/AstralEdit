@@ -1,11 +1,11 @@
 package com.github.shynixn.astraledit.bukkit.logic.business.command;
 
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
+import com.github.shynixn.astraledit.api.bukkit.business.controller.SelectionController;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
 import com.github.shynixn.astraledit.bukkit.logic.business.OperationImpl;
 import com.github.shynixn.astraledit.api.bukkit.business.controller.OperationType;
-import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -13,16 +13,16 @@ import org.bukkit.plugin.Plugin;
 import static com.github.shynixn.astraledit.bukkit.logic.lib.Utils.tryParseDouble;
 
 public class MoveCommand implements PlayerCommand {
-    private final SelectionManager selectionManager;
+    private final SelectionController controller;
     private final Plugin plugin;
 
     /**
-     * Creates a new instance of MoveCommand with SelectionManager as dependency.
+     * Creates a new instance of MoveCommand with SelectionController as dependency.
      *
-     * @param selectionManager selectionManager.
+     * @param controller controller.
      */
-    public MoveCommand(SelectionManager selectionManager, Plugin plugin) {
-        this.selectionManager = selectionManager;
+    public MoveCommand(SelectionController controller, Plugin plugin) {
+        this.controller = controller;
         this.plugin = plugin;
     }
 
@@ -54,13 +54,13 @@ public class MoveCommand implements PlayerCommand {
      */
     private void moveRenderCommand(Player player, Location location) {
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
-            if (!this.selectionManager.hasSelection(player)) {
+            if (!this.controller.hasSelection(player)) {
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
             } else {
                 final OperationImpl operation = new OperationImpl(OperationType.MOVE);
-                operation.setOperationData(this.selectionManager.getSelection(player).getLocation().clone());
-                this.selectionManager.getSelection(player).move(location);
-                this.selectionManager.addOperation(player, operation);
+                operation.setOperationData(this.controller.getSelection(player).getLocation().clone());
+                this.controller.getSelection(player).move(location);
+                this.controller.addOperation(player, operation);
             }
         });
     }

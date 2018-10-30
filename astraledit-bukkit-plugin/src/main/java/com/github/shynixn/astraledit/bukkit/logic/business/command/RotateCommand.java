@@ -1,11 +1,11 @@
 package com.github.shynixn.astraledit.bukkit.logic.business.command;
 
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
+import com.github.shynixn.astraledit.api.bukkit.business.controller.SelectionController;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
 import com.github.shynixn.astraledit.bukkit.logic.business.OperationImpl;
 import com.github.shynixn.astraledit.api.bukkit.business.controller.OperationType;
-import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -20,18 +20,18 @@ public class RotateCommand implements PlayerCommand {
 
     private final Plugin plugin;
 
-    private final SelectionManager manager;
+    private final SelectionController controller;
 
     /**
      * Creates an instance of {@link RotateCommand} which depends on
-     * a {@link SelectionManager} and a {@link Plugin}
+     * a {@link SelectionController} and a {@link Plugin}
      *
-     * @param manager Selection Manager
+     * @param controller Selection Manager
      * @param plugin
      */
-    public RotateCommand(SelectionManager manager, Plugin plugin) {
+    public RotateCommand(SelectionController controller, Plugin plugin) {
         this.plugin = Objects.requireNonNull(plugin);
-        this.manager = Objects.requireNonNull(manager);
+        this.controller = Objects.requireNonNull(controller);
     }
 
     /**
@@ -45,13 +45,13 @@ public class RotateCommand implements PlayerCommand {
     public boolean onPlayerExecuteCommand(Player player, String[] args) {
         if (args.length == 2 && args[0].equalsIgnoreCase("rotate") && tryParseDouble(args[1]) && Permission.ROTATE.hasPermission(player)) {
             this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
-                if (!this.manager.hasSelection(player)) {
+                if (!this.controller.hasSelection(player)) {
                     player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
                 } else {
                     final OperationImpl operation = new OperationImpl(OperationType.ROTATE);
-                    operation.setOperationData(this.manager.getSelection(player).getRotation());
-                    this.manager.getSelection(player).rotate(Double.parseDouble(args[1]));
-                    this.manager.addOperation(player, operation);
+                    operation.setOperationData(this.controller.getSelection(player).getRotation());
+                    this.controller.getSelection(player).rotate(Double.parseDouble(args[1]));
+                    this.controller.addOperation(player, operation);
                 }
             });
             return true;

@@ -1,27 +1,27 @@
 package com.github.shynixn.astraledit.bukkit.logic.business.command;
 
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
+import com.github.shynixn.astraledit.api.bukkit.business.controller.SelectionController;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
 import com.github.shynixn.astraledit.bukkit.logic.business.OperationImpl;
 import com.github.shynixn.astraledit.api.bukkit.business.controller.OperationType;
-import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class TearCommand implements PlayerCommand {
     private final Plugin plugin;
-    private final SelectionManager manager;
+    private final SelectionController controller;
 
     /**
      * Creates an instance of TearCommand which depends on
-     * a SelectionManager and a Plugin
+     * a SelectionController and a Plugin
      *
-     * @param manager SelectionManager
+     * @param controller SelectionController
      * @param plugin Plugin
      */
-    public TearCommand(SelectionManager manager, Plugin plugin) {
-        this.manager = manager;
+    public TearCommand(SelectionController controller, Plugin plugin) {
+        this.controller = controller;
         this.plugin = plugin;
     }
 
@@ -38,11 +38,11 @@ public class TearCommand implements PlayerCommand {
             return false;
         } else {
             this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
-                if (!this.manager.hasSelection(player)) {
+                if (!this.controller.hasSelection(player)) {
                     player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
-                } else if (this.manager.getSelection(player).isJoined()) {
-                    this.manager.getSelection(player).tearApart();
-                    this.manager.addOperation(player, new OperationImpl(OperationType.UNCOMBINE));
+                } else if (this.controller.getSelection(player).isJoined()) {
+                    this.controller.getSelection(player).tearApart();
+                    this.controller.addOperation(player, new OperationImpl(OperationType.UNCOMBINE));
                 }
             });
             return true;

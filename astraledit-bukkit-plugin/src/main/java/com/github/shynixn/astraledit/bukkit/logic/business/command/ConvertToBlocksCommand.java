@@ -1,28 +1,28 @@
 package com.github.shynixn.astraledit.bukkit.logic.business.command;
 
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
+import com.github.shynixn.astraledit.api.bukkit.business.controller.SelectionController;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
 import com.github.shynixn.astraledit.bukkit.logic.business.OperationImpl;
 import com.github.shynixn.astraledit.api.bukkit.business.controller.OperationType;
 import com.github.shynixn.astraledit.bukkit.logic.business.SelectionHolder;
-import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class ConvertToBlocksCommand implements PlayerCommand {
     private static final String commandName = "convertToBlocks";
-    private final SelectionManager selectionManager;
+    private final SelectionController controller;
     private final Plugin plugin;
 
     /**
-     * Creates a new instance of ConvertToBlocksCommand with SelectionManager and Plugin as dependency.
+     * Creates a new instance of ConvertToBlocksCommand with controller and Plugin as dependency.
      *
-     * @param selectionManager selectionManager.
+     * @param controller controller.
      * @param plugin plugin
      */
-    public ConvertToBlocksCommand(SelectionManager selectionManager, Plugin plugin){
-        this.selectionManager = selectionManager;
+    public ConvertToBlocksCommand(SelectionController controller, Plugin plugin){
+        this.controller = controller;
         this.plugin = plugin;
     }
 
@@ -50,15 +50,15 @@ public class ConvertToBlocksCommand implements PlayerCommand {
      */
     private void convertToBlocksCommand(Player player) {
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
-            if (!this.selectionManager.hasSelection(player)) {
+            if (!this.controller.hasSelection(player)) {
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
             } else {
                 player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Converting render ...");
                 final OperationImpl operation = new OperationImpl(OperationType.PLACE);
-                operation.setOperationData(((SelectionHolder) this.selectionManager.getSelection(player)).getTemporaryStorage());
-                this.selectionManager.getSelection(player).placeBlocks(() -> {
-                    this.selectionManager.clearSelection(player);
-                    this.selectionManager.addOperation(player, operation);
+                operation.setOperationData(((SelectionHolder) this.controller.getSelection(player)).getTemporaryStorage());
+                this.controller.getSelection(player).placeBlocks(() -> {
+                    this.controller.clearSelection(player);
+                    this.controller.addOperation(player, operation);
                     player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished converting render.");
                 });
             }

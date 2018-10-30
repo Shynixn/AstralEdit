@@ -1,28 +1,28 @@
 package com.github.shynixn.astraledit.bukkit.logic.business.command;
 
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
+import com.github.shynixn.astraledit.api.bukkit.business.controller.SelectionController;
 import com.github.shynixn.astraledit.api.bukkit.business.entity.Selection;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
 import com.github.shynixn.astraledit.bukkit.logic.business.OperationImpl;
 import com.github.shynixn.astraledit.api.bukkit.business.controller.OperationType;
-import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class FlipCommand implements PlayerCommand {
     private final Plugin plugin;
-    private final SelectionManager manager;
+    private final SelectionController controller;
 
     /**
-     * The Command flips the current selection depending on the Plugin and SelectionManager.
+     * The Command flips the current selection depending on the Plugin and SelectionController.
      *
      * @param plugin the Plugin
-     * @param manager the current SelectionManager
+     * @param controller the current SelectionController
      */
-    public FlipCommand(Plugin plugin, SelectionManager manager) {
+    public FlipCommand(Plugin plugin, SelectionController controller) {
         this.plugin = plugin;
-        this.manager = manager;
+        this.controller = controller;
     }
 
     /**
@@ -39,12 +39,12 @@ public class FlipCommand implements PlayerCommand {
         }
 
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
-            final Selection selection = this.manager.getSelection(player);
+            final Selection selection = this.controller.getSelection(player);
             if (selection == null) {
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
             } else {
                 selection.flip();
-                this.manager.addOperation(player, new OperationImpl(OperationType.FLIP));
+                this.controller.addOperation(player, new OperationImpl(OperationType.FLIP));
             }
         });
 

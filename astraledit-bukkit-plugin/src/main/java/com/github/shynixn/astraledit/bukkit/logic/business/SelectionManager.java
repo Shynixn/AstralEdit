@@ -154,6 +154,7 @@ public final class SelectionManager implements Runnable, SelectionController {
      *
      * @param player player
      */
+    @Override
     public boolean undoOperation(Player player) {
         if (!this.hasSelection(player))
             return false;
