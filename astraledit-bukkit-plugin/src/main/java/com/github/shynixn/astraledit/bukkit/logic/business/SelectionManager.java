@@ -1,5 +1,7 @@
 package com.github.shynixn.astraledit.bukkit.logic.business;
 
+import com.github.shynixn.astraledit.api.bukkit.business.controller.Operation;
+import com.github.shynixn.astraledit.api.bukkit.business.controller.OperationType;
 import com.github.shynixn.astraledit.api.bukkit.business.controller.SelectionController;
 import com.github.shynixn.astraledit.api.bukkit.business.entity.Selection;
 import com.github.shynixn.astraledit.api.business.service.DependencyWorldEditService;
@@ -129,7 +131,7 @@ public final class SelectionManager implements Runnable, SelectionController {
      */
     public void addOperation(Player player, Operation operation) {
         if (!this.operations.containsKey(player))
-            this.operations.put(player, new Operation[this.maxUndoAmount]);
+            this.operations.put(player, new OperationImpl[this.maxUndoAmount]);
         Operation oldOperation;
         for (int i = 0; i < this.operations.get(player).length; i++) {
             oldOperation = this.operations.get(player)[i];
@@ -156,7 +158,7 @@ public final class SelectionManager implements Runnable, SelectionController {
         if (!this.hasSelection(player))
             return false;
         if (!this.operations.containsKey(player))
-            this.operations.put(player, new Operation[this.maxUndoAmount]);
+            this.operations.put(player, new OperationImpl[this.maxUndoAmount]);
         final Operation operation = this.operations.get(player)[0];
         if (operation != null) {
             if (operation.getType() == OperationType.MIRROR) {

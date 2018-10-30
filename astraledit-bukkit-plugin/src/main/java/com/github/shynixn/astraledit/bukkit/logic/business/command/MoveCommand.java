@@ -3,8 +3,8 @@ package com.github.shynixn.astraledit.bukkit.logic.business.command;
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
-import com.github.shynixn.astraledit.bukkit.logic.business.Operation;
-import com.github.shynixn.astraledit.bukkit.logic.business.OperationType;
+import com.github.shynixn.astraledit.bukkit.logic.business.OperationImpl;
+import com.github.shynixn.astraledit.api.bukkit.business.controller.OperationType;
 import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -57,7 +57,7 @@ public class MoveCommand implements PlayerCommand {
             if (!this.selectionManager.hasSelection(player)) {
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
             } else {
-                final Operation operation = new Operation(OperationType.MOVE);
+                final OperationImpl operation = new OperationImpl(OperationType.MOVE);
                 operation.setOperationData(this.selectionManager.getSelection(player).getLocation().clone());
                 this.selectionManager.getSelection(player).move(location);
                 this.selectionManager.addOperation(player, operation);

@@ -80,4 +80,6 @@ public interface SelectionController extends AutoCloseable {
      * @return controll
      */
     DependencyWorldEditService getWorldEditController();
+
+    void addOperation(Player player, Operation operation);
 }

@@ -3,8 +3,8 @@ package com.github.shynixn.astraledit.bukkit.logic.business.command;
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
-import com.github.shynixn.astraledit.bukkit.logic.business.Operation;
-import com.github.shynixn.astraledit.bukkit.logic.business.OperationType;
+import com.github.shynixn.astraledit.bukkit.logic.business.OperationImpl;
+import com.github.shynixn.astraledit.api.bukkit.business.controller.OperationType;
 import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -42,7 +42,7 @@ public class TearCommand implements PlayerCommand {
                     player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
                 } else if (this.manager.getSelection(player).isJoined()) {
                     this.manager.getSelection(player).tearApart();
-                    this.manager.addOperation(player, new Operation(OperationType.UNCOMBINE));
+                    this.manager.addOperation(player, new OperationImpl(OperationType.UNCOMBINE));
                 }
             });
             return true;
