@@ -3,8 +3,8 @@ package com.github.shynixn.astraledit.bukkit.logic.business.command;
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
-import com.github.shynixn.astraledit.bukkit.logic.business.Operation;
-import com.github.shynixn.astraledit.bukkit.logic.business.OperationType;
+import com.github.shynixn.astraledit.bukkit.logic.business.OperationImpl;
+import com.github.shynixn.astraledit.api.bukkit.business.controller.OperationType;
 import com.github.shynixn.astraledit.bukkit.logic.business.SelectionHolder;
 import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import org.bukkit.entity.Player;
@@ -54,7 +54,7 @@ public class ConvertToBlocksCommand implements PlayerCommand {
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
             } else {
                 player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Converting render ...");
-                final Operation operation = new Operation(OperationType.PLACE);
+                final OperationImpl operation = new OperationImpl(OperationType.PLACE);
                 operation.setOperationData(((SelectionHolder) this.selectionManager.getSelection(player)).getTemporaryStorage());
                 this.selectionManager.getSelection(player).placeBlocks(() -> {
                     this.selectionManager.clearSelection(player);

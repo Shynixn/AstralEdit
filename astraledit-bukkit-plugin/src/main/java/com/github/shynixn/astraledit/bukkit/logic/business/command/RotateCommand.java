@@ -3,8 +3,8 @@ package com.github.shynixn.astraledit.bukkit.logic.business.command;
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
-import com.github.shynixn.astraledit.bukkit.logic.business.Operation;
-import com.github.shynixn.astraledit.bukkit.logic.business.OperationType;
+import com.github.shynixn.astraledit.bukkit.logic.business.OperationImpl;
+import com.github.shynixn.astraledit.api.bukkit.business.controller.OperationType;
 import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -48,7 +48,7 @@ public class RotateCommand implements PlayerCommand {
                 if (!this.manager.hasSelection(player)) {
                     player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
                 } else {
-                    final Operation operation = new Operation(OperationType.ROTATE);
+                    final OperationImpl operation = new OperationImpl(OperationType.ROTATE);
                     operation.setOperationData(this.manager.getSelection(player).getRotation());
                     this.manager.getSelection(player).rotate(Double.parseDouble(args[1]));
                     this.manager.addOperation(player, operation);
