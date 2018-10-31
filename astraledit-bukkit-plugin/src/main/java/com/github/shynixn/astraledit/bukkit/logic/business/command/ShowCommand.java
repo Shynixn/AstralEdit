@@ -1,9 +1,9 @@
 package com.github.shynixn.astraledit.bukkit.logic.business.command;
 
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
+import com.github.shynixn.astraledit.api.bukkit.business.controller.SelectionController;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
-import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import com.github.shynixn.astraledit.bukkit.logic.lib.Utils;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -37,16 +37,16 @@ import org.bukkit.plugin.Plugin;
  */
 public class ShowCommand implements PlayerCommand {
     private final Plugin plugin;
-    private final SelectionManager manager;
+    private final SelectionController controller;
 
     /**
      * Creates an instance of {@link ShowCommand} which depends on
-     * a {@link SelectionManager} and a {@link Plugin}
+     * a {@link SelectionController} and a {@link Plugin}
      *
-     * @param manager SelectionManager
+     * @param controller SelectionController
      */
-    public ShowCommand(SelectionManager manager, Plugin plugin) {
-        this.manager = manager;
+    public ShowCommand(SelectionController controller, Plugin plugin) {
+        this.controller = controller;
         this.plugin = plugin;
     }
 
@@ -63,11 +63,11 @@ public class ShowCommand implements PlayerCommand {
             return false;
         } else {
             this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
-                if (!this.manager.hasSelection(player)) {
+                if (!this.controller.hasSelection(player)) {
                     player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
                 } else {
-                    if (this.manager.getSelection(player).isHidden()) {
-                        this.manager.getSelection(player).show(Utils.getOnlinePlayers().toArray(new Player[Utils.getOnlinePlayers().size()]));
+                    if (this.controller.getSelection(player).isHidden()) {
+                        this.controller.getSelection(player).show(Utils.getOnlinePlayers().toArray(new Player[Utils.getOnlinePlayers().size()]));
                         player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Your render is now visible to other players.");
                     }
                 }

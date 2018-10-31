@@ -1,9 +1,9 @@
 package com.github.shynixn.astraledit.bukkit.logic.business.command;
 
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
+import com.github.shynixn.astraledit.api.bukkit.business.controller.SelectionController;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
-import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -36,15 +36,15 @@ import org.bukkit.plugin.Plugin;
  */
 public class UndoCommand implements PlayerCommand {
     private final Plugin plugin;
-    private final SelectionManager manager;
+    private final SelectionController controller;
     /**
      * Creates an instance of {@link UndoCommand} which depends on
-     * a {@link SelectionManager} and a {@link Plugin}
+     * a {@link SelectionController} and a {@link Plugin}
      *
-     * @param manager SelectionManager
+     * @param controller SelectionController
      */
-    public UndoCommand(SelectionManager manager, Plugin plugin) {
-        this.manager = manager;
+    public UndoCommand(SelectionController controller, Plugin plugin) {
+        this.controller = controller;
         this.plugin = plugin;
     }
     /**
@@ -62,7 +62,7 @@ public class UndoCommand implements PlayerCommand {
 
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
             player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Undoing operation ...");
-            if (!this.manager.undoOperation(player)) {
+            if (!this.controller.undoOperation(player)) {
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You cannot undo the last operation.");
             } else {
                 player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Finished undoing the last operation.");

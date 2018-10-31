@@ -1,12 +1,11 @@
 package com.github.shynixn.astraledit.bukkit.logic.business.command;
 
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
+import com.github.shynixn.astraledit.api.bukkit.business.controller.SelectionController;
 import com.github.shynixn.astraledit.api.bukkit.business.entity.Selection;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
-import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 /**
  * Created by Shynixn 2018.
@@ -36,15 +35,15 @@ import org.bukkit.plugin.Plugin;
  * SOFTWARE.
  */
 public class AutoFollowCommand implements PlayerCommand {
-    private final SelectionManager manager;
+    private final SelectionController controller;
 
     /**
      * Creates a new instance of the JoinCommand with SelectionController as dependency.
      *
-     * @param manager dependency.
+     * @param controller dependency.
      */
-    public AutoFollowCommand(SelectionManager manager) {
-        this.manager = manager;
+    public AutoFollowCommand(SelectionController controller) {
+        this.controller = controller;
     }
 
     /**
@@ -60,10 +59,10 @@ public class AutoFollowCommand implements PlayerCommand {
             return false;
         }
 
-        if (!this.manager.hasSelection(player)) {
+        if (!this.controller.hasSelection(player)) {
             player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
         } else {
-            final Selection selection = this.manager.getSelection(player);
+            final Selection selection = this.controller.getSelection(player);
             selection.setAutoFollowEnabled(!selection.isAutoFollowEnabled());
             if (selection.isAutoFollowEnabled()) {
                 player.sendMessage(AstralEditPlugin.PREFIX_SUCCESS + "Enabled auto-follow.");

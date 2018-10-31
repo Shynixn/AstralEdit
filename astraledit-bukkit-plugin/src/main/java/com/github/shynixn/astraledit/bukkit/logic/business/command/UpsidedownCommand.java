@@ -1,11 +1,11 @@
 package com.github.shynixn.astraledit.bukkit.logic.business.command;
 
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
+import com.github.shynixn.astraledit.api.bukkit.business.controller.SelectionController;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
 import com.github.shynixn.astraledit.bukkit.logic.business.OperationImpl;
 import com.github.shynixn.astraledit.api.bukkit.business.controller.OperationType;
-import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -38,16 +38,16 @@ import org.bukkit.plugin.Plugin;
  */
 public class UpsidedownCommand implements PlayerCommand {
     private final Plugin plugin;
-    private final SelectionManager manager;
+    private final SelectionController controller;
 
     /**
      * Creates an instance of {@link UpsidedownCommand} which depends on
-     * a {@link SelectionManager} and a {@link Plugin}
+     * a {@link SelectionController} and a {@link Plugin}
      *
-     * @param manager SelectionManager
+     * @param controller SelectionController
      */
-    public UpsidedownCommand(SelectionManager manager, Plugin plugin) {
-        this.manager = manager;
+    public UpsidedownCommand(SelectionController controller, Plugin plugin) {
+        this.controller = controller;
         this.plugin = plugin;
     }
 
@@ -65,11 +65,11 @@ public class UpsidedownCommand implements PlayerCommand {
         }
 
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
-            if (!this.manager.hasSelection(player)) {
+            if (!this.controller.hasSelection(player)) {
                 player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
             } else {
-                this.manager.getSelection(player).upSideDown();
-                this.manager.addOperation(player, new OperationImpl(OperationType.UPSIDEDOWN));
+                this.controller.getSelection(player).upSideDown();
+                this.controller.addOperation(player, new OperationImpl(OperationType.UPSIDEDOWN));
             }
         });
 

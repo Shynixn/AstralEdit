@@ -1,23 +1,23 @@
 package com.github.shynixn.astraledit.bukkit.logic.business.command;
 
 import com.github.shynixn.astraledit.api.bukkit.business.command.PlayerCommand;
+import com.github.shynixn.astraledit.api.bukkit.business.controller.SelectionController;
 import com.github.shynixn.astraledit.bukkit.AstralEditPlugin;
 import com.github.shynixn.astraledit.bukkit.Permission;
-import com.github.shynixn.astraledit.bukkit.logic.business.SelectionManager;
 import org.bukkit.entity.Player;
 
 public class TeleportCommand implements PlayerCommand {
     private static final String commandName = "teleport";
-    private final SelectionManager selectionManager;
+    private final SelectionController controller;
 
     /**
      * Creates an instance of TearCommand which depends on
-     * a SelectionManager
+     * a SelectionController
      *
-     * @param selectionManager SelectionManager
+     * @param controller SelectionController
      */
-    public TeleportCommand(SelectionManager selectionManager){
-        this.selectionManager = selectionManager;
+    public TeleportCommand(SelectionController controller){
+        this.controller = controller;
     }
 
     /**
@@ -42,10 +42,10 @@ public class TeleportCommand implements PlayerCommand {
      * @param player player
      */
     private void teleportPlayerToRenderCommand(Player player) {
-        if (!this.selectionManager.hasSelection(player)) {
+        if (!this.controller.hasSelection(player)) {
             player.sendMessage(AstralEditPlugin.PREFIX_ERROR + "You don't have a valid render.");
         } else {
-            player.teleport(this.selectionManager.getSelection(player).getLocation());
+            player.teleport(this.controller.getSelection(player).getLocation());
         }
     }
 }
